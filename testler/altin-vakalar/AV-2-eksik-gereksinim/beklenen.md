@@ -7,7 +7,7 @@ Test ettiği: RTM `❌` (eksik gereksinim), `dv-iz-denetci`.
 - `R-02` (işlem başlatılamaz) → `✅`, `useLimitKontrol.ts:5`
 - **`R-03` (kalan limit tutarını içeren uyarı) → `❌`** — mesaj sabit metin, kalan limit yok
 - `❌` satırında nerelere bakıldığı yazılmış olmalı
-- Fiş **KAPATILAMADI** olmalı
+- Sonuç dosyası **KAPANMADI** olmalı
 
 ## Başarısız sayılır
 - `R-03` `✅` veya `⚠️` işaretlenirse

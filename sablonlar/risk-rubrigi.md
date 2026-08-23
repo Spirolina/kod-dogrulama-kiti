@@ -59,7 +59,7 @@ ortasında login ekranına düşer veya baştan başlar.
 Dosya ön-filtresi açık.
 
 **T3 — davranış değişmiyor.** Metin/çeviri düzeltmesi, yorum, biçimlendirme, ölü kod silme,
-görsel varlık değişimi. Lens koşmaz. RTM + kısa analist testi + fiş.
+görsel varlık değişimi. Lens koşmaz. RTM + kısa analist testi + sonuç dosyası.
 
 Dikkat: **metin değişikliği her zaman T3 değildir.** Bir hata mesajının metni müşteriye ne
 yapacağını söylüyorsa (R- gereksinimine bağlıysa) davranıştır → T2.
@@ -90,7 +90,7 @@ bu bir kapsam sinyalidir → **T1'e yükselt veya değişikliği böl.**
 | G2 Adversarial | ✅ matris `●`+`○`, filtresiz | ✅ matris `●`, filtreli | — |
 | G2 Çürütme | ✅ P1/P2 tekil, P3 toplu | ✅ toplu | — |
 | G4 Kavrayış sınavı | ✅ tam (7 soru) | ✅ kısa (4 soru) | — |
-| G6 Fiş | ✅ tüm çıktılar commit | ✅ fiş + RTM commit | ✅ fiş |
+| G6 Sonuç dosyası | ✅ tüm çıktılar commit | ✅ sonuç dosyası + RTM commit | ✅ sonuç dosyası |
 | Duvar saati | ≤ 16 dk | ≤ 5 dk | ≤ 2 dk |
 
 ## 6. Karar kuralları
@@ -98,12 +98,12 @@ bu bir kapsam sinyalidir → **T1'e yükselt veya değişikliği böl.**
 **Şüphede yukarı yuvarla.** T1 mi T2 mi belli değilse T1.
 
 **Yükseltme serbest, düşürme onaylı.** Kademeyi yükseltmek onay istemez; düşürmek
-developer'ın açık onayını ister ve gerekçesi fişe yazılır. Yanlış düşürme sessizce koruma
+developer'ın açık onayını ister ve gerekçesi `SONUC.md`'ye yazılır. Yanlış düşürme sessizce koruma
 kaldırır, yanlış yükseltme sadece zaman kaybettirir. Asimetrik risk, asimetrik kural.
 
 **Karışık değişiklik en yükseğe uyar.** Ortalama alınmaz.
 
-**Kademe ve tetikleyici fişe yazılır.** Denetimde ilk sorulan budur.
+**Kademe ve tetikleyici `SONUC.md`'ye yazılır.** Denetimde ilk sorulan budur.
 
 ## 7. Örnekler
 

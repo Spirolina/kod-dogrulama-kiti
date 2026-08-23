@@ -30,7 +30,7 @@ Bu bir DOĞRULAMA görevidir. Ürün kodu YAZMAYACAKSIN.
 Repo kökündeki .claude/skills/dv-dogrula/SKILL.md dosyasını oku ve oradaki kapıları
 sırayla uygula.
 
-Analiz dokümanı : <ekteki analiz.md | dogrulama/<tarih>-<konu>/00-analiz.md>
+Analiz dokümanı : <ekteki analiz.md | dogrulama/<tarih>-<konu>/ic/analiz.md>
 Kapsam          : <MOD A: "<base-branch> ile bu branch arasındaki diff">
                   <MOD B: "diff yok — kapsamı analizden yola çıkarak sen keşfet">
 Konu            : <kisa-kebab-case>
@@ -61,7 +61,7 @@ onayının (KAPI 2) yerine geçer. Bu durak atlanırsa sistem yanlış kod üzer
 
 **4. madde neden var?** Tüm bağımsızlık modeli alt agent'ların temiz bağlamına dayanıyor.
 Ortam alt agent desteklemiyorsa zincir yine koşar ama bağımsızlık zayıflar; bunu bilerek
-onaylaman gerekir, fişe de yazılır.
+onaylaman gerekir, `SONUC.md`'ye de yazılır.
 
 ---
 
@@ -76,26 +76,27 @@ Branch'i çek, önce nereye yazıldığına bak:
 git diff --name-only <base-branch>...HEAD | grep -v '^dogrulama/'
 ```
 
-Boş dönmeli. Dönmezse doğrulama ürün koduna dokunmuş — fiş kapatılamaz, temiz branch'te
+Boş dönmeli. Dönmezse doğrulama ürün koduna dokunmuş — sonuç kapatılamaz, temiz branch'te
 yeniden koş.
 
-Sonra `dogrulama/<tarih>-<konu>/` altında:
+Sonra `dogrulama/<tarih>-<konu>/` altında **iki dosya** olacak:
 
 | Dosya | Kime gider | Ne yapılır |
 |---|---|---|
-| `05-fis.md` | Sana | Önce bunu oku. Durum `KAPATILAMADI` ise altındaki sebepleri kapat |
-| `01-rtm.md` | Sana | `❌` ve `➕` satırları — en değerli çıktı |
-| `02-bulgular.md` | Sana | Ayakta kalan P1/P2 bulgular |
-| `04a-analist-test-paketi.md` | Analistlere | Confluence'a yapıştır (aşağıda) |
-| `04b-developer-kontrol-listesi.md` | Sana | Confluence'a **gitmez**, teknik detay içerir |
-| `04c-*` | Analistlere | Varsa, kapsam/kapsam dışı notu |
+| `SONUC.md` | Sana | **Sadece bunu oku.** Durum `KAPANMADI` ise altındaki sebepleri kapat |
+| `ANALISTE-GIDECEK.md` | Analistlere | Confluence'a yapıştır (aşağıda) |
 
-### `04a`'yı Confluence'a taşıma
+Bir de `ic/` klasörü — ara dosyalar ve denetim izi. Açman gerekmiyor; `SONUC.md` hepsine
+özet veriyor. İçindekiler `ic/OKUBENI.md`'de birer satırla yazılı.
+
+**`ic/` altındaki hiçbir şey Confluence'a gitmez.** Teknik detay içerirler.
+
+### `ANALISTE-GIDECEK.md`'yı Confluence'a taşıma
 
 1. Analiz sayfasının altında yeni sayfa: `DV-<tarih>-<konu> Test Paketi`
 2. Label: `dogrulama-test`
-3. `Insert → Markup → Confluence Wiki` → `04a` içeriğini yapıştır
-4. Menü kapalıysa `04a` içindeki HTML tablo alternatifini kullan
+3. `Insert → Markup → Confluence Wiki` → `ANALISTE-GIDECEK.md` içeriğini yapıştır
+4. Menü kapalıysa `ANALISTE-GIDECEK.md` içindeki HTML tablo alternatifini kullan
 
 `(*)` işaretli satırlar köprüden gelen senaryolardır — statik analizle emin olunamayan
 noktalar. Analistin bunları atlamaması gerekir, ama teknik sebebi Confluence'a yazılmaz.
@@ -107,9 +108,9 @@ noktalar. Analistin bunları atlamaması gerekir, ama teknik sebebi Confluence'a
 | Yol | Nasıl | Ne zaman |
 |---|---|---|
 | Ek dosya | Task'a `analiz.md` ekle, notta "ekteki analiz.md" de | Tek seferlik |
-| Repoda | `dogrulama/<tarih>-<konu>/00-analiz.md` olarak commit'le | Denetim izi isteniyorsa |
+| Repoda | `dogrulama/<tarih>-<konu>/ic/analiz.md` olarak commit'le | Denetim izi isteniyorsa |
 
-Repoya koymak daha sağlam: analiz, RTM ve fiş aynı commit'te durur. Altı ay sonra
+Repoya koymak daha sağlam: analiz, RTM ve sonuç dosyası aynı commit'te durur. Altı ay sonra
 "hangi analize göre doğrulandı" sorusunun cevabı repoda kalır.
 
 ---
@@ -134,5 +135,5 @@ Yüklenmiyorsa varsayılana dön — kiti ürün reposunun köküne kopyala
 | Kodlama ve doğrulamayı aynı task'a koymak | Aynı bağlam hem yazar hem kontrol eder |
 | Analizi eklemeden koşmak | Oracle yok. Çıktı doğrulama değil, kod okuma olur |
 | Plan onayında kapsamı okumadan onaylamak | Sistem yanlış kod üzerinde kusursuz çalışır |
-| `04b`'yi Confluence'a yapıştırmak | Teknik detay dışarı sızar |
-| Fiş `KAPATILAMADI` iken merge etmek | Fişin tek işlevi buydu |
+| `SONUC.md` §3'yi Confluence'a yapıştırmak | Teknik detay dışarı sızar |
+| Sonuç dosyası `KAPANMADI` iken merge etmek | `SONUC.md`'nin tek işlevi buydu |

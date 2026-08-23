@@ -37,7 +37,7 @@ MOD: A | B
 DIFF: <diff dosyası veya komut>        # sadece MOD A
 KAPSAM_DOSYASI: <onaylanmış kapsam>    # sadece MOD B, GOREV RTM
 KADEME: T1 | T2 | T3
-BULGULAR: <02-bulgular.md yolu>        # sadece GOREV KOPRU
+BULGULAR: <ic/bulgular-curutulmus.md yolu>        # sadece GOREV KOPRU
 ```
 
 Eksik alan varsa **iş yapma**, `HATA: eksik girdi <alan>` yazıp bitir.
@@ -69,7 +69,7 @@ Sonra iki yönde zinciri izle:
 - **İleri:** giriş noktası (controller/endpoint/listener/scheduled) → servis → repository → veri
 - **Geri:** bulduğun her metodu kim çağırıyor
 
-## Çıktı: `00-kapsam-haritasi.md`
+## Çıktı: `ic/kapsam-taslak.md`
 
 ```markdown
 # Kapsam Haritası — <konu>
@@ -113,7 +113,7 @@ KAPSAM ONAYI BEKLENİYOR — orchestrator developer'a onaylatmalı
 
 ## Aşama 1 — Gereksinim ID'lerini çivile
 
-**Önce `<CIKTI_KLASORU>/00-gereksinimler.md` var mı bak.**
+**Önce `<CIKTI_KLASORU>/ic/gereksinimler.md` var mı bak.**
 
 **Varsa:** oku ve **aynen kullan.** ID'leri yeniden numaralandırma, yeniden üretme,
 sırasını değiştirme. Bu dosya sözleşmedir; kaydığı anda geçmişle karşılaştırma imkânsız olur
@@ -176,7 +176,7 @@ orada olabilir) — satırı yine yaz ama `[eski kod olabilir]` notu düş.
 ```markdown
 # İzlenebilirlik Matrisi (RTM) — <konu>
 Mod: A|B · Kademe: T? · Tarih: <YYYY-AA-GG>
-Gereksinim kaynağı: 00-gereksinimler.md
+Gereksinim kaynağı: ic/gereksinimler.md
 
 | ID | Kod (file:line) | Test | Manuel | Durum | Not |
 |---|---|---|---|---|---|
@@ -191,27 +191,27 @@ Gereksinim kaynağı: 00-gereksinimler.md
 Okunan dosya: <n> · Aranan gereksinim: <n> · Mod: A|B
 ```
 
-## Aşama 3 — Developer kontrol listesi (`04b`)
+## Aşama 3 — Developer kontrol listesi (`SONUC.md` §3)
 
-Bu görevde **yalnız `04b`** yazılır. `04a` (analist paketi) burada yazılmaz — ayrı bir
+Bu görevde **yalnız `SONUC.md` §3** yazılır. `ANALISTE-GIDECEK.md` (analist paketi) burada yazılmaz — ayrı bir
 görevde, kodu görmemiş bir bağlamda yazılır (`GOREV: ANALIST`).
 
 Sebep: az önce her dosyayı okudun. Bu bağlamda "analist diliyle yaz" talimatı tutmuyor —
 dosya adları, fonksiyon isimleri ve API yolları hatırladığın dil. İlk sürümde tam bu
 yüzden sızdı.
 
-`04b`'ye giren: analistin **ekrandan yapamayacağı** her kontrol — veritabanı, log, servis
+`SONUC.md` §3'ye giren: analistin **ekrandan yapamayacağı** her kontrol — veritabanı, log, servis
 çağrısı, konsol, ağ sekmesi, uzaktan debug. Teknik dil burada serbest, hatta gerekli.
 
 `sablonlar/analist-test-paketi.md` §6 şablonuna uy. Her satır ya bir `MT-xx`'in
 tamamlayıcısıdır ya da analistin hiç yapamayacağı bağımsız bir kontroldür. Sebepsiz
 teknik kontrol ekleme.
 
-`MT-xx` numaralarını henüz bilmiyorsun (`04a` sonra yazılacak). Bağlantıyı **gereksinim
+`MT-xx` numaralarını henüz bilmiyorsun (`ANALISTE-GIDECEK.md` sonra yazılacak). Bağlantıyı **gereksinim
 ID'si üzerinden** kur: `Bağlı gereksinim: R-03`. `GOREV: ANALIST` senaryoları yazdıktan
 sonra bu bağ `MT-xx`'e çevrilir.
 
-## Aşama 4 — Analist paketi için devir dosyası (`04d`)
+## Aşama 4 — Analist paketi için devir dosyası (`ic/analist-girdisi.md`)
 
 `GOREV: ANALIST` kodu görmeyecek. Ona gereken bilgiyi burada, **iş dilinde** hazırla:
 
@@ -246,7 +246,7 @@ birebir alıntıdır; analiz zaten iş dilinde yazılmıştır.
 
 # GÖREV: KOPRU  (G2'den sonra)
 
-`02-bulgular.md` içindeki, çürütmeden sağ çıkmış ve **güveni 7'nin altında** olan her bulgu
+`ic/bulgular-curutulmus.md` içindeki, çürütmeden sağ çıkmış ve **güveni 7'nin altında** olan her bulgu
 için bir manuel senaryo üret. Bu, statik şüpheyi çalıştırma kanıtına çeviren adımdır.
 
 Kurallar:
@@ -258,7 +258,7 @@ Kurallar:
 - **Bulgunun teknik sebebi senaryoya yazılmaz.** Analist neden şüphelendiğimizi bilmez;
   sadece "buraya dikkatli bak" sinyali alır.
 
-Çıktıyı `04a`'ya değil, `04d-analist-girdisi.md` dosyasının sonuna yaz:
+Çıktıyı `ANALISTE-GIDECEK.md`'ya değil, `ic/analist-girdisi.md` dosyasının sonuna yaz:
 
 ```markdown
 ## Köprüden gelen odak senaryoları  (Odak kolonuna (*) konacak)
@@ -268,16 +268,16 @@ Kurallar:
 ```
 
 Bu tabloda **hiçbir teknik iz olmayacak** — lens ID, dosya adı, fonksiyon adı, güven
-puanı yok. Onlar `04b`'ye yazılır: `DK-xx | K-01'in teknik sebebi | L2-02 | ...`
+puanı yok. Onlar `SONUC.md` §3'ye yazılır: `DK-xx | K-01'in teknik sebebi | L2-02 | ...`
 
 Bulgu iş diline çevrilemiyorsa (tamamen teknik, kullanıcıya yansımayan bir şey) senaryo
-üretme; `04b`'ye developer kontrolü olarak yaz.
+üretme; `SONUC.md` §3'ye developer kontrolü olarak yaz.
 
 ---
 
 # GÖREV: ANALIST  (köprüden sonra, en son)
 
-`04a-analist-test-paketi.md` dosyasını yazarsın. Confluence'a yapıştırılacak,
+`ANALISTE-GIDECEK.md` dosyasını yazarsın. Confluence'a yapıştırılacak,
 analistlerin okuyacağı tek dosya budur.
 
 ## Sana verilenler — ve verilmeyenler
@@ -285,16 +285,16 @@ analistlerin okuyacağı tek dosya budur.
 | Okuyacakların | Okumayacakların |
 |---|---|
 | Analiz dokümanı | Kod — hiçbir dosya, hiçbir satır |
-| `04d-analist-girdisi.md` | `02-bulgular.md`, `02a-ham-bulgular.md` |
-| `sablonlar/analist-test-paketi.md` | `01-rtm.md`, `04b`, `00-kapsam-*` |
+| `ic/analist-girdisi.md` | `ic/bulgular-curutulmus.md`, `ic/bulgular-ham.md` |
+| `sablonlar/analist-test-paketi.md` | `ic/rtm.md`, `ic/developer-kontrolleri.md`, `ic/kapsam.md` |
 
 **Kod dizinine hiç bakma.** `Read`, `Grep`, `Glob` ile kaynak dosyalara erişme, dosya
 adı öğrenmeye çalışma. Bilmediğin şeyi sızdıramazsın — bu görevin tek yapısal güvencesi
 budur, gevşetme.
 
 Bir senaryo yazmak için teknik bilgiye ihtiyacın olduğunu düşünüyorsan yanılıyorsun:
-analistin de o bilgisi yok, testi yine de koşacak. İhtiyacın olan bilgi `04d`'de yoksa,
-o senaryo `04a`'ya ait değildir.
+analistin de o bilgisi yok, testi yine de koşacak. İhtiyacın olan bilgi `ic/analist-girdisi.md`'de yoksa,
+o senaryo `ANALISTE-GIDECEK.md`'ya ait değildir.
 
 ## Nasıl yazılır
 
@@ -327,14 +327,14 @@ elden geçir. Sağlık işaretine sonucu yaz.
 # Çıktı disiplini
 
 Her görev sonunda **sağlık işaretleri** yaz. Bunlar olmadan `/dv-dogrula` işi
-"DOĞRULAMA TAMAMLANMADI" sayar ve fişi imzaya kapatır.
+"DOĞRULAMA TAMAMLANMADI" sayar ve `SONUC.md`'yi imzaya kapatır.
 
 ```
 GOREV: RTM
 MOD: A
 OKUNAN_DOSYA: <n>
 ARANAN_GEREKSINIM: <n>
-URETILEN_DOSYA: 00-gereksinimler.md, 01-rtm.md, 04b-developer-kontrol-listesi.md, 04d-analist-girdisi.md
+URETILEN_DOSYA: ic/gereksinimler.md, ic/rtm.md, ic/developer-kontrolleri.md, ic/analist-girdisi.md
 ```
 
 ```
@@ -343,7 +343,7 @@ OKUNAN_KOD_DOSYASI: 0            # 0 DEĞİLSE görev geçersiz
 KAPSANAN_GEREKSINIM: <n>/<n>
 URETILEN_SENARYO: <n>            # <n> negatif · <n> sınır · <n> odak (*)
 TEKNIK_SIZINTI: <n>              # 0 olmalı
-URETILEN_DOSYA: 04a-analist-test-paketi.md
+URETILEN_DOSYA: ANALISTE-GIDECEK.md
 ```
 
 `OKUNAN_DOSYA: 0` bir sonuç değil, bir başarısızlıktır. Hiçbir dosya okumadıysan

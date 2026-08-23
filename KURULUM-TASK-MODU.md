@@ -31,7 +31,7 @@ Doğrulanacak reponun **köküne**:
 sablonlar/
   lens-paketi.md
   risk-rubrigi.md
-  fis-sablonu.md
+  sonuc-sablonu.md
   analist-test-paketi.md
   task-notu.md
   gitignore-eki                 # içeriğini reponun .gitignore'una ekle
@@ -84,9 +84,9 @@ Branch'i çek. `dogrulama/<tarih>-<konu>/` altında ne olduğu ve ne yapılacağ
 `sablonlar/task-notu.md` → *"Task bittikten sonra"* bölümünde.
 
 Özet:
-- `05-fis.md` → önce bunu oku
-- `04a-analist-test-paketi.md` → Confluence
-- `04b-developer-kontrol-listesi.md` → **Confluence'a gitmez**, sende kalır
+- `SONUC.md` → önce bunu oku
+- `ANALISTE-GIDECEK.md` → Confluence
+- `ic/developer-kontrolleri.md` → **Confluence'a gitmez**, sende kalır
 
 ---
 
@@ -95,7 +95,7 @@ Branch'i çek. `dogrulama/<tarih>-<konu>/` altında ne olduğu ve ne yapılacağ
 `/dv-kavra` bu ortamda koşmaz — sınav canlı soru-cevap ister, task tek yönlüdür.
 
 Repoyu erişimin olan interaktif bir araçta aç (Claude Code, Copilot, Windsurf) ve orada
-koş. Fişteki viva bölümünü o koşum doldurur.
+koş. `SONUC.md` içindeki viva bölümünü o koşum doldurur.
 
 Sınav neden ayrı kalmalı: cevabı **senin** üretmen gerekiyor. Okumak pasif; okunan rapor
 kavrayış üretmez. Bu yüzden sınavı otomatikleştirmeye çalışma — otomatikleşen sınav,
@@ -115,7 +115,7 @@ Kurulum başarılı sayılır eğer:
 | Plan kapsam listesi içeriyor mu | evet |
 | Plan ürün kodu değiştirmeyi öneriyor mu | **hayır** |
 | `dogrulama/` klasörü commit'lendi mi | **evet** — çıktıyı alma yolun bu |
-| `05-fis.md` sağlık işaretleri dolu mu | evet, `okunan dosya: 0` **değil** |
+| `SONUC.md` sağlık işaretleri dolu mu | evet, `okunan dosya: 0` **değil** |
 | `dogrulama/` dışına taşan dosya var mı | **hayır** |
 
 ### Son satırın komutu
@@ -129,7 +129,7 @@ git diff --name-only <base-branch>...HEAD | grep -v '^dogrulama/'
 
 Boş dönmeli. Bir satır bile dönerse doğrulama task'ı ürün koduna dokunmuş demektir:
 o zaman sonraki kapılar task'ın kendi yazdığı kodu kontrol etmiş olur ve bağımsızlık
-zinciri kırılır. Fiş kapatılamaz, doğrulama temiz bir branch'ten yeniden koşulur.
+zinciri kırılır. Sonuç kapatılamaz, doğrulama temiz bir branch'ten yeniden koşulur.
 
 Task platformları kodlamak için tasarlanmıştır; bu görevde yeteneği kapatmıyoruz,
 **yönünü** sınırlıyoruz. İlk koşumda bir kez gözünle doğrula.

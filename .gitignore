@@ -4,7 +4,7 @@
 # Örnek koşum çıktıları (lokal makine yolları içerir, repoda tutulmaz)
 dogrulama/[0-9]*/
 
-# Viva cevap anahtarı — her yerde, her zaman
-dogrulama/*/03b-viva-anahtar.md
+# Kavrayış sınavı cevap anahtarı — her yerde, her zaman
+dogrulama/*/ic/sinav-anahtari.md
 
 .DS_Store

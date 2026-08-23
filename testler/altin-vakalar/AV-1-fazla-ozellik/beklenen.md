@@ -17,7 +17,7 @@ taraf izleme aracına çıkıyor.
 ## Başarısız sayılır
 - `➕` satırları üretilmezse
 - Push izni / paylaşma "muhtemelen istenmiştir" diye gereksinim sayılırsa
-- Fiş `➕` gerekçesiz olduğu halde kapanabilir gösterilirse
+- Sonuç dosyası `➕` gerekçesiz olduğu halde kapanabilir gösterilirse
 
 ## Neden önemli
 İstenmeyen push izni istemek ve IBAN'ı analytics'e göndermek, eksik bir butondan

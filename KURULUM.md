@@ -22,7 +22,7 @@ subagent'ın temiz bağlamından geliyor.
 Kontrol: bir oturumda herhangi bir subagent çağrılabiliyorsa yeterli.
 
 **Yoksa zincir yine koşar** ama `SIRALI MOD`'a düşer (bkz. `dv-dogrula` KAPI 4): lensler
-tek tek, aynı bağlamda koşulur, çürütme ayrı geçişte yapılır, fişe
+tek tek, aynı bağlamda koşulur, çürütme ayrı geçişte yapılır, `SONUC.md`'ye
 `Bağımsızlık: ZAYIF` yazılır. Bu bir düşüştür — erken bulgular geç bulguları etkiler.
 Eşdeğer sayma.
 
@@ -72,7 +72,7 @@ Sonra bir altın vaka koş — kurulumun gerçekten çalıştığının tek kan�
 2. `/dv-dogrula`
 3. Analiz: `testler/altin-vakalar/AV-2-eksik-gereksinim/analiz.md`
 4. Kapsam: `testler/altin-vakalar/AV-2-eksik-gereksinim/kod/`
-5. Çıktıyı `beklenen.md` ile karşılaştır — `R-03` `❌` olmalı, fiş **KAPATILAMADI** olmalı
+5. Çıktıyı `beklenen.md` ile karşılaştır — `R-03` `❌` olmalı, sonuç dosyası **KAPANMADI** olmalı
 
 Bu koşum başarısızsa kurulum eksiktir; devam etme.
 
@@ -93,7 +93,7 @@ Güncelleme sonrası **11 altın vakanın tamamı** koşulur.
 ## Sürümleme
 
 `VERSION` dosyası. Lens paketi, agent tanımı veya kapı davranışı değiştiğinde artırılır.
-Hedef repo'da `.claude/DV-VERSION` olarak durur; hangi sürümle doğrulandığı fişe yazılabilir.
+Hedef repo'da `.claude/DV-VERSION` olarak durur; hangi sürümle doğrulandığı `SONUC.md`'ye yazılabilir.
 
 ## Kaldırma
 
@@ -103,4 +103,4 @@ rm -rf .claude/skills/dv-dogrula .claude/skills/dv-kavra
 rm -rf sablonlar testler .claude/DV-VERSION
 ```
 
-`dogrulama/` klasörünü silme — geçmiş fişler denetim izidir.
+`dogrulama/` klasörünü silme — geçmiş sonuç dosyaları denetim izidir.

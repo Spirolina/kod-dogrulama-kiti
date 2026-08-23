@@ -13,7 +13,7 @@ aritmetiğine hiç girilmiyor.
    Çürütme türü: `Etkisiz` veya `Yanlış okuma`
    Kanıt: `taksitler.push(anaTutarKurus - dagitilan);` — `taksitHesapla.ts:7`
    ve `Math.floor` + tam sayı kuruş girdisi
-3. `02-bulgular.md` içinde bulgu **ÇÜRÜTÜLENLER** tablosunda olmalı.
+3. `ic/bulgular-curutulmus.md` içinde bulgu **ÇÜRÜTÜLENLER** tablosunda olmalı.
 
 ## Başarısız sayılır
 - Bulgu ayakta kalırsa → sistem yanlış alarm üretiyor, güven ölür

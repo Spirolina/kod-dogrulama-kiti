@@ -16,20 +16,20 @@ Kopya çekmek sadece kendini kandırmak.
 Argüman: doğrulama klasörü (`dogrulama/<tarih>-<konu>/`). Verilmediyse en son değiştirilen
 klasörü bul ve kullanıcıya onaylat.
 
-Klasörden oku: `01-rtm.md` (varsa), kademe bilgisi, mod (A/B), kapsam.
+Klasörden oku: `ic/rtm.md` (varsa), kademe bilgisi, mod (A/B), kapsam.
 `/dv-dogrula` hiç koşmadıysa uyar ama devam et — `/dv-kavra` tek başına da çalışır.
 
 ## Adım 1 — Hazırlık
 
 `dv-kavrayis-kocu` agent'ını `GOREV: HAZIRLIK` ile çağır.
-Üretilenler: `03a-rehberli-tur.md` ve `03b-viva-anahtar.md`.
+Üretilenler: `ic/tur.md` ve `ic/sinav-anahtari.md`.
 
 Sağlık işaretlerini kontrol et. `OKUNAN_DOSYA: 0` veya `KANITSIZ_ANAHTAR_NOKTA > 0` ise
 dur ve bildir — sınav geçersiz olur.
 
 ## Adım 2 — Rehberli tur
 
-`03a-rehberli-tur.md` içeriğini kullanıcıya göster. Sonra söyle:
+`ic/tur.md` içeriğini kullanıcıya göster. Sonra söyle:
 
 > Kodu bu sırayla oku. Bittiğinde "hazırım" yaz. Sınav sırasında koda bakmayacaksın.
 
@@ -37,7 +37,7 @@ dur ve bildir — sınav geçersiz olur.
 
 ## Adım 3 — Sınav
 
-`03b-viva-anahtar.md` dosyasını oku (kullanıcıya **gösterme**).
+`ic/sinav-anahtari.md` dosyasını oku (kullanıcıya **gösterme**).
 
 Soruları **tek tek** sor. Her soruda:
 
@@ -55,7 +55,7 @@ Soruları **tek tek** sor. Her soruda:
 
 Puanları topla. Eşik: **T1 ≥ 10/14 · T2 ≥ 6/8**.
 
-`03-viva.md` yaz: skor, soru bazlı tablo, zayıf alanlar, aksiyon.
+`ic/sinav-sonucu.md` yaz: skor, soru bazlı tablo, zayıf alanlar, aksiyon.
 
 **Eşik altıysa** — suçu kullanıcıya atma. İki başlıktan biriyle çık:
 
@@ -67,14 +67,14 @@ etmek mi. Kararı kullanıcı verir.
 
 **Eşik üstüyse ama tek soru 0 aldıysa:** o konu bir doküman satırı olarak kayda geçer.
 
-## Adım 5 — Fişe işle
+## Adım 5 — `SONUC.md`'ye işle
 
-`05-fis.md` içindeki `## Kavrayış sınavı (viva)` bölümünü doldur: skor, eşik, zayıf alanlar,
+`SONUC.md` içindeki `## Kavrayış sınavı (viva)` bölümünü doldur: skor, eşik, zayıf alanlar,
 aksiyon.
 
 Sonra kullanıcıya hatırlat:
 
-> Fişteki *"Viva sorularını koda bakmadan cevapladım"* kutusunu sen işaretleyeceksin.
+> `SONUC.md` içindeki *"Viva sorularını koda bakmadan cevapladım"* kutusunu sen işaretleyeceksin.
 > Bu beyan denetim için değil, kendini kandırmayı görünür kılmak için var.
 
 ## Yasaklar
@@ -82,4 +82,4 @@ Sonra kullanıcıya hatırlat:
 1. **Soruyu yumuşatma.** Kullanıcı zorlanınca ipucu verme, soruyu basitleştirme.
 2. **Puan pazarlığı yapma.** "Aslında yakındın, 2 vereyim" yok.
 3. **Kodu gösterme.** Sınav bitene kadar dosya içeriği ekrana gelmez.
-4. **Anahtarı gösterme.** `03b` dosyası sınav bitmeden ekrana yazılmaz.
+4. **Anahtarı gösterme.** `ic/sinav-anahtari.md` dosyası sınav bitmeden ekrana yazılmaz.

@@ -36,7 +36,7 @@ vermez — **sınar**.
 
 ```
 /dv-dogrula     analiz ↔ kod eşleşmesi (RTM) · lenslerle adversarial tarama ·
-                bulguları çürütme · analistlere Türkçe manuel test paketi · fiş taslağı
+                bulguları çürütme · analistlere Türkçe manuel test paketi · sonuç dosyası
 
 /dv-kavra       rehberli tur · koda bakmadan sözlü sınav · notlama · boşlukları gösterme
 ```
@@ -67,6 +67,15 @@ developer'ın üretmesi gerekiyor, yoksa sınav olmaktan çıkar.
 
 Diff varsa A, yoksa B otomatik seçilir.
 
+## Çıktı: iki dosya
+
+```
+dogrulama/<tarih>-<konu>/
+  SONUC.md              ← developer bunu okur, başka bir şey açmaz
+  ANALISTE-GIDECEK.md   ← Confluence'a yapıştırılır
+  ic/                   ← ara dosyalar ve denetim izi (OKUBENI.md içinde açıklamalı)
+```
+
 ## Dosya haritası
 
 ```
@@ -83,7 +92,7 @@ sablonlar/
   task-notu.md            task tabanlı ortam için not şablonu + çıktı kullanımı
   repo-CLAUDE.md          ürün reposuna konacak CLAUDE.md bloğu (task ortamı güvenlik ağı)
   risk-rubrigi.md         T1/T2/T3 kademe kararı
-  fis-sablonu.md          doğrulama fişi (tek A4)
+  sonuc-sablonu.md        SONUC.md şablonu — developer'ın okuduğu tek dosya
   analist-test-paketi.md  Confluence wiki markup şablonu
 testler/altin-vakalar/    workflow'un kendi testi — 8 vaka
 dogrulama/                çıktılar + kacan-defectler.md
@@ -91,18 +100,21 @@ dogrulama/                çıktılar + kacan-defectler.md
 
 ## Çıktılar
 
-Değişiklik başına bir klasör:
+Değişiklik başına bir klasör, **iki görünür dosya**:
 
 | Dosya | Ne | Kime |
 |---|---|---|
-| `00-gereksinimler.md` | çivilenmiş R-ID'ler (sözleşme) | sistem |
-| `01-rtm.md` | izlenebilirlik matrisi | developer |
-| `02-bulgular.md` | çürütmeden sağ çıkan bulgular | developer |
-| `03-viva.md` | sınav sonucu | developer |
-| `04a-analist-test-paketi.md` | Türkçe manuel senaryolar | **analistlere / Confluence** |
-| `04b-developer-kontrol-listesi.md` | DB/log kontrolleri | developer |
-| `04c-test-sonuclari.md` | analistten dönen sonuçlar | sistem |
-| `05-fis.md` | doğrulama fişi + imza | denetim izi |
+| `SONUC.md` | Durum · ne yapmalısın · analiz↔kod eşleşmesi · bulgular · kendi kontrollerin · manuel test · sınav · sağlık işaretleri · imza | **developer** (tek okunacak dosya) |
+| `ANALISTE-GIDECEK.md` | Türkçe manuel senaryolar, teknik dil yok | **analistlere / Confluence** |
+
+`ic/` altında ara dosyalar ve denetim izi durur — `analiz.md`, `kapsam.md`,
+`gereksinimler.md` (çivilenmiş R-ID'ler), `rtm.md`, `bulgular-ham.md`,
+`bulgular-curutulmus.md`, `developer-kontrolleri.md`, `analist-girdisi.md`,
+`analist-sonuclari.md`, `tur.md`, `sinav-anahtari.md`, `sinav-sonucu.md`.
+Hepsi `ic/OKUBENI.md`'de birer satırla açıklanır.
+
+`SONUC.md` bunların özetidir; ayrıntı gerekirse referansı verir. Günlük iş için
+`ic/` açılmaz.
 
 ## Üç kanıt seviyesi
 

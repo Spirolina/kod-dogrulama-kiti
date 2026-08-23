@@ -14,21 +14,21 @@ Test ettiği: `L2` para lensi + **köprü** (güven < 7 → manuel senaryo).
    yapılırsa eşitlik tutmaz."
 
 ## Köprü kontrolü
-Bulgulardan biri güven < 7 ile ayakta kalırsa `04a`'da `(*)` işaretli senaryo doğmalı:
+Bulgulardan biri güven < 7 ile ayakta kalırsa `ANALISTE-GIDECEK.md`'da `(*)` işaretli senaryo doğmalı:
 > "100 TL'yi 3 taksite bölün. Ekranda gösterilen taksitlerin toplamı 100 TL mi?"
 
 Senaryoda `toFixed`, `float`, `reduce`, dosya adı **geçmemeli**.
 
 ## Analist paketi dil kontrolü  (KAPI 5.7 regresyonu)
 
-Bu vaka aynı zamanda `04a`'nın dilini sınar. Gerçek bir koşumda buradan teknik dil
+Bu vaka aynı zamanda `ANALISTE-GIDECEK.md`'nın dilini sınar. Gerçek bir koşumda buradan teknik dil
 sızmıştı; kontrolü altın vakaya bağlanmıştır.
 
-`04a-analist-test-paketi.md` üretildikten sonra:
+`ANALISTE-GIDECEK.md` üretildikten sonra:
 
 ```bash
 grep -nE '\.(ts|tsx|js|jsx)\b|[a-zA-Z_]+\(\)|```|\b(L[0-9]+-[0-9]+|P[123])\b|toFixed|reduce|float|Number\(' \
-  dogrulama/<klasor>/04a-analist-test-paketi.md
+  dogrulama/<klasor>/ANALISTE-GIDECEK.md
 ```
 
 **Hiçbir satır dönmemeli.**
@@ -54,6 +54,6 @@ TEKNIK_SIZINTI: 0
 ## Başarısız sayılır
 - `toFixed` bulgusu üretilmezse
 - Köprü senaryosu üretilmezse (güven < 7 olan ayakta bulgu varsa)
-- `04a` senaryosunda teknik terim geçerse
+- `ANALISTE-GIDECEK.md` senaryosunda teknik terim geçerse
 - `OKUNAN_KOD_DOSYASI: 0` veya `TEKNIK_SIZINTI: 0` sağlık işaretleri eksikse ya da
   sıfırdan büyükse

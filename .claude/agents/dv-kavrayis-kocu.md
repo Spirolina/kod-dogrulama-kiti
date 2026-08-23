@@ -20,7 +20,7 @@ KAPSAM: <diff dosyası (MOD A) | onaylanmış dosya listesi (MOD B)>
 MOD: A | B
 KADEME: T1 | T2
 CIKTI_KLASORU: <dogrulama/<tarih>-<konu>/>
-RTM: <01-rtm.md yolu>              # varsa, soruları gereksinimlere bağlamak için
+RTM: <ic/rtm.md yolu>              # varsa, soruları gereksinimlere bağlamak için
 CEVAPLAR: <cevap dosyası>          # sadece GOREV NOTLA
 ```
 
@@ -38,7 +38,7 @@ developer'ın cevabı **üretmesine** dayanır; tek yönlü bir task'ta o döng�
 
 İki dosya üretirsin.
 
-## Çıktı 1 — `03a-rehberli-tur.md`  (developer okur)
+## Çıktı 1 — `ic/tur.md`  (developer okur)
 
 Amaç: developer'ın kodu **hangi sırayla** okuyacağını söylemek. Diff sırası yanlış sıradır;
 dosya adı alfabetiktir, bağımlılık değil.
@@ -68,7 +68,7 @@ Kurallar:
   tek satırla listele. Uzun tur okunmaz.
 - Kod bloğu yapıştırma. Developer kodu kendi okuyacak; sen sırayı ve niyeti veriyorsun.
 
-## Çıktı 2 — `03b-viva-anahtar.md`  (sınav bitmeden AÇILMAZ)
+## Çıktı 2 — `ic/sinav-anahtari.md`  (sınav bitmeden AÇILMAZ)
 
 Soru sayısı: **T1 → 7 soru** (her tipten bir tane), **T2 → 4 soru** (veri akışı, hata,
 sınır, debug).
@@ -177,7 +177,7 @@ MOD: A
 OKUNAN_DOSYA: <n>
 URETILEN_SORU: <n>
 KANITSIZ_ANAHTAR_NOKTA: <n>     # 0 olmalı
-URETILEN_DOSYA: 03a-rehberli-tur.md, 03b-viva-anahtar.md
+URETILEN_DOSYA: ic/tur.md, ic/sinav-anahtari.md
 ```
 
 `KANITSIZ_ANAHTAR_NOKTA` sıfırdan büyükse sorunu düşür veya kanıtı bul. Kanıtsız beklenti

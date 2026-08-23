@@ -18,9 +18,9 @@ iyileşmediğini bilmez.
 
 | Durum | Neden yazılmaz |
 |---|---|
-| `(*)` odak işaretli manuel test KALDI | Doğrulama bunu zaten şüpheli işaretlemişti — **yakalandı**, kaçmadı. Fişin başarı hanesine yazılır |
+| `(*)` odak işaretli manuel test KALDI | Doğrulama bunu zaten şüpheli işaretlemişti — **yakalandı**, kaçmadı. `SONUC.md`'nin başarı hanesine yazılır |
 | RTM'de `❌`/`⚠️` olarak raporlanmış eksik | Doğrulama söyledi, bilerek merge edildi. Kaçan değil, kabul edilen risk |
-| Fişte "kalan riskler" altında yazılı olan şey | Aynı sebep — bilinen ve imzalanmış risk |
+| `SONUC.md`'de "kalan riskler" altında yazılı olan şey | Aynı sebep — bilinen ve imzalanmış risk |
 | Analiz hatası (kod analize uygun ama analiz yanlış) | Doğrulama katmanının kapsamı değil. Ayrı kayda geçer (TODOS #2) |
 
 Sadece **hiç kimsenin öngörmediği** şeyler buraya yazılır.
@@ -63,11 +63,11 @@ Ayda bir bakılır. Trend önemli, mutlak sayı değil.
 
 | Metrik | Nereden | Neye bakılır |
 |---|---|---|
-| Kaçan defect / değişiklik | bu dosya + fiş sayısı | düşüyor mu |
+| Kaçan defect / değişiklik | bu dosya + sonuç dosyası sayısı | düşüyor mu |
 | Hangi kapı en çok kaçırıyor | bu dosyadaki dağılım | o kapıya yatırım yap |
-| Yanlış pozitif oranı | fişlerdeki çürütme oranı | %80 üstüne çıkıyorsa tarama gevşiyor |
-| Viva skor trendi | fişler | yükseliyor mu — kavrayış gerçekten artıyor mu |
-| Kapı başına süre | fişler | duvar saati hedefi tutuyor mu |
+| Yanlış pozitif oranı | sonuç dosyalarıdeki çürütme oranı | %80 üstüne çıkıyorsa tarama gevşiyor |
+| Viva skor trendi | sonuç dosyaları | yükseliyor mu — kavrayış gerçekten artıyor mu |
+| Kapı başına süre | sonuç dosyaları | duvar saati hedefi tutuyor mu |
 
 ---
 

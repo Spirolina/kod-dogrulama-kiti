@@ -7,19 +7,19 @@ Manuel testi **analistler** yapıyor, developer değil. Bu paket onlara gider ve
 
 | Dosya | Kime | İçerik |
 |---|---|---|
-| `04a-analist-test-paketi.md` | analistlere (Confluence'a yapıştırılır) | iş dili, ekrandan yapılabilen adımlar |
-| `04b-developer-kontrol-listesi.md` | developer'da kalır | DB/log doğrulamaları, teknik kontroller |
-| `04c-test-sonuclari.md` | Confluence'tan geri kopyalanır | sonuçlar, RTM ve fişe işlenir |
+| `ANALISTE-GIDECEK.md` | analistlere (Confluence'a yapıştırılır) | iş dili, ekrandan yapılabilen adımlar |
+| `ic/developer-kontrolleri.md` | developer'da kalır | DB/log doğrulamaları, teknik kontroller |
+| `ic/analist-sonuclari.md` | Confluence'tan geri kopyalanır | sonuçlar, RTM ve `SONUC.md`'ye işlenir |
 
 ---
 
-## 0. `04a`'yı kim yazar — ve neden ayrı
+## 0. `ANALISTE-GIDECEK.md`'yı kim yazar — ve neden ayrı
 
-`04a` **kodu görmemiş bir bağlamda** yazılır (`dv-iz-denetci` · `GOREV: ANALIST`).
+`ANALISTE-GIDECEK.md` **kodu görmemiş bir bağlamda** yazılır (`dv-iz-denetci` · `GOREV: ANALIST`).
 Girdisi yalnız: analiz dokümanı, çivilenmiş gereksinimler, RTM durumları ve köprüden
 gelen **iş dilindeki** senaryolar. Dosya adı, kod, bulgu metni o bağlama hiç girmez.
 
-Sebep: bu ilk sürümde `04a` RTM ile aynı geçişte yazılıyordu ve yasak listesine rağmen
+Sebep: bu ilk sürümde `ANALISTE-GIDECEK.md` RTM ile aynı geçişte yazılıyordu ve yasak listesine rağmen
 teknik dil sızıyordu. Az önce her dosyayı okumuş bir bağlama "kod dilinde yazma" demek
 işe yaramıyor — hatırladığı dil o. **Görmediğini sızdıramaz;** çözüm kural değil, ayrım.
 
@@ -36,14 +36,14 @@ Kesin liste. Confluence sayfasını sandığından çok daha fazla kişi görür
 - Veritabanı tablo/kolon adı, sorgu, log formatı
 - Tarayıcı/platform API'si (`localStorage`, `WebView`, `window`, `useEffect`)
 
-Bunların hepsi `04b`'ye gider ve sende kalır.
+Bunların hepsi `SONUC.md` §3'ye gider ve sende kalır.
 
 ## 1b. Dil dönüşüm tablosu
 
 Yasak listesi tek başına yetmiyor — **yerine ne yazılacağı** söylenmeli. Teknik gerçek
 korunur, dili değişir:
 
-| Teknik gerçek | `04a`'da böyle yazılır |
+| Teknik gerçek | `ANALISTE-GIDECEK.md`'da böyle yazılır |
 |---|---|
 | Servis 500 dönerse | Sistem yanıt vermezse |
 | İstek zaman aşımına uğrarsa | İşlem uzun sürer ve tamamlanmazsa |
@@ -59,7 +59,7 @@ korunur, dili değişir:
 | Sınır karşılaştırması yanlış | Tutarın tam olarak limite eşit olması |
 
 Kural: analistin **ekranda görebileceği** ya da **eliyle yapabileceği** bir şeye çevir.
-Çeviremiyorsan o senaryo `04a`'ya ait değildir — `04b`'ye taşı ve kapsam beyanında
+Çeviremiyorsan o senaryo `ANALISTE-GIDECEK.md`'ya ait değildir — `SONUC.md` §3'ye taşı ve kapsam beyanında
 kapsanmayan olarak yaz.
 
 ## 1c. Önce / sonra
@@ -83,7 +83,7 @@ ihtiyacı olan tek şey: **ne yapacağım, ne görmeliyim.**
 - **İş dili.** "Müşteri günlük limitini aşan bir transfer başlatır" — "TransferService
   limit kontrolünü çalıştırır" değil.
 - **Ekrandan yapılabilir olmalı.** Analist veritabanına bakamaz, servis çağıramaz, log
-  okuyamaz. Yapılamayan kontrol `04b`'ye taşınır.
+  okuyamaz. Yapılamayan kontrol `SONUC.md` §3'ye taşınır.
 - **Tek beklenen sonuç.** Bir senaryo bir şeyi doğrular. "Hem reddetsin hem mesaj göstersin"
   iki senaryodur (`MT-02`, `MT-03`).
 - **Test verisi somut.** "Limiti dolu müşteri" değil, "Günlük limiti 50.000 TL olan, o gün
@@ -93,13 +93,13 @@ ihtiyacı olan tek şey: **ne yapacağım, ne görmeliyim.**
 - **Sıra bağımlılığı açık.** Bir senaryo öncekinin devamıysa ön koşulda yazılır ("MT-02'nin
   devamı").
 - **Baş parmak testi.** Her adım, telefonu eline alan birinin yapabileceği bir hareket
-  olmalı: dokun, yaz, bekle, kapat, geri dön. Yapılamıyorsa `04b`'ye taşınır.
+  olmalı: dokun, yaz, bekle, kapat, geri dön. Yapılamıyorsa `SONUC.md` §3'ye taşınır.
 - **Beklenen sonuç ekranda görünür olmalı.** "Limit düşürülür" bir iç durumdur, analist
   göremez. "Kalan limitiniz 5.000 TL olarak görünür" görülebilir.
 - **Senaryo başına en fazla 5 adım.** Daha uzunu koşulmaz, koşulsa da nerede kırıldığı
   belli olmaz.
 - **Toplam 15 senaryoyu aşıyorsa** bu bir kapsam sinyalidir: değişiklik muhtemelen
-  bölünmeli. Paketi kısaltma — fişe yaz ve söyle.
+  bölünmeli. Paketi kısaltma — `SONUC.md`'ye yaz ve söyle.
 
 ## 3. Odak işareti `(*)`
 
@@ -114,10 +114,10 @@ Paketin başına tek cümle konur:
 
 ## 3b. Yayın öncesi mekanik kontrol (zorunlu)
 
-`04a` yazıldıktan sonra, Confluence'a gitmeden önce koşulur:
+`ANALISTE-GIDECEK.md` yazıldıktan sonra, Confluence'a gitmeden önce koşulur:
 
 ```bash
-grep -nE '\.(ts|tsx|js|jsx|swift|kt|java)\b|[a-zA-Z_]+\(\)|```|\b(L[0-9]+-[0-9]+|P[123])\b|/api/|https?://|localStorage|sessionStorage|WebView|window\.|use[A-Z][a-zA-Z]+|[a-z]+[A-Z][a-zA-Z]*' 04a-analist-test-paketi.md
+grep -nE '\.(ts|tsx|js|jsx|swift|kt|java)\b|[a-zA-Z_]+\(\)|```|\b(L[0-9]+-[0-9]+|P[123])\b|/api/|https?://|localStorage|sessionStorage|WebView|window\.|use[A-Z][a-zA-Z]+|[a-z]+[A-Z][a-zA-Z]*' ANALISTE-GIDECEK.md
 ```
 
 **Hiçbir satır dönmemeli.** Dönen her satır elden geçirilir:
@@ -126,13 +126,13 @@ grep -nE '\.(ts|tsx|js|jsx|swift|kt|java)\b|[a-zA-Z_]+\(\)|```|\b(L[0-9]+-[0-9]+
 |---|---|
 | Dosya uzantısı, `fonksiyonAdı()`, camelCase | Dil dönüşüm tablosuna göre çevir |
 | Kod bloğu (```` ``` ````) | Tamamen sil, ne yapıldığını cümleyle anlat |
-| Lens/severity kodu | Sil, `04b`'ye taşı |
+| Lens/severity kodu | Sil, `SONUC.md` §3'ye taşı |
 | URL, API yolu | Sil |
 | Platform API adı | Dil dönüşüm tablosuna göre çevir |
 
 Yanlış pozitif çıkabilir (özel isimler, ürün adları). Tek tek bak, körlemesine silme.
 
-Sağlık işaretine yaz: `TEKNIK_SIZINTI: <n>` — **0 olmalı.** Sıfır değilse `04a` yayına
+Sağlık işaretine yaz: `TEKNIK_SIZINTI: <n>` — **0 olmalı.** Sıfır değilse `ANALISTE-GIDECEK.md` yayına
 hazır değildir.
 
 ## 4. Kapsam beyanı
@@ -153,7 +153,7 @@ Toplam <n> senaryo · <n> negatif · <n> sınır değeri · <n> tanesi (*) işar
 
 ---
 
-## 5. `04a` — Confluence wiki markup şablonu
+## 5. `ANALISTE-GIDECEK.md` — Confluence wiki markup şablonu
 
 Confluence'ta **Insert → Markup → Confluence Wiki** ile yapıştırılır; tablo olarak açılır.
 
@@ -191,9 +191,10 @@ son çare, sonuç takibi elle yapılır ve RTM'e bağlamak zorlaşır.
 
 ---
 
-## 6. `04b` — Developer kontrol listesi şablonu
+## 6. `ic/developer-kontrolleri.md` — Developer kontrol listesi şablonu
 
 Analistin göremeyeceği her şey burada. Sende kalır, Confluence'a gitmez.
+Bu tablo `SONUC.md` §3'e olduğu gibi taşınır — developer tek dosyada görsün diye.
 
 ```markdown
 # Developer Kontrol Listesi — <konu>
@@ -209,12 +210,12 @@ Analistin göremeyeceği her şey burada. Sende kalır, Confluence'a gitmez.
 Bağlı bulgular: <L?-??> — bu kontrol o bulgunun çalıştırma kanıtıdır.
 ```
 
-Kural: `04b`'deki her satır ya bir `MT-xx`'in tamamlayıcısıdır, ya da analistin hiç
+Kural: `SONUC.md` §3'deki her satır ya bir `MT-xx`'in tamamlayıcısıdır, ya da analistin hiç
 yapamayacağı bağımsız bir kontroldür. Sebepsiz teknik kontrol eklenmez.
 
 ---
 
-## 7. `04c` — Geri dönüş şablonu
+## 7. `ic/analist-sonuclari.md` — Geri dönüş şablonu
 
 Analist Confluence tablosunu doldurduktan sonra kopyalanır.
 
@@ -233,10 +234,10 @@ Kaynak: <confluence linki> · Alındığı tarih: <YYYY-AA-GG>
 Sonuçlar iki yere işlenir:
 
 1. **RTM** — ilgili gereksinimin "manuel adım" kolonu güncellenir
-2. **Fiş** — "Manuel test" bölümü doldurulur
+2. **`SONUC.md`** — §4 "Manuel test" bölümü doldurulur
 
 **`(*)` işaretli bir test KALDI ise:** doğrulamanın şüphesi doğrulanmıştır. Bu **kaçan
-defect değil, yakalanan defect'tir** — `kacan-defectler.md`'ye değil, fişin başarı hanesine
+defect değil, yakalanan defect'tir** — `kacan-defectler.md`'ye değil, sonucun başarı hanesine
 yazılır. Köprünün çalıştığının kanıtıdır.
 
 **`(*)` işaretsiz bir test KALDI ise:** hiçbir lens bunu öngörmemiştir.

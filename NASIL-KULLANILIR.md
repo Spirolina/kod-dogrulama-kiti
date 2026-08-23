@@ -13,8 +13,8 @@ Kurulum tek seferlik ve ayrı: `KURULUM-TASK-MODU.md` (terminalsiz ortam) veya
 1. Task aç, notu yapıştır, analiz.md'yi ekle, repoyu seç
 2. Planı oku → kapsamı onayla
 3. Bekle, branch'i çek
-4. 05-fis.md oku → P1'leri kapat
-5. 04a-analist-test-paketi.md → Confluence
+4. SONUC.md oku → P1'leri kapat
+5. ANALISTE-GIDECEK.md → Confluence
 6. Kavrayış sınavı — Copilot/Windsurf'te /dv-kavra
 ```
 
@@ -107,7 +107,7 @@ onay yerine şunu yaz: *"config/limits.ts'i de dahil et, öyle devam."*
 tamamlayacağım" gibi bir satır varsa **onaylama.** Düzelten taraf doğrulayamaz.
 
 **Alt agent yok diyorsa.** SIRALI MOD'a düşecek — çalışır ama bağımsızlık zayıflar,
-fişe `Bağımsızlık: ZAYIF` yazılır. Onaylayabilirsin, bilerek onayla.
+`SONUC.md`'ye `Bağımsızlık: ZAYIF` yazılır. Onaylayabilirsin, bilerek onayla.
 
 ### Kademe beklediğinden düşükse
 
@@ -123,7 +123,7 @@ hatanın bedeli eşit değil.
 git diff --name-only develop...HEAD | grep -v '^dogrulama/'
 ```
 
-**Boş dönmeli.** Bir satır bile dönerse doğrulama ürün koduna dokunmuş: fiş
+**Boş dönmeli.** Bir satır bile dönerse doğrulama ürün koduna dokunmuş: sonuç dosyası
 kapatılamaz, temiz branch'te yeniden koş.
 
 `dogrulama/` altının **dolu** olması doğru — çıktıyı alma yolun o.
@@ -132,48 +132,70 @@ kapatılamaz, temiz branch'te yeniden koş.
 
 ## 4. Çıktılar
 
-`dogrulama/<tarih>-<konu>/` altında:
+`dogrulama/<tarih>-<konu>/` altında **iki dosya** görürsün:
 
 | Dosya | Kime | Ne yaparsın |
 |---|---|---|
-| `05-fis.md` | Sana | **Önce bunu oku.** Tek A4, durum satırı üstte |
-| `01-rtm.md` | Sana | `❌` ve `➕` satırlarına bak |
-| `02-bulgular.md` | Sana | Ayakta kalan P1/P2 |
-| `04a-analist-test-paketi.md` | Analistlere | Confluence'a yapıştır |
-| `04b-developer-kontrol-listesi.md` | Sana | **Confluence'a gitmez** |
-| `04d-analist-girdisi.md` | Ara dosya | `04a`'yı yazan bağlama giden iş dilindeki özet |
-| `00-kapsam-onayli.md` | Denetim izi | Onayladığın kapsam |
+| `SONUC.md` | Sana | **Sadece bunu oku.** Başka bir şey açmana gerek yok |
+| `ANALISTE-GIDECEK.md` | Analistlere | Confluence'a yapıştır |
 
-### Fişte ne göreceksin
+Bir de `ic/` klasörü var — ara dosyalar ve denetim izi. Günlük iş için açmana gerek yok;
+`SONUC.md` hepsine özet ve referans veriyor. İçinde ne olduğu `ic/OKUBENI.md`'de yazıyor.
+
+### `SONUC.md` ne içeriyor
+
+Tek dosya, sırayla:
+
+| Bölüm | Ne söylüyor |
+|---|---|
+| Durum + **Ne yapmalısın** | İlk ekran. Kapandı mı, kapanmadıysa neden, sırada ne var |
+| Özet | Değişiklik, risk kademesi, nasıl bakıldı, süre |
+| **1. Analiz ile kod tutuyor mu** | Analizdeki her istek kodda var mı |
+| 2. Bulgular | Merceklerin bulduğu ve çürütmeden sağ çıkan sorunlar |
+| 3. Senin yapacağın kontroller | Analistin ekrandan yapamayacağı, sende kalan kontroller |
+| 4. Manuel test | Analistlere ne gitti, kaç senaryo, sonuçlar |
+| 5. Kavrayış sınavı | Skor, zayıf alan, aksiyon |
+| 6-7. Kalan riskler / açık sorular | Bilerek kabul edilenler ve cevabı beklenenler |
+| 8. Sağlık işaretleri | Doğrulamanın gerçekten koştuğunun kanıtı |
+| 9-10. İmza / geri besleme | Sen doldurursun |
+
+İlk satır böyle görünür:
 
 ```
-Durum: KAPATILAMADI
-Sebep: RTM'de 1 adet ❌ var (R-03); L2-01 P1 bulgusu açık
+**Durum: KAPANMADI**
+Sebep: analizde istenen 1 şey kodda yok (R-03) · 1 ciddi bulgu açık (L13-02)
 ```
 
-`KAPATILAMADI` iken merge etme. Fişin tek işlevi bu.
+`KAPANMADI` iken merge etme. `SONUC.md`'nin tek işlevi bu.
 
-### RTM işaretleri
+### §1 — "Analiz ile kod tutuyor mu" nasıl okunur
+
+Analiz dokümanındaki her istek tek tek arandı, kodda karşılığı var mı diye.
+*(Denetim dilinde bu tabloya "izlenebilirlik matrisi / RTM" denir — denetçi bu adı tanır,
+sen tanımak zorunda değilsin.)*
 
 | İşaret | Anlamı | Ne yaparsın |
 |---|---|---|
-| ✅ | Gereksinim kodda karşılanmış | — |
-| ⚠️ | Kısmen karşılanmış | Oku, karar ver |
-| ❌ | Analizde var, kodda **yok** | Kodu tamamla ya da analize dön |
-| ❓ | Bulunamadı (yalnız MOD B) | Kapsam dar olabilir, bak |
-| ➕ | Kodda var, analizde **yok** | **En değerli satır.** İstenmemiş davranış |
+| ✅ | İstenen kodda var | — |
+| ⚠️ | Kısmen var | Oku, karar ver |
+| ❌ | **İstenmiş ama kodda yok** | Kodu tamamla ya da analize dön |
+| ❓ | Bulamadım (yalnız keşif modunda) | Kapsam dar olabilir, bak |
+| ➕ | **Kodda var ama kimse istememiş** | En değerli satır |
 | ⚪ | Kapsam dışı | — |
 
 `➕` en çok atlanan. Kimse istemediği hâlde koda girmiş bir davranış — ya gereksiz iş,
-ya da kimsenin test etmeyeceği bir risk.
+ya da kimsenin test etmeyeceği bir risk. Analizde yoksa test planında da yoktur.
 
-### Bulgu severity
+### §2 — Bulgu ciddiyeti
 
-| | Anlamı |
+| Kelime | Anlamı |
 |---|---|
-| **P1** | Para, veri, güvenlik veya servis riski. Fiş kapanmaz |
-| **P2** | Yanlış davranış, kullanıcı etkisi var. Karar senin |
-| **P3** | Bakım riski. TODO'ya |
+| **Ciddi** | Para, veri, güvenlik veya servis riski. `SONUC.md` kapanmaz |
+| Orta | Yanlış davranış, kullanıcı etkisi var. Karar senin |
+| Düşük | Bakım riski. TODO'ya — `SONUC.md`'ye yazılmaz |
+
+`#` kolonundaki kod (`L2-01`) bulguyu bulan merceği gösterir. Çözmen gerekmiyor;
+tam hâlini aramak istersen `ic/bulgular-curutulmus.md` içinde aynı kodla duruyor.
 
 ---
 
@@ -181,18 +203,18 @@ ya da kimsenin test etmeyeceği bir risk.
 
 1. Analiz sayfasının **altında** yeni sayfa: `DV-<tarih>-<konu> Test Paketi`
 2. Label: `dogrulama-test`
-3. `Insert → Markup → Confluence Wiki` → `04a` içeriğini yapıştır
-4. Menü kapalıysa `04a` içindeki HTML tablo alternatifini kullan
+3. `Insert → Markup → Confluence Wiki` → `ANALISTE-GIDECEK.md` içeriğini yapıştır
+4. Menü kapalıysa `ANALISTE-GIDECEK.md` içindeki HTML tablo alternatifini kullan
 
 `(*)` işaretli satırlar **köprüden** gelir: statik analizle emin olunamayan, elle
 bakılması gereken noktalar. Analist bunları atlamamalı.
 
-**`04b` Confluence'a gitmez.** İçinde dosya adı, satır numarası, lens ID, güven skoru
+**`SONUC.md` §3 Confluence'a gitmez.** İçinde dosya adı, satır numarası, lens ID, güven skoru
 var. Bu bilgi dışarı çıkmaz.
 
 ### Yapıştırmadan önce bir kez gözünle oku
 
-`04a`'yı yazan agent kodu hiç görmez ve mekanik bir sızıntı kontrolünden geçer, ama
+`ANALISTE-GIDECEK.md`'yı yazan agent kodu hiç görmez ve mekanik bir sızıntı kontrolünden geçer, ama
 Confluence sayfası geri alınamaz. Şunlardan biri görünüyorsa yapıştırma:
 
 dosya adı · uzantı (`.ts`, `.tsx`) · `fonksiyonAdı()` · kod bloğu · `L2-01` gibi kod ·
@@ -218,7 +240,7 @@ T2 ≥ 6/8.
 kod fazla karmaşık (böl), ya da değişiklik fazla büyük (parçala). İkisi de koda bakar,
 sana değil.
 
-Sonuç fişe işlenir. `03b-viva-anahtar.md` dosyası **commit'lenmez** — `.gitignore`'da.
+Sonuç `SONUC.md`'ye işlenir. `ic/sinav-anahtari.md` dosyası **commit'lenmez** — `.gitignore`'da.
 
 ---
 
@@ -228,13 +250,13 @@ Sonuç fişe işlenir. `03b-viva-anahtar.md` dosyası **commit'lenmez** — `.gi
 |---|---|---|
 | Plan kapsamı çok geniş, 30 dosya | Değişiklik büyük | Bölmeyi iste. Doğrulanamayan büyüklük, kavranamayan büyüklüktür |
 | `okunan dosya: 0` + `bulgu: 0` | Lens gerçekten koşmadı | **"Temiz" değil, başarısız.** Yeniden koş |
-| Çürütme oranı %100 | Tarama gevşek veya çürütme aşırı temkinli | Fişteki uyarıyı oku, bir lensi elle kontrol et |
+| Çürütme oranı %100 | Tarama gevşek veya çürütme aşırı temkinli | `SONUC.md` içindeki uyarıyı oku, bir lensi elle kontrol et |
 | Çürütme oranı %0 | Çürütme muhtemelen hiç denenmedi | Aynı — şüpheyle bak |
 | RTM'de çok sayıda ❓ | MOD B'de kapsam dar kalmış | Kapsamı genişletip yeniden koş |
-| Fiş "KAPATILAMADI" ve P1 haklı değil | Yanlış pozitif çürütmeden kaçmış | `02-bulgular.md`'deki `CURUTME_DENEMESI` alanını oku, gerekçeyi değerlendir |
+| Sonuç dosyası "KAPANMADI" ve P1 haklı değil | Yanlış pozitif çürütmeden kaçmış | `ic/bulgular-curutulmus.md`'deki `CURUTME_DENEMESI` alanını oku, gerekçeyi değerlendir |
 | Task ürün kodunu değiştirmiş | Yasak tutmadı | Temiz branch'te yeniden koş. Tekrarlıyorsa `CLAUDE.md` bloğu repoda mı, kontrol et |
-| `04a` fazla teknik, kod parçası var | `ANALIST` görevi kodu görmüş olabilir | Fişte `kod dosyası okundu: 0` mı, `teknik sızıntı: 0` mı bak. Değilse KAPI 5.7'yi tek başına yeniden koştur |
-| `04a` çok uzun, 15+ senaryo | Değişiklik büyük | Paketi kısaltma. Değişikliği bölmeyi değerlendir |
+| `ANALISTE-GIDECEK.md` fazla teknik, kod parçası var | `ANALIST` görevi kodu görmüş olabilir | `SONUC.md`'de `kod dosyası okundu: 0` mı, `teknik sızıntı: 0` mı bak. Değilse KAPI 5.7'yi tek başına yeniden koştur |
+| `ANALISTE-GIDECEK.md` çok uzun, 15+ senaryo | Değişiklik büyük | Paketi kısaltma. Değişikliği bölmeyi değerlendir |
 
 ---
 
@@ -246,7 +268,7 @@ hatalı varsayımı hem yazarken hem kontrol ederken taşır.
 **Analiz zorunlu.** Onsuz çıkan şey doğrulama değil, kod okuma. Karşılaştırılacak bir
 şey olmadan "doğru mu" sorusu cevaplanamaz.
 
-**Boş rapor temiz rapor değil.** Sağlık işaretleri bunun için var; fişte ilk bakılacak
+**Boş rapor temiz rapor değil.** Sağlık işaretleri bunun için var; `SONUC.md`'de ilk bakılacak
 yer orası.
 
 **Kaçan defect olursa yaz.** `dogrulama/kacan-defectler.md` — hangi lens kaçırdı, neden.

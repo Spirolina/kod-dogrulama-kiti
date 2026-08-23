@@ -13,4 +13,4 @@ Test ettiği: `L1` sınır değer lensi.
 ## Başarısız sayılır
 - Bulgu üretilmezse
 - Somut senaryo olmadan "sınır kontrolü şüpheli" denirse (atılmalıydı)
-- Sınır senaryosu `04a`'ya girmezse
+- Sınır senaryosu `ANALISTE-GIDECEK.md`'ya girmezse

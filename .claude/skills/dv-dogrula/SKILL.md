@@ -1,6 +1,6 @@
 ---
 name: dv-dogrula
-description: Kod doğrulama zinciri. Analiz ile kodu karşılaştırır (RTM), dosya tipine göre seçilen lenslerle adversarial tarar, bulguları çürütür, analistlere Türkçe manuel test paketi üretir ve doğrulama fişini hazırlar. Diff varsa A modunda, yoksa kapsamı keşfedip B modunda çalışır. YENİ bir oturumda koşulmalıdır.
+description: Kod doğrulama zinciri. Analiz ile kodu karşılaştırır (RTM), dosya tipine göre seçilen lenslerle adversarial tarar, bulguları çürütür, analistlere Türkçe manuel test paketi üretir ve doğrulama sonucunu hazırlar. Diff varsa A modunda, yoksa kapsamı keşfedip B modunda çalışır. YENİ bir oturumda koşulmalıdır.
 ---
 
 # /dv-dogrula — Doğrulama Zinciri (G0 → G2 + G1b)
@@ -53,7 +53,7 @@ Bitirmeden önce kendini kontrol et:
 git status --porcelain | awk '{print $NF}' | grep -v '^dogrulama/'
 ```
 
-Bir satır bile dönerse **dur ve bildir** — o dosyayı geri al, fişe yaz. Sessizce
+Bir satır bile dönerse **dur ve bildir** — o dosyayı geri al, `SONUC.md`'ye yaz. Sessizce
 commit'leme.
 
 ---
@@ -99,7 +99,7 @@ buradan çöker.
 Yap: /clear (veya yeni terminal), sonra /dv-dogrula tekrar.
 ```
 
-Kullanıcı "yine de devam et" derse: devam et, ama fişe `Bağımsızlık: İHLAL — kirli oturumda
+Kullanıcı "yine de devam et" derse: devam et, ama `SONUC.md`'ye `Bağımsızlık: İHLAL — kirli oturumda
 koşuldu` satırını yaz. Sessizce geçme.
 
 Emin değilsen kullanıcıya doğrudan sor: *"Bu değişikliğin kodunu bu oturumda mı yazdık?"*
@@ -109,7 +109,7 @@ Emin değilsen kullanıcıya doğrudan sor: *"Bu değişikliğin kodunu bu oturu
 `dv-celiskici`, `dv-curutucu`, `dv-iz-denetci` agent'larını çağırabiliyor musun?
 
 Çağıramıyorsan zincir yine koşar ama **SIRALI MOD**'a düşer (bkz. KAPI 4). Bunu şimdi
-söyle, fişe `Bağımsızlık: ZAYIF — sıralı modda koşuldu` yaz. Task ortamındaysan bunu
+söyle, `SONUC.md`'ye `Bağımsızlık: ZAYIF — sıralı modda koşuldu` yaz. Task ortamındaysan bunu
 plan aşamasında bildir; onay senin değil kullanıcının kararı.
 
 ---
@@ -120,12 +120,12 @@ Gerekenler:
 
 | Girdi | Nasıl bulunur |
 |---|---|
-| Analiz dokümanı | Task ekindeki dosya · not içindeki yol · `dogrulama/*/00-analiz.md` · yapıştırılmış metin. **Zorunlu.** |
+| Analiz dokümanı | Task ekindeki dosya · not içindeki yol · `dogrulama/*/ic/analiz.md` · yapıştırılmış metin. **Zorunlu.** |
 | Kapsam | `git diff` çalışıyorsa → **MOD A**. Çalışmıyor/boşsa → **MOD B** |
 | Konu adı | Nottan veya kullanıcıdan, kısa kebab-case |
 
 Task ortamında analiz dosyası ek olarak geldiyse **önce onu klasöre kopyala**
-(`00-analiz.md`). Ek dosyalar task'la birlikte kaybolur; RTM'in dayandığı metnin
+(`ic/analiz.md`). Ek dosyalar task'la birlikte kaybolur; RTM'in dayandığı metnin
 commit'te durması gerekir. Ek yoksa notta verilen yolu oku.
 
 ```bash
@@ -148,8 +148,20 @@ sadece kod okuma olur.
 Klasörü aç:
 
 ```bash
-mkdir -p "dogrulama/$(date +%Y-%m-%d)-<konu>"
+mkdir -p "dogrulama/$(date +%Y-%m-%d)-<konu>/ic"
 ```
+
+Klasör yapısı — **iki görünür dosya, gerisi `ic/` altında:**
+
+```
+dogrulama/<tarih>-<konu>/
+  SONUC.md              ← developer bunu okur, başka bir şey açmasına gerek yok
+  ANALISTE-GIDECEK.md   ← Confluence'a yapıştırılır
+  ic/                   ← ara dosyalar ve denetim izi
+```
+
+Kullanıcı **iki dosya** görmeli. `ic/` altındakiler agent'lar arası devir ve arşiv;
+`SONUC.md` hepsine özet + referans verir. Kök dizine üçüncü bir dosya yazma.
 
 Modu kullanıcıya bir satırda bildir: `Mod A (diff bulundu, N dosya)` veya
 `Mod B (diff yok — kapsam keşfedilecek ve sana onaylatılacak)`.
@@ -168,9 +180,9 @@ Koşulacak: 12 lens, filtresiz · Duvar saati hedefi: 16 dk
 ```
 
 **Yükseltme serbest, düşürme onaylı.** Kademeyi düşürmek istiyorsan kullanıcıya sor ve
-gerekçeyi fişe yaz. Yükseltmek için sorma.
+gerekçeyi `SONUC.md`'ye yaz. Yükseltmek için sorma.
 
-Kademe fişe yazılır.
+Kademe `SONUC.md`'ye yazılır.
 
 ---
 
@@ -179,7 +191,7 @@ Kademe fişe yazılır.
 *(Yalnız MOD B. MOD A ise atla.)*
 
 `dv-iz-denetci` agent'ını `GOREV: KAPSAM` ile çağır.
-Çıktı: `00-kapsam-haritasi.md`.
+Çıktı: `ic/kapsam-taslak.md`.
 
 Haritayı kullanıcıya **olduğu gibi** göster. Özetleme, kısaltma, yorumlama. Sonra sor:
 
@@ -204,13 +216,13 @@ planın içine koy.** Plan şu dört başlığı içermeli:
 4. Alt agent durumu: var | yok (SIRALI MOD)
 ```
 
-Plan onaylanınca kapsam onaylanmış sayılır. Onaylanan listeyi `00-kapsam-onayli.md`
+Plan onaylanınca kapsam onaylanmış sayılır. Onaylanan listeyi `ic/kapsam.md`
 olarak yaz — sonraki agent'lar planı değil bu dosyayı okur.
 
 Kullanıcı planı değiştirerek onaylarsa **değişmiş hali** yazılır. Planda gösterip
 dosyaya başka bir şey yazmak, denetim izini yalanlar.
 
-Onaylanan kapsamı `00-kapsam-onayli.md` olarak yaz. Sonraki tüm agent'lar bunu alır.
+Onaylanan kapsamı `ic/kapsam.md` olarak yaz. Sonraki tüm agent'lar bunu alır.
 
 ---
 
@@ -218,10 +230,10 @@ Onaylanan kapsamı `00-kapsam-onayli.md` olarak yaz. Sonraki tüm agent'lar bunu
 
 `dv-iz-denetci` agent'ını `GOREV: RTM` ile çağır.
 
-Üretilenler: `00-gereksinimler.md`, `01-rtm.md`, `04b-developer-kontrol-listesi.md`,
-`04d-analist-girdisi.md`.
+Üretilenler: `ic/gereksinimler.md`, `ic/rtm.md`, `ic/developer-kontrolleri.md`,
+`ic/analist-girdisi.md`.
 
-**`04a` burada üretilmez.** Analist paketi en sonda, KAPI 5.7'de, kodu görmemiş ayrı bir
+**`ANALISTE-GIDECEK.md` burada üretilmez.** Analist paketi en sonda, KAPI 5.7'de, kodu görmemiş ayrı bir
 bağlamda yazılır. Bu agent az önce her dosyayı okudu; ona "analist diliyle yaz" demek
 tutmuyor.
 
@@ -260,7 +272,7 @@ Her lens dönüşünde sağlık işaretini kontrol et:
 - `OKUNAN_DOSYA: 0` + `BULGU_SAYISI: 0` → o lens **başarısız**, listeye `LENS_BASARISIZ` yaz
 - `ATLANAN_DOSYA > 0` → nedenini not et
 
-Ham bulguları `02a-ham-bulgular.md` olarak birleştir. **Mekanik birleştirme** — bulgu metnini
+Ham bulguları `ic/bulgular-ham.md` olarak birleştir. **Mekanik birleştirme** — bulgu metnini
 değiştirme, severity'ye dokunma, "bu önemli değil" diye eleme. Yorum yapan tek yer KAPI 5.
 
 ### SIRALI MOD — alt agent yoksa
@@ -275,11 +287,11 @@ Ortam alt agent çağırmaya izin vermiyorsa zincir durmaz, ama şu kurallarla k
    işaretleri sıralı modda daha kritik: kaçırılan lens burada görünür.
 4. Çürütmeyi (KAPI 5) **ayrı bir geçişte** yap. Bulguyu üreten geçiş kendi bulgusunu
    çürütmeye çalışırsa ikisi de zayıflar.
-5. `04a`'yı **en son ve ayrı bir geçişte** yaz. Ondan önce yazdığın her şeyi (kod, RTM,
-   bulgular) unutmuş gibi davran; girdin yalnız analiz dokümanı ve `04d`. Sıralı modda
+5. `ANALISTE-GIDECEK.md`'yı **en son ve ayrı bir geçişte** yaz. Ondan önce yazdığın her şeyi (kod, RTM,
+   bulgular) unutmuş gibi davran; girdin yalnız analiz dokümanı ve `ic/analist-girdisi.md`. Sıralı modda
    bu bir ayrım değil sadece bir disiplin — bu yüzden §3b mekanik `grep` kontrolü burada
    **tek gerçek koruma**. Mutlaka koş.
-6. Fişe `Bağımsızlık: ZAYIF — sıralı modda koşuldu` yaz.
+6. `SONUC.md`'ye `Bağımsızlık: ZAYIF — sıralı modda koşuldu` yaz.
 
 Sıralı mod bir **düşüş**, eşdeğer değil. Aynı bağlam hem 11 lensi hem çürütmeyi taşır;
 erken bulgular geç bulguları etkiler. Alt agent desteği çıkarsa geri dön.
@@ -288,9 +300,9 @@ erken bulgular geç bulguları etkiler. Alt agent desteği çıkarsa geri dön.
 
 ## KAPI 5 — G2b Çürütme
 
-`dv-curutucu` agent'ını çağır. Girdi: `02a-ham-bulgular.md` + kapsam.
+`dv-curutucu` agent'ını çağır. Girdi: `ic/bulgular-ham.md` + kapsam.
 
-Çıktı: `02-bulgular.md` — ayakta kalanlar, çürütülenler (gerekçeli), köprüye gidenler.
+Çıktı: `ic/bulgular-curutulmus.md` — ayakta kalanlar, çürütülenler (gerekçeli), köprüye gidenler.
 
 Çürütme oranını kontrol et:
 - **> %80** → kullanıcıya uyar: tarama gevşek veya çürütme aşırı temkinli olabilir
@@ -300,13 +312,13 @@ erken bulgular geç bulguları etkiler. Alt agent desteği çıkarsa geri dön.
 
 ## KAPI 5.5 — Köprü
 
-`02-bulgular.md` içinde **güveni 7'nin altında ayakta kalmış** bulgu varsa:
+`ic/bulgular-curutulmus.md` içinde **güveni 7'nin altında ayakta kalmış** bulgu varsa:
 
 `dv-iz-denetci` agent'ını `GOREV: KOPRU` ile çağır. Bu bulguları iş diline çevirip
-`04d-analist-girdisi.md` sonuna `K-xx` senaryoları olarak ekler, teknik sebebi `04b`'ye
+`ic/analist-girdisi.md` sonuna `K-xx` senaryoları olarak ekler, teknik sebebi `SONUC.md` §3'ye
 yazar.
 
-Köprüden geçen bulgu yoksa bu kapıyı atla ve fişe `Köprüye giden: 0` yaz.
+Köprüden geçen bulgu yoksa bu kapıyı atla ve `SONUC.md`'ye `Köprüye giden: 0` yaz.
 
 ---
 
@@ -314,38 +326,75 @@ Köprüden geçen bulgu yoksa bu kapıyı atla ve fişe `Köprüye giden: 0` yaz
 
 `dv-iz-denetci` agent'ını `GOREV: ANALIST` ile çağır.
 
-**Bu çağrıya kod yolu verme.** Girdisi yalnız: analiz dokümanı, `04d-analist-girdisi.md`,
-`sablonlar/analist-test-paketi.md`. Kapsam dosyasını, RTM'i, bulguları, `04b`'yi bu
+**Bu çağrıya kod yolu verme.** Girdisi yalnız: analiz dokümanı, `ic/analist-girdisi.md`,
+`sablonlar/analist-test-paketi.md`. Kapsam dosyasını, RTM'i, bulguları, `SONUC.md` §3'yi bu
 çağrının bağlamına sokma — özet olarak bile.
 
-Çıktı: `04a-analist-test-paketi.md`.
+Çıktı: `ANALISTE-GIDECEK.md`.
 
 Sağlık kontrolü:
 
 | İşaret | Beklenen | Değilse |
 |---|---|---|
 | `OKUNAN_KOD_DOSYASI` | **0** | Görev geçersiz, yeniden çağır |
-| `TEKNIK_SIZINTI` | **0** | `04a` yayına hazır değil, düzelttir |
+| `TEKNIK_SIZINTI` | **0** | `ANALISTE-GIDECEK.md` yayına hazır değil, düzelttir |
 | `KAPSANAN_GEREKSINIM` | `❌`/`❓` hariç hepsi | Eksikse kapsam beyanında yazılı mı, kontrol et |
 
-`TEKNIK_SIZINTI > 0` iken `04a`'yı devretme. Confluence sayfasını sandığından çok daha
+`TEKNIK_SIZINTI > 0` iken `ANALISTE-GIDECEK.md`'yı devretme. Confluence sayfasını sandığından çok daha
 fazla kişi görür ve oradan geri alınamaz.
 
 ---
 
-## KAPI 6 — Fiş taslağı
+## KAPI 6 — Sonuç dosyası
 
-`sablonlar/fis-sablonu.md` şablonunu kullanarak `05-fis.md` yaz. Doldurabileceğin alanlar:
-kademe, mod, sağlık işaretleri, RTM özeti, `➕` satırları, ayakta kalan P1/P2 bulgular,
-köprü sayısı.
+`sablonlar/sonuc-sablonu.md` şablonunu kullanarak `SONUC.md` yaz.
+
+Bu dosya **birleştirme** işidir; `ic/` altındaki şu dosyalardan derlenir:
+
+| SONUC.md bölümü | Kaynak |
+|---|---|
+| §1 Analiz ile kod tutuyor mu | `ic/rtm.md` — tabloyu olduğu gibi taşı |
+| §2 Bulgular | `ic/bulgular-curutulmus.md` — ayakta kalan P1/P2, Türkçe ciddiyet |
+| §3 Senin yapacağın kontroller | `ic/developer-kontrolleri.md` — tabloyu taşı |
+| §4 Manuel test | `ANALISTE-GIDECEK.md` sayıları + `ic/analist-girdisi.md` |
+| §8 Sağlık işaretleri | Tüm agent çıktılarındaki sağlık satırları |
+
+Doldurabileceğin alanlar: kademe, mod, sağlık işaretleri, RTM özeti, `➕` satırları,
+ayakta kalan bulgular, köprü sayısı.
+
+Ciddiyet kodlarını **Türkçeye çevir**: P1 → **Ciddi** · P2 → Orta · P3 → Düşük.
+Bulgu ID'sini (`L2-01`) değiştirme — `ic/` dosyalarına bağlayan anahtar o.
+
+Sonra `ic/OKUBENI.md` yaz — her dosya bir satır:
+
+```markdown
+# Bu klasörde ne var
+
+Bunlar ara dosyalar ve denetim izi. Günlük iş için `../SONUC.md` yeterli.
+
+| Dosya | Ne |
+|---|---|
+| `analiz.md` | Doğrulamanın dayandığı analiz dokümanı |
+| `kapsam.md` | İncelenen dosya listesi (keşif modunda onayladığın hali) |
+| `gereksinimler.md` | Analizden çıkarılıp ID verilmiş istekler. Sonraki koşum buradan okur |
+| `rtm.md` | Gereksinim ↔ kod eşleşme tablosunun tam hali |
+| `bulgular-ham.md` | Merceklerin ürettiği ham bulgular, çürütmeden önce |
+| `bulgular-curutulmus.md` | Çürütme sonrası: ayakta kalanlar + elenenler ve gerekçeleri |
+| `developer-kontrolleri.md` | Analistin yapamayacağı, sende kalan kontroller |
+| `analist-girdisi.md` | Analist paketini yazan bağlama giden iş dilindeki özet |
+| `analist-sonuclari.md` | Analistlerden geri gelen test sonuçları |
+| `tur.md` | Kavrayış sınavı öncesi okuma sırası |
+| `sinav-anahtari.md` | Cevap anahtarı — commit'lenmez, sınavdan önce açılmaz |
+| `sinav-sonucu.md` | Sınav skoru ve zayıf alanlar |
+```
 
 **Boş bırakılacaklar** (sen dolduramazsın): viva bölümü (`/dv-kavra` doldurur), manuel test
 sonuçları (analistten gelir), imza.
 
-Fiş kapatılamaz koşullarını kontrol et ve durumu yaz:
+Sonuç kapatılamaz koşullarını kontrol et ve durumu yaz:
 
 ```
-Durum: KAPATILAMADI
+Durum: KAPANMADI
 Sebep: RTM'de 1 adet ❌ var (R-03); L2-01 P1 bulgusu açık
 ```
 
@@ -361,12 +410,12 @@ DOĞRULAMA TAMAMLANDI · Kademe T1 · Mod A · 11 dk
 RTM       ✅ 6  ⚠️ 1  ❌ 1  ➕ 2
 Dosya     UI(4) DURUM(2) KOPRU(1)
 Lensler   11/11 koştu · 14 bulgu · 7 ayakta · 2 köprüye
-Fiş       KAPATILAMADI — R-03 eksik, L2-01 açık
+Sonuç dosyası       KAPANMADI — R-03 eksik, L2-01 açık
 
 Sırada:
 1. R-03 eksik — analize dön veya kodu tamamla
 2. L2-01 (P1) düzelt
-3. 04a-analist-test-paketi.md → Confluence'a yapıştır (Insert → Markup → Confluence Wiki)
+3. ANALISTE-GIDECEK.md → Confluence'a yapıştır (Insert → Markup → Confluence Wiki)
    Yapıştırmadan önce bir kez gözünle oku: teknik bir şey görürsen yapıştırma, bildir
 4. /dv-kavra — kavrayış sınavı
 ```
@@ -375,7 +424,7 @@ Task tabanlı ortamda 4. madde burada koşmaz — sınav canlı soru-cevap ister
 
 ```
 4. Kavrayış sınavı: bu klasörü interaktif bir araçta (Claude Code, Copilot, Windsurf)
-   aç ve /dv-kavra koş. Fişteki viva bölümü o zaman dolar.
+   aç ve /dv-kavra koş. `SONUC.md` içindeki viva bölümü o zaman dolar.
 ```
 
 Bir lens başarısız olduysa veya sağlık işareti eksikse **kapanış yerine** şunu yaz:
@@ -384,7 +433,7 @@ Bir lens başarısız olduysa veya sağlık işareti eksikse **kapanış yerine*
 DOĞRULAMA TAMAMLANMADI
 Başarısız: <lens/agent listesi>
 Sebep: <sağlık işareti neyi gösteriyor>
-Fiş imzaya kapatılamaz. Yeniden koş veya kapsamı daralt.
+Sonuç imzaya kapatılamaz. Yeniden koş veya kapsamı daralt.
 ```
 
 ---
@@ -423,7 +472,7 @@ commit'lenmeyen dosya task bitince yok olur. Kademe ayrımı burada geçersiz.
 **Terminal ortamında:**
 
 - **T1:** klasördeki tüm dosyalar commit'lenir (denetim izi zorunlu)
-- **T2/T3:** yalnız `01-rtm.md` ve `05-fis.md` commit'lenebilir; kalanı lokal kalabilir
+- **T2/T3:** yalnız `ic/rtm.md` ve `SONUC.md` commit'lenebilir; kalanı lokal kalabilir
 
-Her iki ortamda: `03b-viva-anahtar.md` **asla commit'lenmez** — sınavdan önce üretilir,
+Her iki ortamda: `ic/sinav-anahtari.md` **asla commit'lenmez** — sınavdan önce üretilir,
 repoda dururken sınavın anlamı kalmaz.
