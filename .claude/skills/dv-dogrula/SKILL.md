@@ -412,13 +412,19 @@ Dosya     UI(4) DURUM(2) KOPRU(1)
 Lensler   11/11 koştu · 14 bulgu · 7 ayakta · 2 köprüye
 Sonuç dosyası       KAPANMADI — R-03 eksik, L2-01 açık
 
-Sırada:
-1. R-03 eksik — analize dön veya kodu tamamla
-2. L2-01 (P1) düzelt
-3. ANALISTE-GIDECEK.md → Confluence'a yapıştır (Insert → Markup → Confluence Wiki)
-   Yapıştırmadan önce bir kez gözünle oku: teknik bir şey görürsen yapıştırma, bildir
-4. /dv-kavra — kavrayış sınavı
+Sırada — bu sırayla:
+1. ANALISTE-GIDECEK.md → Confluence (Insert → Markup → Confluence Wiki)
+   Yapıştırmadan önce gözünle oku: teknik bir şey görürsen yapıştırma, bildir
+   Analistler beklemesin; bu adım sınavdan bağımsız
+2. /dv-kavra — kavrayış sınavı. BULGULARI OKUMADAN ÖNCE
+3. Sonra SONUC.md §1 ve §2'yi tam oku
+4. R-03 eksik — analize dön veya kodu tamamla
+5. L2-01 (Ciddi) düzelt
 ```
+
+**Sıra önemli.** Bulgular kodun kırılgan noktalarını gösterir; sınav soruları da aynı
+noktalara gelir. Developer bulguları önce okursa sınav, kodu anlamayı değil raporu
+hatırlamayı ölçer. Kullanıcıya bunu bir cümleyle söyle, sırayı değiştirme.
 
 Task tabanlı ortamda 4. madde burada koşmaz — sınav canlı soru-cevap ister. Onun yerine:
 

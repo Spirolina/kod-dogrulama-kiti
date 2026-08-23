@@ -18,12 +18,17 @@ Uzunluk hedefi: **iki A4.** Aşıyorsa değişiklik fazla büyük demektir; kıs
 **Durum: KAPANMADI**
 Sebep: analizde istenen 1 şey kodda yok (R-03) · 1 ciddi bulgu açık (L13-02)
 
+> **Aşağıdaki §2'yi okumadan önce kavrayış sınavını yap.**
+> Bulgular kodun kırılgan noktalarını gösterir; sınav soruları da aynı noktalara gelir.
+> Önce okursan sınav, kodu anlamanı değil bu raporu hatırlamanı ölçer.
+
 ## Ne yapmalısın
 
-1. R-03 eksik — kodu tamamla ya da analize dön, gereksinim düşmüş mü kontrol et
-2. L13-02 (ciddi) düzelt
-3. `ANALISTE-GIDECEK.md` → Confluence'a yapıştır
-4. Kavrayış sınavı: interaktif bir araçta `/dv-kavra`
+1. `ANALISTE-GIDECEK.md` → Confluence'a yapıştır *(analistler beklemesin, sınavdan bağımsız)*
+2. Kavrayış sınavı: interaktif bir araçta `/dv-kavra` — **§2'yi okumadan önce**
+3. Sonra §1 ve §2'yi tam oku
+4. R-03 eksik — kodu tamamla ya da analize dön, gereksinim düşmüş mü kontrol et
+5. L13-02 (ciddi) düzelt
 
 ---
 
@@ -137,6 +142,7 @@ defect'tir, başarı hanesine yazılır.
 ## 5. Kavrayış sınavı
 
 Nerede koşuldu: <terminal Claude | Copilot | Windsurf | koşulmadı>
+Sınav geçerliliği: <NORMAL — bulgular okunmadan önce koşuldu | DÜŞÜK — sonra koşuldu>
 
 | | |
 |---|---|

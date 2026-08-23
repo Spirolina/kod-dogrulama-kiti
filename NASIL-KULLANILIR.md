@@ -16,25 +16,57 @@ Kod yazıldı
 [Doğrulama task'ı]  →  SONUC.md  +  ANALISTE-GIDECEK.md
     │
     ▼
-SONUC.md'yi okursun                 (10 dk)
+SONUC.md — SADECE durum satırı + §8 sağlık işaretleri     1 dk
+    │        (doğrulama gerçekten koştu mu?)
     │
-    ├─── Kol A: sen düzeltirsin ─────────────────┐
-    │       Ciddi bulgular, ❌ eksikler           │
-    │                                             │
-    └─── Kol B: ANALISTE-GIDECEK.md               │
-             → Confluence alt sayfası             │
-             → analistler koşar, doldurur         │
-             → sonuçları geri alırsın             │
-                                                  │
-    ┌─────────────────────────────────────────────┘
+    ├─── ANALISTE-GIDECEK.md → Confluence ────────┐       5 dk
+    │       analistler beklemesin, sınavdan        │
+    │       bağımsız, paralel yürür                │
+    │                                              │
+    ▼                                              │
+►► KAVRAYIŞ SINAVI ◄◄                             │      15 dk
+   (Copilot / Windsurf)                            │
+   BULGULARI OKUMADAN ÖNCE                         │
+    │                                              │
+    ▼                                              │
+SONUC.md'yi tam oku — §1 ❌/➕, §2 bulgular        │      10 dk
+    │                                              │
+    ▼                                              │
+Düzelt                                             │
+    │                                              │
+    ┌──────────────────────────────────────────────┘
     ▼
-Kavrayış sınavı (Copilot / Windsurf)
+Analist sonuçları gelir → SONUC.md §4
     │
     ▼
 SONUC.md kapanır → imza → merge
 ```
 
-İki kol **paralel** yürür. Analistler test koşarken sen düzeltmeye başlarsın.
+## Sıra neden bu — sınav bulgulardan önce
+
+Bulgular **kodun tam olarak kırılgan olduğu yerleri** gösteriyor. Sınav soruları da aynı
+yerlere geliyor: sınır değeri, hata yolu, yarıçap. İkisi aynı noktaya bakıyor.
+
+§2'de *"liste yeniden sıralandığında satırlar karışıyor"* yazısını okuduktan sonra sınavda
+*"listeyi sıraladığında ne olur"* sorusuna cevap veriyorsan, ölçtüğün şey kodu anlaman
+değil — **raporu hatırlaman**. Skor yüksek çıkar, hiçbir şey ifade etmez.
+
+İki sebep daha:
+
+- Sınav, kodun **savunulabilir olup olmadığını** söyler. Eşiğin altında kalırsan doğru
+  hamle "bulguyu düzelt" değil, **kodu bölmek**. Bunu yamayı yazmadan önce bilmen lazım.
+- Sınavdan sonra bulguları hem hızlı okursun hem **yargılayabilirsin**. Değerlendiremediğin
+  bulguyu körlemesine kabul edersin.
+
+Adım 2'de sadece `Durum` satırına ve `§8`'e bakıyorsun — ikisinde de bulgu içeriği yok,
+sınavı kirletmez.
+
+**Tek istisna:** prod'da acil bir şey varsa önce düzeltirsin. O zaman sınav geçersizdir ve
+`§5`'e yazılır: *"sınav bulgular okunduktan sonra yapıldı — skor geçerli değil"*. Sessizce
+geçme.
+
+Analist kolu sınavdan bağımsız — `ANALISTE-GIDECEK.md`'de bulgu yok, seni kirletmez.
+Analistleri bekletme, sınavdan önce gönder.
 
 **Analistler `SONUC.md`'yi hiç görmez.** İçinde dosya yolu, satır numarası, mercek kodu
 ve güven puanı var — hem işlerine yaramaz hem gereksiz endişe yaratır. Onlara giden tek
@@ -166,14 +198,18 @@ Bir de `ic/` klasörü var — ara dosyalar ve denetim izi. Günlük iş için a
 
 Hepsini okumana gerek yok. Dört durak yeter:
 
-| Durak | Nereye bakarsın | Kararın |
-|---|---|---|
-| 1 | İlk iki satır — durum ve sebep | Merge edilebilir mi |
-| 2 | "Ne yapmalısın" listesi | Sıradaki iş |
-| 3 | §1'de `❌` ve `➕` tabloları | `❌` → analiste sor · `➕` → gereksiz iş mi, gizli risk mi |
-| 4 | §2'de sadece **Ciddi** satırlar | Düzelt |
+| Durak | Ne zaman | Nereye bakarsın | Kararın |
+|---|---|---|---|
+| 1 | Hemen | İlk iki satır — durum ve sebep | Merge edilebilir mi |
+| 2 | Hemen | §8 sağlık işaretleri | Doğrulama gerçekten koştu mu (`okunan dosya: 0` → koşmadı) |
+| — | | **▶ Burada kavrayış sınavını yap** | |
+| 3 | Sınavdan sonra | §1'de `❌` ve `➕` tabloları | `❌` → analiste sor · `➕` → gereksiz iş mi, gizli risk mi |
+| 4 | Sınavdan sonra | §2'de sadece **Ciddi** satırlar | Düzelt |
 
-Gerisi (§3 kontroller, §5 sınav, §8 sağlık) sırası geldiğinde okunur.
+Durak 1 ve 2'de bulgu **içeriği** yok — sadece "koştu mu, kaç tane var". Sınavı
+kirletmez. §2'yi sınavdan önce okursan skor anlamını kaybeder.
+
+Gerisi (§3 kontroller, §5 sınav sonucu, §4 manuel test) sırası geldiğinde okunur.
 
 **`ic/` ne zaman açılır:** bir bulguya itiraz edeceğin zaman.
 `ic/bulgular-curutulmus.md` içinde bulgunun tam hâli, kod alıntısı ve **çürütme
@@ -327,6 +363,9 @@ T2 ≥ 6/8.
 **Eşiğin altında kalırsan** çözüm "daha dikkatli oku" değil. İki ihtimalden biri:
 kod fazla karmaşık (böl), ya da değişiklik fazla büyük (parçala). İkisi de koda bakar,
 sana değil.
+
+Bunu bulguları düzeltmeden önce öğrenmen bu yüzden önemli: kod bölünecekse yazdığın
+yamalar zaten taşınacak.
 
 Sonuç `SONUC.md`'ye işlenir. `ic/sinav-anahtari.md` dosyası **commit'lenmez** — `.gitignore`'da.
 

@@ -32,6 +32,16 @@ Kod yazma hızı insan doğrulama hızını aşınca iki ayrı boşluk açılıy
 İkincisi daha iyi AI özeti okuyarak kapanmaz. Okumak pasif. Bu yüzden AI burada rapor
 vermez — **sınar**.
 
+## Sıra
+
+```
+doğrulama koşar  →  analist paketi Confluence'a  →  KAVRAYIŞ SINAVI  →  bulgular okunur
+```
+
+Sınav bulgulardan **önce**. Bulgular kodun kırılgan noktalarını gösterir; sınav soruları
+da aynı noktalara gelir. Önce okunursa sınav, kodu anlamayı değil raporu hatırlamayı
+ölçer.
+
 ## İki komut
 
 ```

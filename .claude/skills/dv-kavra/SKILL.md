@@ -11,6 +11,24 @@ bu kapı **senin** kodu savunup savunamayacağını sorar.
 Kural: sorular **koda bakmadan** cevaplanır. Sınav senin için, kimseye rapor verilmiyor.
 Kopya çekmek sadece kendini kandırmak.
 
+## Sınav öncesi tek kural
+
+Bu sınav, developer'ın **bulguları okumadan önce** koşulur.
+
+Bulgular kodun kırılgan noktalarını gösterir — sınır değeri, hata yolu, yarıçap.
+Sınav soruları da aynı noktalara gelir. Developer `SONUC.md` §2'yi okuduysa sınav
+kodu anlamayı değil raporu hatırlamayı ölçer ve skor anlamsızlaşır.
+
+Başlarken tek cümleyle sor:
+
+> `SONUC.md` içindeki bulgular bölümünü (§2) okudun mu?
+
+**Okuduysa:** sınavı yine koş — hiç koşmamaktan iyidir — ama sonuca
+`Sınav geçerliliği: DÜŞÜK — bulgular okunduktan sonra koşuldu` satırını yaz ve
+`SONUC.md` §5'e işle. Skoru yukarı yuvarlama, yorumunu değiştirme; sadece etiketle.
+
+**Okumadıysa** normal devam et.
+
 ## Adım 0 — Girdi
 
 Argüman: doğrulama klasörü (`dogrulama/<tarih>-<konu>/`). Verilmediyse en son değiştirilen
