@@ -30,6 +30,7 @@ Durum: <TAM | ZAYIF — sıralı modda koşuldu | İHLAL — kirli oturumda koş
 ## Sağlık işaretleri
 Okunan dosya: <n>   ·   Koşulan lens: <n>/<n>   ·   Atlanan dosya: <n>
 Üretilen bulgu: <n>   ·   Çürütmeden sağ çıkan: <n>   ·   Çürütme oranı: <%>
+Analist paketi: <n> senaryo   ·   teknik sızıntı: <n>   ·   kod dosyası okundu: <n>
 
 ## RTM özeti
 ✅ <n>   ⚠️ <n>   ❌ <n>   ❓ <n>   ➕ <n>   ⚪ <n>   (toplam gereksinim: <n>)
@@ -98,6 +99,7 @@ kacan-defectler.md'ye işlendi: <evet/hayır>
 | Viva eşiğin altında ve aksiyon yok | Kod savunulamıyor (P8) |
 | Duvar saati hedefi aşıldı ve değişiklik bölünmedi | Değişiklik doğrulanamayacak kadar büyük (P7) |
 | Doğrulama task'ı ürün kodunu değiştirmiş | Düzelten taraf doğrulayamaz — zincir kırık, yeniden koşulmalı |
+| `04a`'da teknik sızıntı var | Confluence'a yapıştırıldıktan sonra geri alınamaz |
 
 `Bağımsızlık: ZAYIF` fişi **kapatmaz** — bilinerek kabul edilmiş bir düşüştür, kayda
 geçer. `İHLAL` de kapatmaz ama kaçan defect analizinde ilk bakılacak satırdır.

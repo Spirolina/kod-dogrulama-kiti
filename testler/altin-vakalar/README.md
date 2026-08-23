@@ -17,7 +17,7 @@ güncellendiğinde, yeni lens/kontrol maddesi eklendiğinde.
 | AV-1 | `➕` gereksinimsiz kod + PII analytics | `dv-iz-denetci`, L6 |
 | AV-2 | `❌` eksik gereksinim | `dv-iz-denetci` |
 | AV-3 | Sınır değeri (`<` vs `<=`) | L1 |
-| AV-4 | JS float / `toFixed` + **köprü** | L2, `GOREV:KOPRU` |
+| AV-4 | JS float / `toFixed` + **köprü** + **analist paketi dili** | L2, `GOREV:KOPRU`, `GOREV:ANALIST` |
 | AV-5 | Köprü fail-open + platform kontrolü yok | L14, L11, L5 |
 | AV-6 | **Yanlış pozitif eleme** | `dv-curutucu` |
 | AV-7 | **B modu kapsam keşfi** | `GOREV:KAPSAM` |

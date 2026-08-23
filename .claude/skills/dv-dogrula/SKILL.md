@@ -214,12 +214,16 @@ Onaylanan kapsamı `00-kapsam-onayli.md` olarak yaz. Sonraki tüm agent'lar bunu
 
 ---
 
-## KAPI 3 — G1 İzlenebilirlik + analist paketi
+## KAPI 3 — G1 İzlenebilirlik
 
 `dv-iz-denetci` agent'ını `GOREV: RTM` ile çağır.
 
-Üretilenler: `00-gereksinimler.md`, `01-rtm.md`, `04a-analist-test-paketi.md`,
-`04b-developer-kontrol-listesi.md`.
+Üretilenler: `00-gereksinimler.md`, `01-rtm.md`, `04b-developer-kontrol-listesi.md`,
+`04d-analist-girdisi.md`.
+
+**`04a` burada üretilmez.** Analist paketi en sonda, KAPI 5.7'de, kodu görmemiş ayrı bir
+bağlamda yazılır. Bu agent az önce her dosyayı okudu; ona "analist diliyle yaz" demek
+tutmuyor.
 
 **Sağlık kontrolü:** `OKUNAN_DOSYA` > 0 ve `ARANAN_GEREKSINIM` > 0 mu? Değilse KAPI 6'ya
 atla, `DOĞRULAMA TAMAMLANMADI` ile bitir.
@@ -271,7 +275,11 @@ Ortam alt agent çağırmaya izin vermiyorsa zincir durmaz, ama şu kurallarla k
    işaretleri sıralı modda daha kritik: kaçırılan lens burada görünür.
 4. Çürütmeyi (KAPI 5) **ayrı bir geçişte** yap. Bulguyu üreten geçiş kendi bulgusunu
    çürütmeye çalışırsa ikisi de zayıflar.
-5. Fişe `Bağımsızlık: ZAYIF — sıralı modda koşuldu` yaz.
+5. `04a`'yı **en son ve ayrı bir geçişte** yaz. Ondan önce yazdığın her şeyi (kod, RTM,
+   bulgular) unutmuş gibi davran; girdin yalnız analiz dokümanı ve `04d`. Sıralı modda
+   bu bir ayrım değil sadece bir disiplin — bu yüzden §3b mekanik `grep` kontrolü burada
+   **tek gerçek koruma**. Mutlaka koş.
+6. Fişe `Bağımsızlık: ZAYIF — sıralı modda koşuldu` yaz.
 
 Sıralı mod bir **düşüş**, eşdeğer değil. Aynı bağlam hem 11 lensi hem çürütmeyi taşır;
 erken bulgular geç bulguları etkiler. Alt agent desteği çıkarsa geri dön.
@@ -295,9 +303,33 @@ erken bulgular geç bulguları etkiler. Alt agent desteği çıkarsa geri dön.
 `02-bulgular.md` içinde **güveni 7'nin altında ayakta kalmış** bulgu varsa:
 
 `dv-iz-denetci` agent'ını `GOREV: KOPRU` ile çağır. Bu bulguları iş diline çevirip
-`04a`'ya `(*)` işaretli `MT-xx` senaryoları olarak ekler, teknik sebebi `04b`'ye yazar.
+`04d-analist-girdisi.md` sonuna `K-xx` senaryoları olarak ekler, teknik sebebi `04b`'ye
+yazar.
 
 Köprüden geçen bulgu yoksa bu kapıyı atla ve fişe `Köprüye giden: 0` yaz.
+
+---
+
+## KAPI 5.7 — Analist test paketi
+
+`dv-iz-denetci` agent'ını `GOREV: ANALIST` ile çağır.
+
+**Bu çağrıya kod yolu verme.** Girdisi yalnız: analiz dokümanı, `04d-analist-girdisi.md`,
+`sablonlar/analist-test-paketi.md`. Kapsam dosyasını, RTM'i, bulguları, `04b`'yi bu
+çağrının bağlamına sokma — özet olarak bile.
+
+Çıktı: `04a-analist-test-paketi.md`.
+
+Sağlık kontrolü:
+
+| İşaret | Beklenen | Değilse |
+|---|---|---|
+| `OKUNAN_KOD_DOSYASI` | **0** | Görev geçersiz, yeniden çağır |
+| `TEKNIK_SIZINTI` | **0** | `04a` yayına hazır değil, düzelttir |
+| `KAPSANAN_GEREKSINIM` | `❌`/`❓` hariç hepsi | Eksikse kapsam beyanında yazılı mı, kontrol et |
+
+`TEKNIK_SIZINTI > 0` iken `04a`'yı devretme. Confluence sayfasını sandığından çok daha
+fazla kişi görür ve oradan geri alınamaz.
 
 ---
 
@@ -335,6 +367,7 @@ Sırada:
 1. R-03 eksik — analize dön veya kodu tamamla
 2. L2-01 (P1) düzelt
 3. 04a-analist-test-paketi.md → Confluence'a yapıştır (Insert → Markup → Confluence Wiki)
+   Yapıştırmadan önce bir kez gözünle oku: teknik bir şey görürsen yapıştırma, bildir
 4. /dv-kavra — kavrayış sınavı
 ```
 

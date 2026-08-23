@@ -141,6 +141,7 @@ kapatılamaz, temiz branch'te yeniden koş.
 | `02-bulgular.md` | Sana | Ayakta kalan P1/P2 |
 | `04a-analist-test-paketi.md` | Analistlere | Confluence'a yapıştır |
 | `04b-developer-kontrol-listesi.md` | Sana | **Confluence'a gitmez** |
+| `04d-analist-girdisi.md` | Ara dosya | `04a`'yı yazan bağlama giden iş dilindeki özet |
 | `00-kapsam-onayli.md` | Denetim izi | Onayladığın kapsam |
 
 ### Fişte ne göreceksin
@@ -189,6 +190,16 @@ bakılması gereken noktalar. Analist bunları atlamamalı.
 **`04b` Confluence'a gitmez.** İçinde dosya adı, satır numarası, lens ID, güven skoru
 var. Bu bilgi dışarı çıkmaz.
 
+### Yapıştırmadan önce bir kez gözünle oku
+
+`04a`'yı yazan agent kodu hiç görmez ve mekanik bir sızıntı kontrolünden geçer, ama
+Confluence sayfası geri alınamaz. Şunlardan biri görünüyorsa yapıştırma:
+
+dosya adı · uzantı (`.ts`, `.tsx`) · `fonksiyonAdı()` · kod bloğu · `L2-01` gibi kod ·
+`P1`/`P2` · API yolu · `localStorage`/`WebView` gibi platform terimi
+
+Görürsen KAPI 5.7'yi tek başına yeniden koştur — zincirin tamamını değil.
+
 ---
 
 ## 6. Kavrayış sınavı
@@ -222,6 +233,8 @@ Sonuç fişe işlenir. `03b-viva-anahtar.md` dosyası **commit'lenmez** — `.gi
 | RTM'de çok sayıda ❓ | MOD B'de kapsam dar kalmış | Kapsamı genişletip yeniden koş |
 | Fiş "KAPATILAMADI" ve P1 haklı değil | Yanlış pozitif çürütmeden kaçmış | `02-bulgular.md`'deki `CURUTME_DENEMESI` alanını oku, gerekçeyi değerlendir |
 | Task ürün kodunu değiştirmiş | Yasak tutmadı | Temiz branch'te yeniden koş. Tekrarlıyorsa `CLAUDE.md` bloğu repoda mı, kontrol et |
+| `04a` fazla teknik, kod parçası var | `ANALIST` görevi kodu görmüş olabilir | Fişte `kod dosyası okundu: 0` mı, `teknik sızıntı: 0` mı bak. Değilse KAPI 5.7'yi tek başına yeniden koştur |
+| `04a` çok uzun, 15+ senaryo | Değişiklik büyük | Paketi kısaltma. Değişikliği bölmeyi değerlendir |
 
 ---
 

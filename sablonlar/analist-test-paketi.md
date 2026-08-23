@@ -13,17 +13,70 @@ Manuel testi **analistler** yapıyor, developer değil. Bu paket onlara gider ve
 
 ---
 
+## 0. `04a`'yı kim yazar — ve neden ayrı
+
+`04a` **kodu görmemiş bir bağlamda** yazılır (`dv-iz-denetci` · `GOREV: ANALIST`).
+Girdisi yalnız: analiz dokümanı, çivilenmiş gereksinimler, RTM durumları ve köprüden
+gelen **iş dilindeki** senaryolar. Dosya adı, kod, bulgu metni o bağlama hiç girmez.
+
+Sebep: bu ilk sürümde `04a` RTM ile aynı geçişte yazılıyordu ve yasak listesine rağmen
+teknik dil sızıyordu. Az önce her dosyayı okumuş bir bağlama "kod dilinde yazma" demek
+işe yaramıyor — hatırladığı dil o. **Görmediğini sızdıramaz;** çözüm kural değil, ayrım.
+
 ## 1. Confluence'a ne gitmez
 
 Kesin liste. Confluence sayfasını sandığından çok daha fazla kişi görür.
 
-- `file:line` referansı, sınıf/metot adı, paket yolu
+- `file:line` referansı, sınıf/metot/değişken adı, paket yolu, dosya uzantısı
+- **Kod parçası.** Tek satır bile. Backtick içinde bile.
 - Lens ID'si (`L2-01`), severity kodu (`P1`), güven puanı
 - Ham bulgu metni, çürütme notu
 - Branch adı, commit hash, PR linki
+- API yolu, HTTP durum kodu, köprü metot adı, MFE adı
 - Veritabanı tablo/kolon adı, sorgu, log formatı
+- Tarayıcı/platform API'si (`localStorage`, `WebView`, `window`, `useEffect`)
 
 Bunların hepsi `04b`'ye gider ve sende kalır.
+
+## 1b. Dil dönüşüm tablosu
+
+Yasak listesi tek başına yetmiyor — **yerine ne yazılacağı** söylenmeli. Teknik gerçek
+korunur, dili değişir:
+
+| Teknik gerçek | `04a`'da böyle yazılır |
+|---|---|
+| Servis 500 dönerse | Sistem yanıt vermezse |
+| İstek zaman aşımına uğrarsa | İşlem uzun sürer ve tamamlanmazsa |
+| Oturum bilgisi depodan okunamıyorsa | Uygulama oturumu devralamazsa |
+| Ekran yeniden yükleniyor / bağlam sıfırlanıyor | Ekran baştan açılıyor |
+| Ondalık yuvarlama hatası | Kuruş farkı oluşması |
+| Aynı isteğin iki kez gitmesi | Butona iki kez basılması |
+| Tekrar koruması yok | Aynı işlemin iki kez oluşması |
+| Durum saklanmıyor | Girilen bilgilerin kaybolması |
+| Farklı bölüme geçişte bağlam kopuyor | Başka bir sekmeye gidip geri dönme |
+| Büyük/küçük harf dönüşümü dile duyarlı | Türkçe karakterli metin girilmesi |
+| İzin reddedilirse akış devam ediyor | İzin isteğinde "İzin verme" seçilmesi |
+| Sınır karşılaştırması yanlış | Tutarın tam olarak limite eşit olması |
+
+Kural: analistin **ekranda görebileceği** ya da **eliyle yapabileceği** bir şeye çevir.
+Çeviremiyorsan o senaryo `04a`'ya ait değildir — `04b`'ye taşı ve kapsam beyanında
+kapsanmayan olarak yaz.
+
+## 1c. Önce / sonra
+
+Gerçek koşumdan çıkmış tipik sızıntılar ve doğrusu:
+
+| ✗ Böyle yazılmış | ✓ Böyle yazılmalı |
+|---|---|
+| `useLimitKontrol` hook'u limit aşımında hata mesajı döndürmeli | Günlük limitini aşan bir transfer denendiğinde uyarı mesajı görünmeli |
+| `taksitHesapla()` fonksiyonunun döndürdüğü dizinin toplamı ana tutara eşit olmalı | Taksitlerin toplamı, kredinin ana tutarıyla kuruşu kuruşuna aynı olmalı |
+| `localStorage`'da `auth_token` yoksa `/login`'e yönlendiriyor | Kredilerim bölümüne girildiğinde yeniden şifre sorulmamalı |
+| Köprü çağrısı `catch` bloğunda `true` dönüyor (fail-open) | Cihaz güvenlik kontrolü tamamlanamazsa işleme devam edilmemeli |
+| API 500 dönerse boş liste render ediliyor | Sistem yanıt vermediğinde "hesaplarınız yüklenemedi" benzeri bir hata görünmeli, boş liste değil |
+| `key={i}` kullanıldığı için liste yeniden sıralandığında satırlar karışıyor | Listeyi sıraladıktan sonra satırlardaki bilgiler doğru satırda kalmalı |
+
+Sağdaki sütunda ne dosya adı var, ne fonksiyon, ne de "neden şüpheleniyoruz". Analistin
+ihtiyacı olan tek şey: **ne yapacağım, ne görmeliyim.**
 
 ## 2. Senaryo yazım kuralları
 
@@ -39,6 +92,14 @@ Bunların hepsi `04b`'ye gider ve sende kalır.
   ve sınır değeri varsa tam sınırda bir senaryo. İnsanların atladığı yer tam burası.
 - **Sıra bağımlılığı açık.** Bir senaryo öncekinin devamıysa ön koşulda yazılır ("MT-02'nin
   devamı").
+- **Baş parmak testi.** Her adım, telefonu eline alan birinin yapabileceği bir hareket
+  olmalı: dokun, yaz, bekle, kapat, geri dön. Yapılamıyorsa `04b`'ye taşınır.
+- **Beklenen sonuç ekranda görünür olmalı.** "Limit düşürülür" bir iç durumdur, analist
+  göremez. "Kalan limitiniz 5.000 TL olarak görünür" görülebilir.
+- **Senaryo başına en fazla 5 adım.** Daha uzunu koşulmaz, koşulsa da nerede kırıldığı
+  belli olmaz.
+- **Toplam 15 senaryoyu aşıyorsa** bu bir kapsam sinyalidir: değişiklik muhtemelen
+  bölünmeli. Paketi kısaltma — fişe yaz ve söyle.
 
 ## 3. Odak işareti `(*)`
 
@@ -50,6 +111,29 @@ Paketin başına tek cümle konur:
 
 > `(*)` işaretli testlerde sınır değerlere, tam sayılara ve tutarların toplamına özellikle
 > dikkat edin.
+
+## 3b. Yayın öncesi mekanik kontrol (zorunlu)
+
+`04a` yazıldıktan sonra, Confluence'a gitmeden önce koşulur:
+
+```bash
+grep -nE '\.(ts|tsx|js|jsx|swift|kt|java)\b|[a-zA-Z_]+\(\)|```|\b(L[0-9]+-[0-9]+|P[123])\b|/api/|https?://|localStorage|sessionStorage|WebView|window\.|use[A-Z][a-zA-Z]+|[a-z]+[A-Z][a-zA-Z]*' 04a-analist-test-paketi.md
+```
+
+**Hiçbir satır dönmemeli.** Dönen her satır elden geçirilir:
+
+| Eşleşme | Ne yapılır |
+|---|---|
+| Dosya uzantısı, `fonksiyonAdı()`, camelCase | Dil dönüşüm tablosuna göre çevir |
+| Kod bloğu (```` ``` ````) | Tamamen sil, ne yapıldığını cümleyle anlat |
+| Lens/severity kodu | Sil, `04b`'ye taşı |
+| URL, API yolu | Sil |
+| Platform API adı | Dil dönüşüm tablosuna göre çevir |
+
+Yanlış pozitif çıkabilir (özel isimler, ürün adları). Tek tek bak, körlemesine silme.
+
+Sağlık işaretine yaz: `TEKNIK_SIZINTI: <n>` — **0 olmalı.** Sıfır değilse `04a` yayına
+hazır değildir.
 
 ## 4. Kapsam beyanı
 

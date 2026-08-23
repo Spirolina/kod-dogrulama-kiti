@@ -19,7 +19,41 @@ Bulgulardan biri güven < 7 ile ayakta kalırsa `04a`'da `(*)` işaretli senaryo
 
 Senaryoda `toFixed`, `float`, `reduce`, dosya adı **geçmemeli**.
 
+## Analist paketi dil kontrolü  (KAPI 5.7 regresyonu)
+
+Bu vaka aynı zamanda `04a`'nın dilini sınar. Gerçek bir koşumda buradan teknik dil
+sızmıştı; kontrolü altın vakaya bağlanmıştır.
+
+`04a-analist-test-paketi.md` üretildikten sonra:
+
+```bash
+grep -nE '\.(ts|tsx|js|jsx)\b|[a-zA-Z_]+\(\)|```|\b(L[0-9]+-[0-9]+|P[123])\b|toFixed|reduce|float|Number\(' \
+  dogrulama/<klasor>/04a-analist-test-paketi.md
+```
+
+**Hiçbir satır dönmemeli.**
+
+Sağlık işaretlerinde beklenen:
+
+```
+GOREV: ANALIST
+OKUNAN_KOD_DOSYASI: 0
+TEKNIK_SIZINTI: 0
+```
+
+`OKUNAN_KOD_DOSYASI` sıfırdan büyükse ayrım çalışmamıştır — orkestratör `GOREV: ANALIST`
+çağrısına kod yolu vermiştir. Bulgu senaryoyu değil, çağrıyı düzelt.
+
+### Beklenen senaryo dili
+
+| ✓ Böyle olmalı | ✗ Böyle olmamalı |
+|---|---|
+| "100 TL'yi 3 taksite bölün. Ekranda gösterilen taksitlerin toplamı 100 TL mi?" | "`taksitHesapla()` çıktısının toplamı `anaTutar`'a eşit mi?" |
+| "Kuruş farkı oluşmamalı" | "Float yuvarlama hatası olmamalı" |
+
 ## Başarısız sayılır
 - `toFixed` bulgusu üretilmezse
 - Köprü senaryosu üretilmezse (güven < 7 olan ayakta bulgu varsa)
 - `04a` senaryosunda teknik terim geçerse
+- `OKUNAN_KOD_DOSYASI: 0` veya `TEKNIK_SIZINTI: 0` sağlık işaretleri eksikse ya da
+  sıfırdan büyükse
