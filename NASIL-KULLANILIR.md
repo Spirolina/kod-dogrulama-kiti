@@ -10,15 +10,35 @@ Kurulum tek seferlik ve ayrı: `KURULUM-TASK-MODU.md` (terminalsiz ortam) veya
 ## Akışın tamamı
 
 ```
-1. Task aç, notu yapıştır, analiz.md'yi ekle, repoyu seç
-2. Planı oku → kapsamı onayla
-3. Bekle, branch'i çek
-4. SONUC.md oku → P1'leri kapat
-5. ANALISTE-GIDECEK.md → Confluence
-6. Kavrayış sınavı — Copilot/Windsurf'te /dv-kavra
+Kod yazıldı
+    │
+    ▼
+[Doğrulama task'ı]  →  SONUC.md  +  ANALISTE-GIDECEK.md
+    │
+    ▼
+SONUC.md'yi okursun                 (10 dk)
+    │
+    ├─── Kol A: sen düzeltirsin ─────────────────┐
+    │       Ciddi bulgular, ❌ eksikler           │
+    │                                             │
+    └─── Kol B: ANALISTE-GIDECEK.md               │
+             → Confluence alt sayfası             │
+             → analistler koşar, doldurur         │
+             → sonuçları geri alırsın             │
+                                                  │
+    ┌─────────────────────────────────────────────┘
+    ▼
+Kavrayış sınavı (Copilot / Windsurf)
+    │
+    ▼
+SONUC.md kapanır → imza → merge
 ```
 
-Adım 5 analistlerin, adım 6 senin. İkisi paralel gider.
+İki kol **paralel** yürür. Analistler test koşarken sen düzeltmeye başlarsın.
+
+**Analistler `SONUC.md`'yi hiç görmez.** İçinde dosya yolu, satır numarası, mercek kodu
+ve güven puanı var — hem işlerine yaramaz hem gereksiz endişe yaratır. Onlara giden tek
+şey Confluence sayfasıdır.
 
 ---
 
@@ -142,6 +162,23 @@ kapatılamaz, temiz branch'te yeniden koş.
 Bir de `ic/` klasörü var — ara dosyalar ve denetim izi. Günlük iş için açmana gerek yok;
 `SONUC.md` hepsine özet ve referans veriyor. İçinde ne olduğu `ic/OKUBENI.md`'de yazıyor.
 
+### `SONUC.md`'yi nasıl okursun
+
+Hepsini okumana gerek yok. Dört durak yeter:
+
+| Durak | Nereye bakarsın | Kararın |
+|---|---|---|
+| 1 | İlk iki satır — durum ve sebep | Merge edilebilir mi |
+| 2 | "Ne yapmalısın" listesi | Sıradaki iş |
+| 3 | §1'de `❌` ve `➕` tabloları | `❌` → analiste sor · `➕` → gereksiz iş mi, gizli risk mi |
+| 4 | §2'de sadece **Ciddi** satırlar | Düzelt |
+
+Gerisi (§3 kontroller, §5 sınav, §8 sağlık) sırası geldiğinde okunur.
+
+**`ic/` ne zaman açılır:** bir bulguya itiraz edeceğin zaman.
+`ic/bulgular-curutulmus.md` içinde bulgunun tam hâli, kod alıntısı ve **çürütme
+denemesi** var — "şunu denedim, şu yüzden ayakta kaldı". İkna olmazsan gerekçesi orada.
+
 ### `SONUC.md` ne içeriyor
 
 Tek dosya, sırayla:
@@ -221,6 +258,57 @@ dosya adı · uzantı (`.ts`, `.tsx`) · `fonksiyonAdı()` · kod bloğu · `L2-
 `P1`/`P2` · API yolu · `localStorage`/`WebView` gibi platform terimi
 
 Görürsen KAPI 5.7'yi tek başına yeniden koştur — zincirin tamamını değil.
+
+---
+
+## 5b. Analistlere giden ikinci kanal — test paketi değil
+
+Analistlerle **iki ayrı** konuşma var, karıştırma:
+
+| Kanal | Ne gider | Nasıl |
+|---|---|---|
+| Test paketi | Koşacakları senaryolar | Confluence alt sayfası |
+| **Gereksinim boşluğu** | `❌` satırları ve açık sorular | Analiz sayfasına yorum / doğrudan soru |
+
+`❌` iki şeyden biri demek ve hangisi olduğunu sen bilemezsin:
+
+- **Kod eksik kaldı** → senin işin, tamamlarsın
+- **Gereksinim sözlü olarak düştü, analiz güncellenmedi** → analistin işi
+
+Sorman gereken şey bu. Analiz sayfasına yorum yaz:
+
+> Doğrulamada şu gereksinimin kodda karşılığı bulunamadı:
+> *"<analizden birebir alıntı>"*
+> Bu istek hâlâ geçerli mi, yoksa kapsam dışına mı çıktı?
+
+| Cevap | Ne olur |
+|---|---|
+| "Geçerli" | Kodu tamamlarsın, `❌` kapanır |
+| "Düştü" | `SONUC.md` §1'de satır `⚪ kapsam dışı` olur ve **kimin söylediği** yazılır |
+
+İkinci satırdaki kayıt, altı ay sonra "bu neden yok" sorusunun tek cevabı. Sözlü kararın
+yazıya döndüğü tek yer burası — atlanırsa bir dahaki doğrulamada aynı `❌` yeniden çıkar.
+
+`SONUC.md` §7 "Açık sorular" da aynı kanaldan gider: cevabı analistten veya üründen
+beklenen her şey.
+
+---
+
+## 5c. Analistlerden sonuç geri geldiğinde
+
+Confluence tablosunu kopyala → `ic/analist-sonuclari.md` → `SONUC.md` §4 dolar.
+
+Sonucun anlamı kolay karıştırılıyor, tablo şu:
+
+| Ne oldu | Anlamı | Nereye |
+|---|---|---|
+| `(*)` işaretli test **KALDI** | Doğrulamanın şüphesi doğrulandı, köprü çalıştı | **Başarı hanesi** — *yakalanan* defect |
+| `(*)` işaretsiz test **KALDI** | Hiçbir mercek bunu öngörmedi | `dogrulama/kacan-defectler.md` — *kaçan* defect |
+| Test **GEÇTİ** | — | Kayıt Confluence'ta kalır |
+
+İkinci satır sistemin öğrendiği tek yer. Soru: **hangi mercek kaçırdı?** Cevap ya mevcut
+bir merceğe yeni kontrol maddesi olur, ya yeni bir mercek — ve beraberinde bir altın vaka
+gelir. Yazılmazsa sistem öğrenmez, ritüele döner.
 
 ---
 
