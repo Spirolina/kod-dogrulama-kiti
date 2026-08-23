@@ -1,0 +1,13 @@
+# --- Doğrulama katmanı (hedef reponun .gitignore'una eklenir) ---
+#
+# Varsayılan: dogrulama/ altındaki her şey commit'lenir.
+# Task tabanlı ortamda çıktıyı görmenin tek yolu commit; denetim izi de bunu ister.
+#
+# Terminal ortamında T2/T3 çıktısını lokal tutmak istersen alttaki üç satırı aç:
+# dogrulama/*/*
+# !dogrulama/*/01-rtm.md
+# !dogrulama/*/05-fis.md
+
+# Viva cevap anahtarı — ASLA commit'lenmez.
+# Sınavdan ÖNCE üretilir; repoda dururken sınavın anlamı kalmaz.
+dogrulama/*/03b-viva-anahtar.md

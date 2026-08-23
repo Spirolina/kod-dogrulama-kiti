@@ -1,0 +1,10 @@
+# Bu dosya YALNIZ kit reposu içindir. Hedef repoya kopyalanmaz —
+# oraya eklenecek satırlar: sablonlar/gitignore-eki
+
+# Örnek koşum çıktıları (lokal makine yolları içerir, repoda tutulmaz)
+dogrulama/[0-9]*/
+
+# Viva cevap anahtarı — her yerde, her zaman
+dogrulama/*/03b-viva-anahtar.md
+
+.DS_Store
