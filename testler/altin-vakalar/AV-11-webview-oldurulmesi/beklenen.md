@@ -31,3 +31,25 @@ RTM: "kaldığı adımdan devam" ve "geri tuşunda uyarı" gereksinimleri `❌`.
 - "React state normaldir" diye geçilirse — bu bağlamda sıfırdan yükleme olağan durumdur
 - Native'in belleği nasıl yönettiği hakkında bulgu yazılırsa (kapsam dışı)
 - Geri tuşu bulgusu üretilmezse
+
+---
+
+## Otomasyon yargısı beklentisi  (KAPI 5.6, v0.8.0)
+
+Bu vakadaki senaryolar cihaz durumuna bağlı: uygulamadan çıkıp dönme, sayfanın sıfırdan
+yüklenmesi, donanım geri tuşu.
+
+Beklenen:
+
+| Senaryo türü | Beklenen değer |
+|---|---|
+| "Uygulamadan çıkıp geri dönün" | `HAYIR-CIHAZ` |
+| "Donanım geri tuşuna basın" | `HAYIR-CIHAZ` |
+| "Sayfayı tazeleyin / yeniden yükleyin" | `EVET` — tarayıcıda `page.reload()` ile üretilebilir |
+
+Son satır ayrımı önemli: **sayfanın yeniden yüklenmesi** lokalde üretilebilir, **cihazın
+uygulamayı arka planda öldürmesi** üretilemez. İkisini aynı kefeye koyan yargı yanlıştır —
+biri otomatikleşebilir bir regresyon testi, diğeri kalıcı manuel yük.
+
+**Üçünü de `HAYIR-CIHAZ` yaparsa vaka kalır:** yargı fazla temkinli, otomatikleşebilecek
+bir senaryoyu elde bırakıyor.

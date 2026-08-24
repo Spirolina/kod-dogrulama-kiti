@@ -6,3 +6,13 @@
 # Kavrayış sınavı cevap anahtarı — ASLA commit'lenmez.
 # Sınavdan ÖNCE üretilir; repoda dururken sınavın anlamı kalmaz.
 dogrulama/*/ic/sinav-anahtari.md
+
+# Otomasyon ortam profili — port, auth yöntemi ve hesap anahtarları.
+# Kimlik bilgisi $ENV: ile ortam değişkenine işaret etse de bu dosya repoya girmez.
+ortam-profili.local.json
+
+# Kimlik bilgilerinin yazıldığı tek yer.
+.env.local
+
+# Playwright oturum durumu — CANLI JETON taşır, elle düzenlenmez.
+auth/

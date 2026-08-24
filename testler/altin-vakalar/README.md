@@ -17,7 +17,7 @@ güncellendiğinde, yeni lens/kontrol maddesi eklendiğinde.
 | AV-1 | `➕` gereksinimsiz kod + PII analytics | `dv-iz-denetci`, L6 |
 | AV-2 | `❌` eksik gereksinim | `dv-iz-denetci` |
 | AV-3 | Sınır değeri (`<` vs `<=`) | L1 |
-| AV-4 | JS float / `toFixed` + **köprü** + **analist paketi dili** | L2, `GOREV:KOPRU`, `GOREV:ANALIST` |
+| AV-4 | JS float / `toFixed` + **köprü** + **analist paketi dili** + **KAPI 5.7 agent regresyonu** | L2, `GOREV:KOPRU`, `dv-analist-paketi` |
 | AV-5 | Köprü fail-open + platform kontrolü yok | L14, L11, L5 |
 | AV-6 | **Yanlış pozitif eleme** | `dv-curutucu` |
 | AV-7 | **B modu kapsam keşfi** | `GOREV:KAPSAM` |
@@ -25,12 +25,18 @@ güncellendiğinde, yeni lens/kontrol maddesi eklendiğinde.
 | AV-9 | `key={i}` + stale closure + idempotent olmayan efekt | L13 |
 | AV-10 | Oturum temelsiz varsayımla depodan okunuyor | L15, L6, L5 |
 | AV-11 | Sıfırdan yüklemede çok adımlı akış baştan başlıyor | L15, L3, L16 |
+| AV-12 | **Otomasyon yargısı karar dalları** | `GOREV:OTOMAT` (KAPI 5.6) |
 
 **Kural:** lens paketine yeni kontrol maddesi eklendiğinde beraberinde bir altın vaka gelir.
 Yoksa eklemenin işe yaradığı hiçbir zaman doğrulanmaz.
 
 **AV-6 en değerlisi** — sistemin *yanlış alarm vermediğini* test eden tek vaka. Kod doğrudur;
 bulgu üretilirse çürütülmesi beklenir. Ayakta kalırsa sistem yanlış pozitif üretiyor demektir.
+AV-6 aynı zamanda tek **temiz koşum** vakası: köprüye hiçbir şey gitmez, dolayısıyla
+KAPI 5.6'nın koşulsuz çalıştığını doğrulayan tek yer burasıdır.
+
+**AV-12 farklı bir şeyi test ediyor** — diğerleri *bulmayı*, o *karar vermeyi*. Otomasyon
+yargısının en tehlikeli hatası yanlış `HAYIR` değil, emin olmadığı yerde `EVET` demesi.
 
 ## Lens kapsama durumu
 

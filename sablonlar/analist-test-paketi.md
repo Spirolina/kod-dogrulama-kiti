@@ -15,7 +15,9 @@ Manuel testi **analistler** yapıyor, developer değil. Bu paket onlara gider ve
 
 ## 0. `ANALISTE-GIDECEK.md`'yı kim yazar — ve neden ayrı
 
-`ANALISTE-GIDECEK.md` **kodu görmemiş bir bağlamda** yazılır (`dv-iz-denetci` · `GOREV: ANALIST`).
+`ANALISTE-GIDECEK.md` **kodu görmemiş bir bağlamda** yazılır (`dv-analist-paketi` agent'ı).
+O agent'ın `tools` satırında `Grep` ve `Glob` yok — kod araması yapması teknik olarak
+mümkün değil. Yasak değil, imkânsız.
 Girdisi yalnız: analiz dokümanı, çivilenmiş gereksinimler, RTM durumları ve köprüden
 gelen **iş dilindeki** senaryolar. Dosya adı, kod, bulgu metni o bağlama hiç girmez.
 

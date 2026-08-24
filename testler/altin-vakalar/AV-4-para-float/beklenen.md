@@ -57,3 +57,27 @@ TEKNIK_SIZINTI: 0
 - `ANALISTE-GIDECEK.md` senaryosunda teknik terim geçerse
 - `OKUNAN_KOD_DOSYASI: 0` veya `TEKNIK_SIZINTI: 0` sağlık işaretleri eksikse ya da
   sıfırdan büyükse
+
+## KAPI 5.7 agent regresyonu  (v0.8.0)
+
+`ANALISTE-GIDECEK.md`'yı artık `dv-iz-denetci` değil **`dv-analist-paketi`** yazıyor.
+Bu vaka o bağın koptuğunu yakalar.
+
+Kontrol:
+1. Sağlık işaretlerinde `GOREV: ANALIST` bloğu **`dv-analist-paketi`**'nden gelmeli
+2. `OKUNAN_KOD_DOSYASI: 0` hâlâ yayınlanıyor mu
+3. `BEKLENMEYEN_GIRDI: 0` — çağrıya kapsam/RTM/bulgu/otomasyon yargısı sızmamış
+4. `TEKNIK_SIZINTI: 0`
+
+**Başarısız sayılır:** `ANALISTE-GIDECEK.md` hiç üretilmezse, ya da sağlık işaretleri
+eksikse. Agent adı değişikliği sessizce paketi yok edebilir — bu kontrolün sebebi bu.
+
+## Otomasyon yargısı beklentisi  (KAPI 5.6)
+
+`ic/otomasyon-yargisi.md` üretilmeli. Taksit toplamı senaryosu `(*)` işaretli ve analiz
+"tam olarak eşit" diyor — yani **beklenen değer analizde çivili.**
+
+Beklenen: `MT-xx | EVET | <hesap anahtarı> | —`
+
+**`TUR-2` çıkarsa vaka kalır.** Analiz değeri çiviliyorsa `(*)` olması otomatikleşmeye
+engel değil; `TUR-2` yalnız analiz sessiz kaldığında doğrudur.

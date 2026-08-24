@@ -226,7 +226,7 @@ Tek dosya, sırayla:
 | **1. Analiz ile kod tutuyor mu** | Analizdeki her istek kodda var mı |
 | 2. Bulgular | Merceklerin bulduğu ve çürütmeden sağ çıkan sorunlar |
 | 3. Senin yapacağın kontroller | Analistin ekrandan yapamayacağı, sende kalan kontroller |
-| 4. Manuel test | Analistlere ne gitti, kaç senaryo, sonuçlar |
+| 4. Manuel test | Analistlere ne gitti, kaç senaryo, sonuçlar, otomatikleşebilirlik |
 | 5. Kavrayış sınavı | Skor, zayıf alan, aksiyon |
 | 6-7. Kalan riskler / açık sorular | Bilerek kabul edilenler ve cevabı beklenenler |
 | 8. Sağlık işaretleri | Doğrulamanın gerçekten koştuğunun kanıtı |
@@ -333,6 +333,14 @@ beklenen her şey.
 ## 5c. Analistlerden sonuç geri geldiğinde
 
 Confluence tablosunu kopyala → `ic/analist-sonuclari.md` → `SONUC.md` §4 dolar.
+
+**§4'ün altındaki "Otomatikleşebilirlik" bloğu:** hangi senaryolar makineyle koşulabilir,
+hangileri **yapısal olarak** elle kalmak zorunda (cihaz durumu, zamana bağlı, native
+köprü), ve otomasyona geçilirse hangi test hesaplarını sağlaman gerekecek.
+
+Otomasyon henüz üretilmiyor. Bu bloğun bugünkü değeri: elle kalan senaryolar **her
+sürümde** tekrar test edilmeli — kalıcı manuel yükün ne olduğunu söylüyor. Ayrıntı
+`ic/otomasyon-yargisi.md`'de, tasarım `OTOMASYON-PLANI.md`'de.
 
 Sonucun anlamı kolay karıştırılıyor, tablo şu:
 

@@ -106,7 +106,8 @@ Emin değilsen kullanıcıya doğrudan sor: *"Bu değişikliğin kodunu bu oturu
 
 ### Alt agent kontrolü (her iki ortamda)
 
-`dv-celiskici`, `dv-curutucu`, `dv-iz-denetci` agent'larını çağırabiliyor musun?
+`dv-celiskici`, `dv-curutucu`, `dv-iz-denetci`, `dv-analist-paketi` agent'larını
+çağırabiliyor musun?
 
 Çağıramıyorsan zincir yine koşar ama **SIRALI MOD**'a düşer (bkz. KAPI 4). Bunu şimdi
 söyle, `SONUC.md`'ye `Bağımsızlık: ZAYIF — sıralı modda koşuldu` yaz. Task ortamındaysan bunu
@@ -288,10 +289,17 @@ Ortam alt agent çağırmaya izin vermiyorsa zincir durmaz, ama şu kurallarla k
 4. Çürütmeyi (KAPI 5) **ayrı bir geçişte** yap. Bulguyu üreten geçiş kendi bulgusunu
    çürütmeye çalışırsa ikisi de zayıflar.
 5. `ANALISTE-GIDECEK.md`'yı **en son ve ayrı bir geçişte** yaz. Ondan önce yazdığın her şeyi (kod, RTM,
-   bulgular) unutmuş gibi davran; girdin yalnız analiz dokümanı ve `ic/analist-girdisi.md`. Sıralı modda
-   bu bir ayrım değil sadece bir disiplin — bu yüzden §3b mekanik `grep` kontrolü burada
-   **tek gerçek koruma**. Mutlaka koş.
-6. `SONUC.md`'ye `Bağımsızlık: ZAYIF — sıralı modda koşuldu` yaz.
+   bulgular, otomasyon yargısı) unutmuş gibi davran; girdin yalnız analiz dokümanı ve
+   `ic/analist-girdisi.md`.
+
+   **Dikkat:** agent modunda bu görev `dv-analist-paketi` agent'ında koşar ve o agent'ın
+   `Grep`/`Glob` araçları yoktur — koruma mekaniktir. Sıralı modda alt agent yok, dolayısıyla
+   araç kısıtı da yok; burada koruma yeniden sadece disiplin. Bu yüzden §3b mekanik `grep`
+   kontrolü sıralı modda **tek gerçek koruma**. Mutlaka koş.
+
+6. `GOREV: OTOMAT` yargısını da ayrı bir geçişte yap ve `ANALISTE-GIDECEK.md`'dan **önce**
+   bitir. Yargı dosyasını yazdıktan sonra içeriğini unut.
+7. `SONUC.md`'ye `Bağımsızlık: ZAYIF — sıralı modda koşuldu` yaz.
 
 Sıralı mod bir **düşüş**, eşdeğer değil. Aynı bağlam hem 11 lensi hem çürütmeyi taşır;
 erken bulgular geç bulguları etkiler. Alt agent desteği çıkarsa geri dön.
@@ -322,13 +330,41 @@ Köprüden geçen bulgu yoksa bu kapıyı atla ve `SONUC.md`'ye `Köprüye giden
 
 ---
 
+## KAPI 5.6 — Otomasyon yargısı
+
+`dv-iz-denetci` agent'ını `GOREV: OTOMAT` ile çağır.
+
+**Bu kapı koşulsuz koşar.** KAPI 5.5 atlanmış olabilir (köprüye giden bulgu yoksa);
+bu kapı atlanmaz. Sağlıklı bir değişiklikte de senaryolar var ve yargı gerekiyor.
+Atlarsan hiçbir şey hata vermez — `ic/otomasyon-yargisi.md` sadece **yok** olur.
+
+Girdi: `ic/analist-girdisi.md`, kapsam, `ic/bulgular-curutulmus.md`.
+Çıktı: `ic/otomasyon-yargisi.md`.
+
+Sağlık kontrolü:
+
+| İşaret | Beklenen | Değilse |
+|---|---|---|
+| `YARGILANAN` | senaryo sayısına eşit | Senaryo atlanmış, yeniden çağır |
+| `OTOMATIKLESEBILIR` | — | `SONUC.md` §4'e yazılır |
+| `YARGILANAMAYAN` | mümkünse 0 | > 0 ise `SONUC.md` §4'te açıkça yazılır |
+| `GEREKLI_HESAP` | — | `SONUC.md` §4'e hesap listesi olarak yazılır |
+
+`YARGILANAMAYAN > 0` bir hata değil, dürüst bir cevap. Gizleme — o senaryolar elle kalır.
+
+---
+
 ## KAPI 5.7 — Analist test paketi
 
-`dv-iz-denetci` agent'ını `GOREV: ANALIST` ile çağır.
+`dv-analist-paketi` agent'ını çağır. (`dv-iz-denetci` **değil** — o agent kod okuyor.)
 
 **Bu çağrıya kod yolu verme.** Girdisi yalnız: analiz dokümanı, `ic/analist-girdisi.md`,
-`sablonlar/analist-test-paketi.md`. Kapsam dosyasını, RTM'i, bulguları, `SONUC.md` §3'yi bu
-çağrının bağlamına sokma — özet olarak bile.
+`sablonlar/analist-test-paketi.md`. Kapsam dosyasını, RTM'i, bulguları,
+`ic/otomasyon-yargisi.md`'yi, `SONUC.md` §3'yi bu çağrının bağlamına sokma — özet olarak bile.
+
+Agent'ın kendi `tools` satırında `Grep` ve `Glob` yok; kod araması yapması teknik olarak
+mümkün değil. Bu, düz yazı bir yasağın yerini alan yapısal güvence — `dv-analist-paketi.md`
+dosyasına kod okuyan bir görev eklenmez.
 
 Çıktı: `ANALISTE-GIDECEK.md`.
 
@@ -337,6 +373,7 @@ Sağlık kontrolü:
 | İşaret | Beklenen | Değilse |
 |---|---|---|
 | `OKUNAN_KOD_DOSYASI` | **0** | Görev geçersiz, yeniden çağır |
+| `BEKLENMEYEN_GIRDI` | **0** | Sözleşme dışı dosya verilmiş — çağrıyı düzelt, yeniden koş |
 | `TEKNIK_SIZINTI` | **0** | `ANALISTE-GIDECEK.md` yayına hazır değil, düzelttir |
 | `KAPSANAN_GEREKSINIM` | `❌`/`❓` hariç hepsi | Eksikse kapsam beyanında yazılı mı, kontrol et |
 
@@ -382,6 +419,7 @@ Bunlar ara dosyalar ve denetim izi. Günlük iş için `../SONUC.md` yeterli.
 | `bulgular-curutulmus.md` | Çürütme sonrası: ayakta kalanlar + elenenler ve gerekçeleri |
 | `developer-kontrolleri.md` | Analistin yapamayacağı, sende kalan kontroller |
 | `analist-girdisi.md` | Analist paketini yazan bağlama giden iş dilindeki özet |
+| `otomasyon-yargisi.md` | Hangi senaryo otomatikleşir, hangi test hesabı gerekir |
 | `analist-sonuclari.md` | Analistlerden geri gelen test sonuçları |
 | `tur.md` | Kavrayış sınavı öncesi okuma sırası |
 | `sinav-anahtari.md` | Cevap anahtarı — commit'lenmez, sınavdan önce açılmaz |
@@ -410,6 +448,7 @@ DOĞRULAMA TAMAMLANDI · Kademe T1 · Mod A · 11 dk
 RTM       ✅ 6  ⚠️ 1  ❌ 1  ➕ 2
 Dosya     UI(4) DURUM(2) KOPRU(1)
 Lensler   11/11 koştu · 14 bulgu · 7 ayakta · 2 köprüye
+Otomasyon 12 senaryo · 8 otomatikleşebilir · 3 gerekli hesap · 1 belirsiz
 Sonuç dosyası       KAPANMADI — R-03 eksik, L2-01 açık
 
 Sırada — bu sırayla:
@@ -446,7 +485,10 @@ Sonuç imzaya kapatılamaz. Yeniden koş veya kapsamı daralt.
 
 ## Duvar saati
 
-Hedef: **T1 ≤ 16 dk · T2 ≤ 5 dk · T3 ≤ 2 dk**.
+Hedef: **T1 ≤ 18 dk · T2 ≤ 6 dk · T3 ≤ 2 dk**.
+
+(KAPI 5.6 eklendiğinde T1 16→18, T2 5→6 çıkarıldı. Dosya sayısı sinyali değişmedi —
+OTOMAT zaten KAPI 3'te okunan dosyalara bakıyor.)
 
 Task tabanlı ortamda duvar saati anlamsızdır — kullanıcı ekranda beklemiyor. Orada
 sinyal **kapsam büyüklüğü**: T1'de 25'ten, T2'de 10'dan fazla dosya okunduysa aynı
@@ -469,6 +511,10 @@ Aşılırsa çözüm "daha hızlı koş" değil. Kullanıcıya söyle:
 6. **Kademe düşürmeyi kendi başına yapma.** Yükseltme serbest, düşürme onaylı.
 7. **Ürün kodunu değiştirme.** Bulgu bulsan bile düzeltme, test yazma, format/lint
    düzeltmesi yapma. Yazma izni yalnız `dogrulama/<tarih>-<konu>/` altında.
+8. **Otomasyon testi üretme.** KAPI 5.6 yalnız *yargı* üretir. Test dosyası yazmak ayrı
+   bir görevdir, ayrı bir task'ta ve ayrı bir branch'te koşar.
+9. **`dv-analist-paketi`'ne kod yolu verme.** Kapsam, RTM, bulgular, otomasyon yargısı —
+   hiçbiri o çağrının bağlamına girmez.
 
 ## Çıktı saklama
 

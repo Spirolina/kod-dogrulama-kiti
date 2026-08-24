@@ -137,6 +137,22 @@ defect'tir, başarı hanesine yazılır.
 **`(*)` işaretsiz bir test kaldıysa:** hiçbir mercek bunu öngörmemiştir —
 `dogrulama/kacan-defectler.md`'ye yazılır ve "hangi mercek kaçırdı" sorulur.
 
+### Otomatikleşebilirlik
+*(Ayrıntı: `ic/otomasyon-yargisi.md`)*
+
+| | |
+|---|---|
+| Otomatikleşebilir | 8 / 12 senaryo |
+| Yapısal olarak elle | 3 — cihaz durumu (2), zamana bağlı (1) |
+| Karar verilemedi | 1 — MT-09 |
+
+**Yapısal olarak elle kalan bu 3 senaryo her sürümde tekrar test edilmeli.** Otomasyon
+gelse bile bunlar otomatikleşmiyor; kalıcı manuel test yükü budur.
+
+**Gereken test hesapları** — otomasyona geçilirse sağlanacak:
+- `limit-50k-kullanilan-45k` — MT-01, MT-04
+- `taksitli-kredi-aktif` — MT-07
+
 ---
 
 ## 5. Kavrayış sınavı

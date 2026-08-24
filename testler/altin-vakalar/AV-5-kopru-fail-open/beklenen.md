@@ -25,3 +25,21 @@ RTM: "kontrol yapılamazsa işlem başlatılmaz" gereksinimi `❌` — kod tersi
 - Fail-open bulgusu üretilmezse (vakanın ana amacı)
 - **Android'de hiç çalışmadığı** bulgusu üretilmezse (ikinci amacı)
 - `return true` "makul varsayılan" diye normal karşılanırsa
+
+---
+
+## Otomasyon yargısı beklentisi  (KAPI 5.6, v0.8.0)
+
+Bu vaka köprü çağrısının `catch` içinde `true` dönmesiyle ilgili — yani **native köprünün
+kendi davranışı.**
+
+Beklenen: köprüden doğan `(*)` senaryosu için `HAYIR-CIHAZ` ya da yapısal-elle bir değer.
+
+Gerekçede **köprünün gerçek davranışının lokalde üretilemediği** geçmeli: container app
+native kabuğun yerine geçiyor, kabuğun kendisi yok.
+
+**`EVET` çıkarsa vaka kalır.** Container app üzerinden koşan bir test, native köprünün
+gerçekten fail-open olup olmadığını söyleyemez; yeşil test sahte güven üretir.
+
+**Not:** servis hatası senaryolarıyla karıştırma. Servisin 500 dönmesi `EVET-ARIZA`'dır
+(arıza enjeksiyonuyla üretilebilir). Native köprünün kendi davranışı değildir.

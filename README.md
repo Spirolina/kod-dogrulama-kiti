@@ -90,7 +90,8 @@ dogrulama/<tarih>-<konu>/
 
 ```
 .claude/agents/
-  dv-iz-denetci.md        RTM, gereksinim ID çivileme, analist test paketi, keşif, köprü
+  dv-iz-denetci.md        RTM, gereksinim ID çivileme, keşif, köprü, otomasyon yargısı
+  dv-analist-paketi.md    analist test paketi — tools: Read, Write (kod arayamaz)
   dv-celiskici.md         lens başına adversarial tarama
   dv-curutucu.md          bulgu çürütme (yanlış pozitif eleme)
   dv-kavrayis-kocu.md     rehberli tur, viva soruları, notlama
@@ -104,7 +105,8 @@ sablonlar/
   risk-rubrigi.md         T1/T2/T3 kademe kararı
   sonuc-sablonu.md        SONUC.md şablonu — developer'ın okuduğu tek dosya
   analist-test-paketi.md  Confluence wiki markup şablonu
-testler/altin-vakalar/    workflow'un kendi testi — 8 vaka
+  otomasyon-sozlesmesi.md Playwright koşum modeli, hesap sözleşmesi, arıza enjeksiyonu
+testler/altin-vakalar/    workflow'un kendi testi — 12 vaka
 dogrulama/                çıktılar + kacan-defectler.md
 ```
 
@@ -120,7 +122,8 @@ Değişiklik başına bir klasör, **iki görünür dosya**:
 `ic/` altında ara dosyalar ve denetim izi durur — `analiz.md`, `kapsam.md`,
 `gereksinimler.md` (çivilenmiş R-ID'ler), `rtm.md`, `bulgular-ham.md`,
 `bulgular-curutulmus.md`, `developer-kontrolleri.md`, `analist-girdisi.md`,
-`analist-sonuclari.md`, `tur.md`, `sinav-anahtari.md`, `sinav-sonucu.md`.
+`otomasyon-yargisi.md`, `analist-sonuclari.md`, `tur.md`, `sinav-anahtari.md`,
+`sinav-sonucu.md`.
 Hepsi `ic/OKUBENI.md`'de birer satırla açıklanır.
 
 `SONUC.md` bunların özetidir; ayrıntı gerekirse referansı verir. Günlük iş için
@@ -136,6 +139,11 @@ Hepsi `ic/OKUBENI.md`'de birer satırla açıklanır.
 
 **Köprü:** G2 bir şeyden emin olamadıysa (güven < 7), o şüphe boşluğa düşmez —
 analist paketine `(*)` işaretli bir senaryo olarak girer ve elle kanıtlanır.
+
+**Otomasyon yargısı:** her manuel senaryo için "bu makineyle koşulabilir mi, koşulamazsa
+neden" kararı verilir (`ic/otomasyon-yargisi.md`). Otomasyon henüz üretilmiyor; yargının
+bugünkü değeri, hangi testin **yapısal olarak** elle kalmak zorunda olduğunu ve hangi test
+hesaplarının gerektiğini söylemesi. Tasarım: `OTOMASYON-PLANI.md`.
 
 ## Kurulum
 

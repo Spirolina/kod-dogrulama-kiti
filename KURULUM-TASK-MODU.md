@@ -25,6 +25,7 @@ Doğrulanacak reponun **köküne**:
     dv-kavra/SKILL.md          # task ortamında koşmaz, interaktif araç için
   agents/
     dv-iz-denetci.md
+    dv-analist-paketi.md        # tools: Read, Write — kod arayamaz, bu kasıtlı
     dv-celiskici.md
     dv-curutucu.md
     dv-kavrayis-kocu.md
@@ -33,6 +34,7 @@ sablonlar/
   risk-rubrigi.md
   sonuc-sablonu.md
   analist-test-paketi.md
+  otomasyon-sozlesmesi.md
   task-notu.md
   gitignore-eki                 # içeriğini reponun .gitignore'una ekle
 CLAUDE.md                       # varsa birleştir, yoksa sablonlar/repo-CLAUDE.md'den kopyala

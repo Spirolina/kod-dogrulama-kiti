@@ -59,9 +59,9 @@ varsa `dv-sablonlar/` ve `dv-testler/` olarak kopyala ve şu dosyalardaki yollar
 ## Doğrulama (kurulum sonrası)
 
 ```bash
-ls .claude/agents/dv-*.md          # 4 dosya
+ls .claude/agents/dv-*.md          # 5 dosya
 ls .claude/skills/ | grep dv-      # 2 klasör
-ls sablonlar/                      # 3 dosya
+ls sablonlar/                      # 4+ dosya (otomasyon-sozlesmesi.md dahil)
 ls testler/altin-vakalar/          # 11 klasör + README
 cat .claude/DV-VERSION
 ```

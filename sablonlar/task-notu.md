@@ -37,7 +37,8 @@ Konu            : <kisa-kebab-case>
 
 YASAK:
 - Ürün kodunda tek satır değişiklik. Bulgu bulsan bile DÜZELTME, sadece raporla.
-- Test dosyası yazmak veya var olanı değiştirmek.
+- Test dosyası yazmak veya var olanı değiştirmek. Otomasyon yargısı (KAPI 5.6)
+  yalnız KARAR verir, test ÜRETMEZ.
 - Bulguyu kendin üretmek veya elemek. Üretmek dv-celiskici'nin, elemek
   dv-curutucu'nun işi.
 

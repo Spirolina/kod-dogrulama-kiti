@@ -4,6 +4,14 @@ Doğrulama workflow'u eng review'ından ertelenen kalemler. Her biri gerekçeli;
 istemediğini sil.
 
 ## 1. Senaryo testlerini otomatikleştir (unit testten bağımsız)
+
+> **Durum (2026-08-24):** Tasarlandı, ikiye bölündü — `OTOMASYON-PLANI.md`.
+> **Faz A UYGULANDI (v0.8.0):** `GOREV: OTOMAT`, KAPI 5.6, `dv-analist-paketi` agent
+> ayrımı, AV-12 altın vakası, `sablonlar/otomasyon-sozlesmesi.md`.
+> **Faz B** (üretici `/dv-otomat`) sırada. Koşum modeli kararlaştırıldı: Playwright,
+> gerçek ortam, veri mock'u yok, hata yolları arıza enjeksiyonuyla. Kalan tek iş
+> ortam profilini bankada doldurmak (portlar, auth, sağlık kontrolü).
+
 **Ne:** Analist test paketindeki senaryoları elle koşmak yerine otomatik koşulabilir hale
 getirmek (E2E / entegrasyon seviyesi).
 **Neden:** Unit test kodlama akışında zaten yazılıyor, o kapatıldı. Ama senaryo seviyesinde

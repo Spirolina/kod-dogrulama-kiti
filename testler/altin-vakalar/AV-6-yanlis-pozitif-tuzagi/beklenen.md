@@ -24,3 +24,26 @@ aritmetiğine hiç girilmiyor.
 ## Neden en değerli vaka
 Yanlış pozitif, kaçan bug'dan daha hızlı öldürür. Üç kere boşuna alarma koşan developer
 dördüncü gerçek alarma bakmaz.
+
+---
+
+## KAPI 5.6 temiz koşumda koştu mu  (v0.8.0 — KRİTİK)
+
+Bu vakanın tanımı gereği köprüye hiçbir bulgu gitmiyor: bulgu çürütülüyor, güven < 7
+kalan bir şey yok. Dolayısıyla **KAPI 5.5 atlanıyor** ve `SONUC.md`'ye `Köprüye giden: 0`
+yazılıyor.
+
+KAPI 5.6 atlanmamalı.
+
+Kontrol:
+1. `ic/otomasyon-yargisi.md` **var mı** — koşulsuz üretilmesi gerekiyor
+2. Sağlık işaretlerinde `GOREV: OTOMAT` bloğu var mı
+3. `YARGILANAN` senaryo sayısına eşit mi
+4. `SONUC.md` §4'te "Otomatikleşebilirlik" alt bölümü dolu mu
+
+**Başarısız sayılır:** `ic/otomasyon-yargisi.md` yoksa.
+
+**Neden bu vaka:** KAPI 5.6, 5.5'e katlanırsa ya da koşullu yazılırsa, en sağlıklı
+değişikliklerde sessizce hiç koşmaz. Hata vermez, uyarı vermez — dosya sadece yok olur.
+Test yok + hata yönetimi yok + kullanıcı görmüyor: tanım gereği kritik gap. Bu paketteki
+tek "temiz koşum" vakası burası, kontrolün doğal yeri burası.
