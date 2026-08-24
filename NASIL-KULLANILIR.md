@@ -293,7 +293,7 @@ Confluence sayfası geri alınamaz. Şunlardan biri görünüyorsa yapıştırma
 dosya adı · uzantı (`.ts`, `.tsx`) · `fonksiyonAdı()` · kod bloğu · `L2-01` gibi kod ·
 `P1`/`P2` · API yolu · `localStorage`/`WebView` gibi platform terimi
 
-Görürsen KAPI 5.7'yi tek başına yeniden koştur — zincirin tamamını değil.
+Görürsen KAPI 5.6'yı tek başına yeniden koştur — zincirin tamamını değil.
 
 ---
 
@@ -390,7 +390,7 @@ Sonuç `SONUC.md`'ye işlenir. `ic/sinav-anahtari.md` dosyası **commit'lenmez**
 | RTM'de çok sayıda ❓ | MOD B'de kapsam dar kalmış | Kapsamı genişletip yeniden koş |
 | Sonuç dosyası "KAPANMADI" ve P1 haklı değil | Yanlış pozitif çürütmeden kaçmış | `ic/bulgular-curutulmus.md`'deki `CURUTME_DENEMESI` alanını oku, gerekçeyi değerlendir |
 | Task ürün kodunu değiştirmiş | Yasak tutmadı | Temiz branch'te yeniden koş. Tekrarlıyorsa `CLAUDE.md` bloğu repoda mı, kontrol et |
-| `ANALISTE-GIDECEK.md` fazla teknik, kod parçası var | `ANALIST` görevi kodu görmüş olabilir | `SONUC.md`'de `kod dosyası okundu: 0` mı, `teknik sızıntı: 0` mı bak. Değilse KAPI 5.7'yi tek başına yeniden koştur |
+| `ANALISTE-GIDECEK.md` fazla teknik, kod parçası var | `ANALIST` görevi kodu görmüş olabilir | `SONUC.md`'de `kod dosyası okundu: 0` mı, `teknik sızıntı: 0` mı bak. Değilse KAPI 5.6'yı tek başına yeniden koştur |
 | `ANALISTE-GIDECEK.md` çok uzun, 15+ senaryo | Değişiklik büyük | Paketi kısaltma. Değişikliği bölmeyi değerlendir |
 
 ---

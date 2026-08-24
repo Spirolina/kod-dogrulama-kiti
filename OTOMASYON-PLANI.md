@@ -289,6 +289,13 @@ Karar:
                         │             ic/otomasyon-yargisi.md
                         └── KAPI 5.7  ANALIST      (kod görmez)
 
+  ⚠ ÜSTÜ ÇİZİLDİ (v1.0.0) — bu sıra bir hataydı ve düzeltildi.
+    OTOMAT, ANALIST'ten önce koştuğu için henüz atanmamış MT-xx numaralarına
+    yargı yazıyordu. Güncel sıra: KAPI 5.6 ANALIST, KAPI 5.7 OTOMAT.
+    Gerekçe ve düzeltme: ANALIST-GERIBILDIRIM-PLANI.md §2.
+    Bu bölümün geri kalanı v0.8.0/v0.9.0 turunun tarihsel kaydıdır; olduğu gibi
+    bırakıldı — sonradan düzeltmek kaydı sahteleştirir.
+
   ┌────────────────────────────────────────────────────────┐
   │  FAZ B — UYGULANDI (v0.9.0):  /dv-otomat               │
   │  AYRI TASK, AYRI BRANCH                                │

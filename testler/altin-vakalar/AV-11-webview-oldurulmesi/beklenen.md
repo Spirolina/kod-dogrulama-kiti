@@ -34,7 +34,7 @@ RTM: "kaldığı adımdan devam" ve "geri tuşunda uyarı" gereksinimleri `❌`.
 
 ---
 
-## Otomasyon yargısı beklentisi  (KAPI 5.6, v0.8.0)
+## Otomasyon yargısı beklentisi  (KAPI 5.7, v1.0.0'da 5.6'dan taşındı)
 
 Bu vakadaki senaryolar cihaz durumuna bağlı: uygulamadan çıkıp dönme, sayfanın sıfırdan
 yüklenmesi, donanım geri tuşu.

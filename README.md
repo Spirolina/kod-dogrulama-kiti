@@ -108,7 +108,7 @@ sablonlar/
   sonuc-sablonu.md        SONUC.md şablonu — developer'ın okuduğu tek dosya
   analist-test-paketi.md  Confluence wiki markup şablonu
   otomasyon-sozlesmesi.md Playwright koşum modeli, hesap sözleşmesi, arıza enjeksiyonu
-testler/altin-vakalar/    workflow'un kendi testi — 12 vaka
+testler/altin-vakalar/    workflow'un kendi testi — 13 vaka
 dogrulama/                çıktılar + kacan-defectler.md
 ```
 
@@ -147,11 +147,33 @@ neden" kararı verilir (`ic/otomasyon-yargisi.md`). Bu yargı, otomasyon hiç ko
 hangi testin **yapısal olarak** elle kalmak zorunda olduğunu ve hangi test hesaplarının
 gerektiğini söyler.
 
+Yargı, analist paketinden **sonra** koşar. Sebebi: `MT-xx` numaraları pakette doğuyor.
+Önce koşarsa yargı, yazılmamış senaryolara numara tahmin eder ve faz B yanlış senaryoya
+test yazar.
+
+## Analist paketi biçimi
+
+Paket analistlerin geri bildirimiyle şekillendi. Beş yapısal parça:
+
+| Parça | Neyi çözer |
+|---|---|
+| Gereksinim tablosu | `R-01` tek başına hiçbir şey söylemiyordu |
+| Koşum planı (hesaba göre) | Test hesabı bulmak en pahalı adım; aynı hesabın testleri yan yana |
+| Fonksiyonel bölümler | Kapsam gözle görünür — bölüm başlıkları analizin kendi başlıkları |
+| Üç parçalı beklenen sonuç | `ne görünür / nerede / ne değişmemeli` — üçüncüsü regresyonu yakalar |
+| Tekrar eleme | Aynı hesap koşulu + aynı adımlar + aynı sonuç = tek senaryo |
+
+Okuma yapısı (fonksiyonel bölüm) ile koşum yapısı (hesap) **ayrıdır.** Tek tabloyu
+ikisine birden zorlamak ikisini de bozuyordu.
+
+Müşteri numarası kolonu **boş gider** — kişisel veridir, analist Confluence'ta doldurur.
+
 **Otomasyon üretimi (`/dv-otomat`):** yargıdan Playwright testleri üretir — ayrı task,
 ayrı branch. Gerçek ortamda koşar, veri mock'u kurmaz, hata yollarını arıza
 enjeksiyonuyla üretir, görmediği seçiciyi uydurmaz. Testleri yazar, **koşmaz** — koşum
-developer'ın adımı. Tasarım: `OTOMASYON-PLANI.md`, sözleşme:
-`sablonlar/otomasyon-sozlesmesi.md`.
+developer'ın adımı. Koşum kanıtı olarak ekran görüntüsü üretilir: geçen testte koşum
+sonunda, kalan testte kırılma anında, atlanan testte hiç. Tasarım: `OTOMASYON-PLANI.md`
+ve `ANALIST-GERIBILDIRIM-PLANI.md`, sözleşme: `sablonlar/otomasyon-sozlesmesi.md`.
 
 ## Kurulum
 

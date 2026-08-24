@@ -35,6 +35,7 @@ cd <hedef-repo>
 cp /tmp/dv/.claude/agents/dv-*.md        .claude/agents/
 cp -r /tmp/dv/.claude/skills/dv-dogrula  .claude/skills/
 cp -r /tmp/dv/.claude/skills/dv-kavra    .claude/skills/
+cp -r /tmp/dv/.claude/skills/dv-otomat   .claude/skills/
 cp -r /tmp/dv/sablonlar                  .
 cp -r /tmp/dv/testler                    .
 mkdir -p dogrulama && cp /tmp/dv/dogrulama/kacan-defectler.md dogrulama/
@@ -61,8 +62,8 @@ varsa `dv-sablonlar/` ve `dv-testler/` olarak kopyala ve şu dosyalardaki yollar
 ```bash
 ls .claude/agents/dv-*.md          # 6 dosya
 ls .claude/skills/ | grep dv-      # 3 klasör
-ls sablonlar/                      # 4+ dosya (otomasyon-sozlesmesi.md dahil)
-ls testler/altin-vakalar/          # 11 klasör + README
+ls sablonlar/                      # 8 dosya (otomasyon-sozlesmesi.md dahil)
+ls testler/altin-vakalar/          # 13 klasör + README
 cat .claude/DV-VERSION
 ```
 
@@ -88,7 +89,7 @@ diff /tmp/dv/sablonlar/lens-paketi.md sablonlar/lens-paketi.md
 `lens-paketi.md` yaşayan dokümandır ve hedef ortamda büyür. Güncellemede körlemesine
 üzerine yazma — `diff` al, yerel eklemeleri koru.
 
-Güncelleme sonrası **11 altın vakanın tamamı** koşulur.
+Güncelleme sonrası **13 altın vakanın tamamı** koşulur.
 
 ## Sürümleme
 
@@ -99,7 +100,7 @@ Hedef repo'da `.claude/DV-VERSION` olarak durur; hangi sürümle doğrulandığ�
 
 ```bash
 rm .claude/agents/dv-*.md
-rm -rf .claude/skills/dv-dogrula .claude/skills/dv-kavra
+rm -rf .claude/skills/dv-dogrula .claude/skills/dv-kavra .claude/skills/dv-otomat
 rm -rf sablonlar testler .claude/DV-VERSION
 ```
 

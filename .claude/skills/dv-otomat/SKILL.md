@@ -8,7 +8,7 @@ description: Otomasyon üreticisi. Doğrulamanın otomasyon yargısından Playwr
 `/dv-dogrula` bitmiş bir değişiklikten Playwright testleri üretirsin.
 
 Girdin `ic/otomasyon-yargisi.md`. Hangi senaryonun otomatikleşeceğine **sen karar
-vermiyorsun** — karar KAPI 5.6'da verildi, sen uyguluyorsun.
+vermiyorsun** — karar KAPI 5.7'de verildi, sen uyguluyorsun.
 
 Sözleşme: `sablonlar/otomasyon-sozlesmesi.md`. Bağlayıcıdır, hafızandan çalışma, oku.
 
@@ -46,7 +46,8 @@ Gerekenler:
 | Girdi | Nereden | Yoksa |
 |---|---|---|
 | `ic/otomasyon-yargisi.md` | doğrulama klasörü | **DUR.** Önce `/dv-dogrula` koşulmalı |
-| `ic/analist-girdisi.md` | doğrulama klasörü | DUR — senaryo metinleri orada |
+| `ANALISTE-GIDECEK.md` | doğrulama klasörü | **DUR** — senaryo metinleri (ön koşul, hesap, adımlar, beklenen sonuç) orada |
+| `ic/analist-girdisi.md` | doğrulama klasörü | Devam et — gereksinim metinleri için yardımcı |
 | `ic/rtm.md` | doğrulama klasörü | Devam et, `R-xx` bağı zayıflar, bildir |
 | Ortam + auth bilgisi | **task notu** ya da `ortam-profili.local.json` | KAPI 2'ye bak |
 | `sablonlar/otomasyon-sozlesmesi.md` | repo | DUR |
@@ -112,13 +113,19 @@ onu okur, doğru sanır, koşum sebebi anlaşılmayan bir hatayla düşer.
 Task tabanlı ortamda profil taslağını **plan aşamasında göster** ve onay al. Onaydan
 sonra dosyaya yaz.
 
-`.gitignore` kontrolü — üçü de olmalı, yoksa ekle:
+`.gitignore` kontrolü — beşi de olmalı, yoksa ekle:
 
 ```
 ortam-profili.local.json
 .env.local
 auth/
+test-results/
+playwright-report/
 ```
+
+Son ikisi koşum çıktısı: ekran görüntüsü, trace, HTML rapor. İçlerinde bakiye ve müşteri
+bilgisi var — `auth/` kadar hassas, ama gözden kaçması çok daha kolay çünkü testleri sen
+koşmuyorsun, developer koşuyor ve dosyalar sonradan oluşuyor.
 
 Ayrıca `.env.example` üret: gereken değişken adları, **değersiz.**
 
@@ -155,15 +162,41 @@ Test üretimine **devam et** ama setup dosyasını şablon olarak bırak, testle
 
 ## KAPI 4 — Test üretimi
 
+### Önce: kanıt fixture'ı ve config
+
+Tek testten önce `sablonlar/otomasyon-sozlesmesi.md` §9'a göre şunları üret:
+
+| Dosya | Ne |
+|---|---|
+| `<testDir>/yardimcilar/kanit.js` | `test`/`expect` yeniden dışa verilir + `afterEach` ekran görüntüsü |
+| `playwright.config.*` | `screenshot: 'only-on-failure'`, `trace: 'retain-on-failure'`, `video: 'off'`, `reporter: [['html', { open: 'never' }]]` |
+
+`playwright.config.*` **zaten varsa** üzerine yazma. Eksik anahtarları ekle, var olan
+değerleri değiştirme — developer'ın kendi ayarı olabilir. Değiştirmediğin ama önerdiğin
+her ayarı raporda yaz.
+
+Fixture tek yerde durur; test gövdelerine ekran görüntüsü kodu **girmez.** Sebep §9'da:
+test gövdesi senaryonun birebir karşılığı kalmalı, yoksa `MT-xx` ile eşleşmesi bozulur.
+
+### Sonra: senaryolar
+
 `ic/otomasyon-yargisi.md` içindeki her `EVET` ve `EVET-ARIZA` satırı için
 `dv-otomat-yazar` agent'ını **senaryo başına ayrı ayrı** çağır.
 
 Her çağrıya ver:
-- Senaryonun tam metni (`ic/analist-girdisi.md`'den: ön koşul, adımlar, beklenen sonuç)
+- Senaryonun tam metni (**`ANALISTE-GIDECEK.md`'den**: `Hesap`, `Ön koşul`, `Adımlar`,
+  `Beklenen sonuç` kolonları birebir)
 - Yargı satırı (`Otomat` değeri, gerekli hesap, gerekçe)
 - Bağlı gereksinim metni (`ic/rtm.md` ya da `ic/gereksinimler.md`)
 - Kapsamdaki dosya listesi
 - `sablonlar/otomasyon-sozlesmesi.md` yolu
+
+**Senaryo metni analist paketinden gelir, `ic/analist-girdisi.md`'den değil.** İkincisinde
+gereksinim seviyesinde bilgi var, adımlar yok. `MT-xx` numaraları da pakette doğuyor —
+yargı dosyası oraya işaret ediyor.
+
+`Beklenen sonuç` kolonu üç parçalı (`ne görünür / nerede / ne değişmemeli`). Üçünü de
+agent'a ver; üçüncü parça çoğu regresyonun yakalandığı yer.
 
 `TUR-2`, `HAYIR-*` ve `BELİRSİZ` satırları için **test üretme.** Raporda neden
 üretilmediğini yaz.
@@ -225,6 +258,22 @@ git diff --stat package.json package-lock.json
 
 Boş dönmeli.
 
+**6. Kanıt fixture'ı doğru bağlanmış mı**
+
+```bash
+grep -rLn "yardimcilar/kanit" <testDir>/*.spec.*     # fixture'ı import ETMEYEN dosyalar
+grep -rn "page.screenshot\|testInfo.attach" <testDir>/*.spec.*   # gövdede görüntü kodu
+```
+
+Birinci komut dosya listelerse o testler kanıt üretmez — `import` satırını düzelt.
+İkinci komut satır dönerse test gövdesine ekran görüntüsü kodu sızmış — **sil.**
+
+Gövdedeki görüntü kodu iki şeyi bozar: senaryonun birebir karşılığı olma özelliğini, ve
+`ATLANDI` durumunda görüntü almama kuralını (fixture `status !== 'passed'` ile korur,
+gövdedeki kod korumaz).
+
+Sağlık işareti: `KANIT_BAGLANMAMIS: <n>` ve `GOVDEDE_GORUNTU: <n>` — ikisi de **0 olmalı.**
+
 ---
 
 ## KAPI 6 — Rapor
@@ -264,7 +313,22 @@ Test dosyaları henüz **koşulmadı** — doğrulanmadılar.
 | Anahtar | Hangi testler | Hangi durumda olmalı |
 |---|---|---|
 
-## 5. İlk koşum triyajı
+## 5. Koşum kanıtı
+Testler koşulduktan sonra bu tablo doldurulur (ilk üretimde boş gider).
+
+| Test | Sonuç | Kanıt |
+|---|---|---|
+| MT-01 | | |
+| MT-04 | | |
+
+GEÇTİ testlerin görüntüsü HTML raporda teste ilişik gelir (`MT-xx__gecti.png`).
+KALDI testlerin görüntüsü ve trace'i `test-results/` altındadır.
+ATLANDI testlerde görüntü yoktur — test hiç koşmadı.
+
+`ANALISTE-GIDECEK.md`'nin `Kanıt` kolonuna hangi görüntünün taşınacağı **senin kararın.**
+Görüntüde bakiye ve müşteri bilgisi var; otomatik taşınmaz.
+
+## 6. İlk koşum triyajı
 Bu testler hiç koşmadı. İlk koşumda kırmızı beklenir; sebebi genelde kod değil:
 
 | Belirti | Muhtemel sebep | Ne yap |
@@ -275,12 +339,15 @@ Bu testler hiç koşmadı. İlk koşumda kırmızı beklenir; sebebi genelde kod
 | Ortam kontrolü geçmiyor | app'ler ayakta değil | Komutları/portları kontrol et |
 | Yukarıdakilerin hiçbiri | **gerçek bulgu** | `kacan-defectler.md`'ye aday |
 
-## 6. Sağlık işaretleri
+## 7. Sağlık işaretleri
 KANITSIZ_SECICI: 0
 KURAL_IHLALI: 0
+KANIT_BAGLANMAMIS: 0
+GOVDEDE_GORUNTU: 0
 URUN_KODU_DEGISTI: hayır
 YENI_BAGIMLILIK: hayır
 URETILEN_TEST: <n>
+YARGIDAKI_MT: <n>            # otomasyon-yargisi.md'deki EVET + EVET-ARIZA
 DOLDURULACAK_ALAN: <n>
 Bağımsızlık: <NORMAL | ZAYIF>
 ```
@@ -312,7 +379,7 @@ beklemek boşuna. Koşum developer'ın adımı.
 ## Bu skill'in yasakları
 
 1. **Yargıyı değiştirme.** `HAYIR-*` yazan senaryoya test yazma, `BELİRSİZ`'i kendi
-   kararınla `EVET`'e çevirme. Karar KAPI 5.6'da verildi.
+   kararınla `EVET`'e çevirme. Karar KAPI 5.7'de verildi.
 2. **Senaryoyu değiştirme.** Otomatikleşsin diye adım ekleme/çıkarma. Senaryo neyse odur.
 3. **Beklenen değeri koddan alma.** Analizden gelir. Koddan alınan beklenti, kodun
    kendini onaylamasıdır.

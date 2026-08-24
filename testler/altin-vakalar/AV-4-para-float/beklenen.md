@@ -19,7 +19,7 @@ Bulgulardan biri güven < 7 ile ayakta kalırsa `ANALISTE-GIDECEK.md`'da `(*)` i
 
 Senaryoda `toFixed`, `float`, `reduce`, dosya adı **geçmemeli**.
 
-## Analist paketi dil kontrolü  (KAPI 5.7 regresyonu)
+## Analist paketi dil kontrolü  (KAPI 5.6 regresyonu)
 
 Bu vaka aynı zamanda `ANALISTE-GIDECEK.md`'nın dilini sınar. Gerçek bir koşumda buradan teknik dil
 sızmıştı; kontrolü altın vakaya bağlanmıştır.
@@ -58,7 +58,7 @@ TEKNIK_SIZINTI: 0
 - `OKUNAN_KOD_DOSYASI: 0` veya `TEKNIK_SIZINTI: 0` sağlık işaretleri eksikse ya da
   sıfırdan büyükse
 
-## KAPI 5.7 agent regresyonu  (v0.8.0)
+## KAPI 5.6 agent regresyonu  (v0.8.0)
 
 `ANALISTE-GIDECEK.md`'yı artık `dv-iz-denetci` değil **`dv-analist-paketi`** yazıyor.
 Bu vaka o bağın koptuğunu yakalar.
@@ -72,7 +72,7 @@ Kontrol:
 **Başarısız sayılır:** `ANALISTE-GIDECEK.md` hiç üretilmezse, ya da sağlık işaretleri
 eksikse. Agent adı değişikliği sessizce paketi yok edebilir — bu kontrolün sebebi bu.
 
-## Otomasyon yargısı beklentisi  (KAPI 5.6)
+## Otomasyon yargısı beklentisi  (KAPI 5.7)
 
 `ic/otomasyon-yargisi.md` üretilmeli. Taksit toplamı senaryosu `(*)` işaretli ve analiz
 "tam olarak eşit" diyor — yani **beklenen değer analizde çivili.**

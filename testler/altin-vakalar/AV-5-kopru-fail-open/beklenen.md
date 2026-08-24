@@ -28,7 +28,7 @@ RTM: "kontrol yapılamazsa işlem başlatılmaz" gereksinimi `❌` — kod tersi
 
 ---
 
-## Otomasyon yargısı beklentisi  (KAPI 5.6, v0.8.0)
+## Otomasyon yargısı beklentisi  (KAPI 5.7, v1.0.0'da 5.6'dan taşındı)
 
 Bu vaka köprü çağrısının `catch` içinde `true` dönmesiyle ilgili — yani **native köprünün
 kendi davranışı.**

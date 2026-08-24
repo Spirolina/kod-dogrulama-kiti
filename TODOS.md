@@ -13,6 +13,10 @@ istemediğini sil.
 > enjeksiyonuyla. Kalan tek iş bankada: ortam ve auth bloklarını task notuna yazıp
 > ilk koşumu yapmak, sonra `.env.local`'i doldurup `npx playwright test` demek.
 > **Bu kalem kapandı.**
+>
+> **v1.0.0 eki:** analist geri bildirimiyle paket biçimi değişti ve KAPI 5.6/5.7
+> takas edildi (`ANALIST-GERIBILDIRIM-PLANI.md`). Otomasyon yargısı artık gerçek
+> `MT-xx` üzerinden koşuyor; koşum kanıtı olarak ekran görüntüsü üretiliyor.
 
 **Ne:** Analist test paketindeki senaryoları elle koşmak yerine otomatik koşulabilir hale
 getirmek (E2E / entegrasyon seviyesi).
@@ -80,3 +84,17 @@ Doğrulama değil, öğrenme aracı. Karıştırılırsa sahte güven üretir.
 `/dv-dogrula` çıktısı olmadan tek başına çalışabilmesi gerekiyor — kapsamı kendi çizip
 onaylatması, sonra tur + sınav. Teknik olarak B modunun RTM'siz hali.
 **Bağımlı:** T7 (dv-kavrayis-kocu) tamamlanmalı. Sonrası küçük iş.
+
+## 7. Repo geçmişindeki sektör kelimesi
+
+**Ne:** `TODOS.md` ve `OTOMASYON-PLANI.md` içinde sektörü söyleyen kelime geçiyor ve
+bu iki dosya zaten public commit'lerde.
+**Neden:** Repo herkese açık ve jenerik bir adla duruyor. Kelime tek başına kurumu
+söylemiyor ama kaynağı daraltıyor.
+**Artı:** HEAD'i temizlemek beş dakikalık iş; yeni okuyan için iz kalmaz.
+**Eksi:** Git geçmişi temizlenmiyor. Gerçekten silmek `filter-repo` + zorla push demek;
+klonlamış biri varsa zaten geç. Yarım temizlik yanlış güven üretir.
+**Bağlam:** Yeni dosyalarda kelime **geçmiyor** ve kurum içi terimler (müşteri
+numarasının iç adı gibi) hiç girmedi — `ANALIST-GERIBILDIRIM-PLANI.md` §4'teki
+terminoloji notu bu kuralı yazıya döktü. Kalan iş yalnız geçmiş.
+**Bağımlı:** Kullanıcının risk değerlendirmesi. Teknik bağımlılık yok.

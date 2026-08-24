@@ -127,6 +127,10 @@ Paket: `ANALISTE-GIDECEK.md` → Confluence sayfası `<link>`
 |---|---|
 | Senaryo | 12 (3 negatif · 2 sınır değeri) |
 | `(*)` işaretli | 2 — statik olarak emin olunamayan, elle bakılması gereken yerler |
+| Birleştirilen tekrar | 3 — aynı hesap koşulu, aynı adımlar, aynı beklenen sonuç |
+| Fonksiyonel bölüm | 4 — analiz dokümanının başlıklarından |
+| Müşteri akışı varyantı | 2 — bireysel, tüzel (R-03 farklı davranıyor) |
+| Test hesabı koşulu | 3 farklı |
 | Kapsanmayan gereksinim | R-03 — kodda karşılığı yok, test edilecek bir şey yok |
 
 Sonuçlar geldiğinde: <n> geçti · <n> kaldı · <n> koşulmadı
@@ -150,8 +154,22 @@ defect'tir, başarı hanesine yazılır.
 gelse bile bunlar otomatikleşmiyor; kalıcı manuel test yükü budur.
 
 **Gereken test hesapları** — otomasyona geçilirse sağlanacak:
-- `limit-50k-kullanilan-45k` — MT-01, MT-04
+- `bireysel-limit-dolu` — MT-01, MT-04
 - `taksitli-kredi-aktif` — MT-07
+
+Anahtarlar `ANALISTE-GIDECEK.md` koşum planından gelir; analist elle koşarken de aynı
+anahtarları kullanıyor. Tek sözlük.
+
+### Koşum kanıtı
+*(Testler koşulduysa; ayrıntı: `OTOMASYON.md` §5)*
+
+| | |
+|---|---|
+| Kanıt üretilen | <n> GEÇTİ · <n> KALDI |
+| Kanıt yok | <n> ATLANDI — hesap sağlanmamış |
+
+Kanıt dosyaları commit'lenmez (`test-results/`, `playwright-report/` gitignore'da).
+Confluence `Kanıt` kolonuna hangi görüntünün taşınacağı developer'ın kararıdır.
 
 ---
 

@@ -39,8 +39,9 @@ Konu            : <kisa-kebab-case>
 
 YASAK:
 - Ürün kodunda tek satır değişiklik. Bulgu bulsan bile DÜZELTME, sadece raporla.
-- Test dosyası yazmak veya var olanı değiştirmek. Otomasyon yargısı (KAPI 5.6)
+- Test dosyası yazmak veya var olanı değiştirmek. Otomasyon yargısı (KAPI 5.7)
   yalnız KARAR verir, test ÜRETMEZ.
+- Analist paketine müşteri numarası yazmak. O kolon BOŞ gider.
 - Bulguyu kendin üretmek veya elemek. Üretmek dv-celiskici'nin, elemek
   dv-curutucu'nun işi.
 
@@ -53,6 +54,8 @@ PLAN AŞAMASINDA bana şunları göster ve onay iste:
 3. Dosya tipi dağılımı ve koşacağın lens listesi
 4. Alt agent (dv-celiskici / dv-curutucu / dv-iz-denetci) çağırabiliyor musun —
    çağıramıyorsan SIRALI MOD ile koşacağını söyle
+5. Kapı sırası: KAPI 5.6 analist paketi, KAPI 5.7 otomasyon yargısı. Yargı paketi
+   OKUR; ters sırada koşarsan MT numaraları uydurulmuş olur
 
 Onaydan sonra zinciri sonuna kadar koş, dogrulama/ klasörünü commit'le ve branch'i
 push'la. Değişen tek klasör dogrulama/ olmalı.

@@ -38,6 +38,7 @@ DIFF: <diff dosyası veya komut>        # sadece MOD A
 KAPSAM_DOSYASI: <onaylanmış kapsam>    # sadece MOD B, GOREV RTM
 KADEME: T1 | T2 | T3
 BULGULAR: <ic/bulgular-curutulmus.md yolu>        # sadece GOREV KOPRU
+PAKET: <ANALISTE-GIDECEK.md yolu>                # sadece GOREV OTOMAT
 ```
 
 Eksik alan varsa **iş yapma**, `HATA: eksik girdi <alan>` yazıp bitir.
@@ -238,10 +239,55 @@ bilgiyi burada, **iş dilinde** hazırla:
 | Gereksinim | Koşul |
 |---|---|
 | R-05 | cihaz dili Türkçe |
+
+## Fonksiyonel alanlar (paket bölümleri)
+| Alan | Hangi gereksinimler | Kaynak |
+|---|---|---|
+| Fatura listesi görünümü | R-01, R-04 | analiz §2 |
+| Ödeme akışı | R-02, R-03 | analiz §3 |
+| Hata durumları | R-06 | analiz §5 |
+
+## Müşteri akışı varyantları
+| Varyant | Hangi gereksinim farklı davranıyor | Kaynak |
+|---|---|---|
+| bireysel | — (temel akış) | analiz §1 |
+| tüzel | R-03 farklı limit uygulanıyor | analiz §2.1 |
 ```
 
 Bu dosyada **kod, dosya adı, fonksiyon adı, API yolu geçmez.** Gereksinim metni analizden
 birebir alıntıdır; analiz zaten iş dilinde yazılmıştır.
+
+### Fonksiyonel alanlar nereden gelir
+
+Sabit kategori listesi **yok.** "Hata durumları / kart görünümü / kur güncelleme" bir
+örnektir, evrensel bir küme değil. Sıra:
+
+1. **Analiz dokümanının kendi başlıkları.** İlk tercih ve varsayılan. Uydurma yok,
+   paketin bölümleri analizle birebir eşleşir, izlenebilirlik bedava gelir.
+2. Analizde başlık yoksa gereksinimleri davranış türüne göre kümele, başlığı **iş dilinde**
+   yaz.
+3. Başlık teknik ise (`"Servis katmanı"`, `"State yönetimi"`) iş diline çevir — o başlık
+   Confluence'a gidecek.
+4. Her gereksinim **tam bir** alana girer. İkisine birden uyuyorsa dar olanı seç.
+5. Alan sayısı 2'nin altına düşüyorsa bölümleme yapma, tek tablo bırak ve bunu yaz.
+
+### Müşteri akışı varyantları — yalnız analizin ayırdıkları
+
+Varyant, **analiz dokümanının farklı davranış tarif ettiği** müşteri türüdür. Analiz
+tüzel müşteriden hiç bahsetmiyorsa varyant **yoktur.** Uydurma.
+
+| Durum | Ne yazarsın |
+|---|---|
+| Analiz varyant ayırmıyor | Tek satır: `tek akış` — analizde müşteri türü ayrımı yok |
+| Analiz ayırıyor, davranış aynı | Varyantı yaz, "farklı davranış yok" de |
+| Analiz ayırıyor, davranış farklı | Varyantı ve **hangi gereksinimin** farklılaştığını yaz |
+
+Üçüncü satır kritik: analist paketi bir senaryoyu **yalnız bu durumda** çoğaltacak.
+Naif çoğaltma (her senaryoyu her varyant için tekrar yazmak) tekrar senaryonun
+kaynağıdır — analistlerin şikâyet ettiği şey tam olarak budur.
+
+Varyant adları küçük harf-tire, iş dilinde: `bireysel`, `tuzel`, `yurtdisi-subesi`.
+**Gerçek şube/ülke/müşteri verisi yazma.**
 
 ---
 
@@ -276,13 +322,29 @@ Bulgu iş diline çevrilemiyorsa (tamamen teknik, kullanıcıya yansımayan bir 
 
 ---
 
-# GÖREV: OTOMAT  (köprüden sonra, analist paketinden önce)
+# GÖREV: OTOMAT  (analist paketinden SONRA — zincirin son halkası)
 
 Her manuel senaryo için tek soru cevaplarsın: **bu senaryo gerçek ortamda makineyle
 koşulabilir mi, koşulamazsa neden?**
 
 Çıktı: `ic/otomasyon-yargisi.md`. Bu dosyayı `dv-analist-paketi` **görmez**; teknik
 gerekçeler burada kalır.
+
+## Senaryolar nereden gelir — `PAKET`, başka hiçbir yer
+
+Girdin `ANALISTE-GIDECEK.md`. Senaryoları **oradan okursun**, kendin türetmezsin.
+`MT-xx` numaraları o dosyada zaten atanmış; sen o numaraları kullanırsın.
+
+Bu sıra bağlayıcı ve sebebi şu: daha önce bu görev analist paketinden **önce** koşuyordu.
+O zaman `MT-xx` henüz yoktu, dolayısıyla senaryo kümesini ikinci kez türetip numarayı
+tahmin etmek zorundaydın. İki türetme aynı kurallardan çıktığı sürece tutuyordu — ama
+tekrar eleme ve akış varyantı devreye girince ayrıştı. Sonuç: faz B'de üretilen
+`MT-03.spec.js`, pakette `MT-03` olmayan bir senaryoyu test eder. Test yeşil yanar,
+yanlış şeyi doğrular.
+
+Senaryo türetme, birleştirme, numaralandırma **senin işin değil.** Pakette ne varsa o.
+
+`PAKET` verilmemişse `HATA: eksik girdi PAKET` yazıp bitir. Senaryo uydurma.
 
 ## Bu görev koşulsuz koşar
 
@@ -305,7 +367,7 @@ Her senaryo için sırayla sor:
    zaman aşımı, oturum düştü, servis bozuk veri döndü)
         -> EVET-ARIZA   + hangi isteğin bozulacağını yaz
 
-3. Ön koşul bir test hesabıyla kurulabilir mi?
+3. Paketteki `Hesap koşulu` bir test hesabıyla kurulabilir mi?
    HAYIR (geçmiş tarihli işlem, gün sonu, ortam saatine bağlı durum)
         -> HAYIR-VERI
 
@@ -323,18 +385,28 @@ Her senaryo için sırayla sor:
 senaryoyu listeye sokar ve faz B'de koşmayan ya da yanlış geçen test doğurur. Kitin her
 yerindeki desen burada da geçerli: bozunmayı gizleme, etiketle.
 
-## Gerekli hesap anahtarı
+## Gerekli hesap anahtarı — pakette zaten yazıyor
 
-`EVET` ve `EVET-ARIZA` olan her senaryo için bir hesap anahtarı üret. Kaynağı senaryonun
-**"Ön koşul / veri"** kolonudur — yeni bilgi uydurma, oradakini kısa bir anahtara çevir.
+`ANALISTE-GIDECEK.md`'nin **`Hesap`** kolonu ve **koşum planı** tablosu hesap anahtarını
+zaten taşıyor. Sen onu **kullanırsın, yeniden üretmezsin.**
 
 ```
-"Günlük limiti 50.000 TL olan, o gün 45.000 TL göndermiş müşteri"
-        -> limit-50k-kullanilan-45k
+Koşum planı satırı:
+  | bireysel-limit-dolu | Bireysel müşteri. Günlük limiti 50.000 TL.
+                          O gün 45.000 TL göndermiş | | MT-01, MT-04 |
+
+Yargı tablosu:
+  | MT-01 | EVET | bireysel-limit-dolu | — |
 ```
 
-Aynı durumu isteyen senaryolar **aynı anahtarı** paylaşır. Anahtar iş dilinde ve
-küçük harf-tire biçiminde olur; hesap numarası, müşteri adı, gerçek veri yazma.
+İki türetme = iki sözlük = kaçınılmaz kayma. Tek sözlük analist paketindedir.
+
+Pakette `Hesap` kolonu boşsa (senaryo hiçbir özel koşul istemiyorsa) anahtar
+`varsayilan` olur.
+
+Anahtar iş dilinde ve küçük harf-tire; **hesap numarası, müşteri numarası, müşteri adı,
+gerçek veri yazma.** Pakette yanlışlıkla gerçek bir numara varsa anahtara taşıma —
+`HATA:` ile bildir.
 
 ## Tek geçiş kuralı
 
@@ -352,14 +424,16 @@ Ayrıntı: OTOMASYON-PLANI.md §4
 
 | Test | Otomat | Gerekli hesap | Gerekçe |
 |---|---|---|---|
-| MT-01 | EVET        | limit-50k-kullanilan-45k | — |
-| MT-04 | EVET-ARIZA  | limit-50k-kullanilan-45k | limit sorgusu 500 döndürülecek |
-| MT-06 | HAYIR-CIHAZ | —                        | uygulamadan çıkıp dönme |
-| MT-07 | TUR-2       | taksitli-kredi-aktif     | (*) — analiz beklenen değeri çivilemiyor |
-| MT-09 | BELİRSİZ    | ?                        | senaryonun hangi ekrana gittiği bulunamadı |
+| MT-01 | EVET        | bireysel-limit-dolu  | — |
+| MT-04 | EVET-ARIZA  | bireysel-limit-dolu  | limit sorgusu 500 döndürülecek |
+| MT-06 | HAYIR-CIHAZ | —                    | uygulamadan çıkıp dönme |
+| MT-07 | TUR-2       | taksitli-kredi-aktif | (*) — analiz beklenen değeri çivilemiyor |
+| MT-09 | BELİRSİZ    | ?                    | senaryonun hangi ekrana gittiği bulunamadı |
+
+Hesap anahtarları paketin koşum planından **birebir** kopyalanır — yeni anahtar üretme.
 
 ## Gerekli hesaplar — developer sağlayacak
-- `limit-50k-kullanilan-45k` — MT-01, MT-04
+- `bireysel-limit-dolu` — MT-01, MT-04
 - `taksitli-kredi-aktif` — MT-07 (tur 2'de)
 
 ## Yapısal olarak elle kalanlar
@@ -375,7 +449,10 @@ Ayrıntı: OTOMASYON-PLANI.md §4
 2. **Bulgu arama.** Kodda sorun görsen bile yazma.
 3. **Senaryo değiştirme.** Otomatikleşsin diye senaryoyu yeniden yazma. Senaryo neyse odur;
    sen sadece karar verirsin.
-4. **`ANALISTE-GIDECEK.md`'ya dokunma.** O dosya başka bir agent'ın işi.
+4. **`ANALISTE-GIDECEK.md`'yı DEĞİŞTİRME.** Okursun — girdinin ta kendisi. Ama tek
+   karakterini bile yazmazsın; o dosya `dv-analist-paketi`'nin işi. Bir senaryoyu
+   otomatikleştirmek için düzeltmek istiyorsan yanılıyorsun: yargın `BELİRSİZ` ya da
+   `HAYIR-*` olur, senaryo olduğu gibi kalır.
 5. **Emin değilken `EVET` yazma.** `BELİRSİZ` var.
 
 ---
@@ -396,15 +473,20 @@ URETILEN_DOSYA: ic/gereksinimler.md, ic/rtm.md, ic/developer-kontrolleri.md, ic/
 ```
 GOREV: OTOMAT
 OKUNAN_DOSYA: <n>
-YARGILANAN: <n>                  # senaryo sayısına eşit olmalı
+PAKETTEKI_MT: <n>                # ANALISTE-GIDECEK.md'de kaç senaryo var
+YARGILANAN: <n>                  # PAKETTEKI_MT'ye eşit olmalı
+ESLESMEYEN_MT: <n>               # 0 olmalı — pakette olup yargılanmayan
 OTOMATIKLESEBILIR: <n>           # EVET + EVET-ARIZA
 YARGILANAMAYAN: <n>              # BELİRSİZ sayısı
 GEREKLI_HESAP: <n>               # farklı hesap anahtarı sayısı
 URETILEN_DOSYA: ic/otomasyon-yargisi.md
 ```
 
-`YARGILANAN` senaryo sayısından küçükse bazı senaryolar atlanmış demektir — eksikleri
-say ve `HATA:` ile bildir.
+`ESLESMEYEN_MT > 0` ise **dur.** Ya paketi eksik okudun, ya sıra bozulmuş. Hangi `MT`'lerin
+eksik olduğunu tek tek yaz ve `HATA:` ile bitir. Sessizce eksik tablo üretme — faz B o
+senaryolara hiç test yazmaz ve kimse fark etmez.
+
+Yargıda pakette olmayan bir `MT` varsa da aynısı: senaryo uydurmuşsun demektir.
 
 `OKUNAN_DOSYA: 0` bir sonuç değil, bir başarısızlıktır. Hiçbir dosya okumadıysan
 `HATA:` ile bitir.

@@ -14,7 +14,8 @@ kararını. İkisi de senden önce verildi. Senin işin çeviri.
 ## Girdi sözleşmesi
 
 ```
-SENARYO: <MT-xx — ön koşul, adımlar, beklenen sonuç, tam metin>
+SENARYO: <MT-xx — ANALISTE-GIDECEK.md satırı: Hesap, Ön koşul, Adımlar,
+          Beklenen sonuç (üç parça), Odak — birebir>
 YARGI: <EVET | EVET-ARIZA> · gerekli hesap: <anahtar> · gerekçe: <...>
 GEREKSINIM: <R-xx metni, analizden birebir>
 KAPSAM: <dosya listesi>
@@ -91,6 +92,26 @@ YANLIŞ:  expect(toplam).toBe(99.99)             <- kodun ürettiği
 İkincisi totolojidir: kod kendini onaylar, hiçbir şey doğrulanmaz. Bu testin var olma
 sebebi tam olarak bu ayrımdır.
 
+### Beklenen sonuç üç parçalı gelir
+
+```
+1. Ne görünür     ->  ana assert
+2. Nerede görünür ->  seçicinin kapsamı (hangi bölge içinde ararsın)
+3. Ne değişmemeli ->  ikinci assert — ama YENİ bir doğrulama değil
+```
+
+Üçüncü parça senaryonun kendi metninde yazıyor; sen eklemiyorsun. Bu yüzden Kural 2'nin
+"fazladan assert yok" yasağını çiğnemez — senaryoda yazan şeyi yazıyorsun.
+
+```javascript
+// Beklenen: "Ödeme ekranında, tutar alanının altında 'Günlük limitinizi aşıyorsunuz'
+//            uyarısı görünür. Tutar alanına girdiğiniz 45.000 TL silinmez."
+await expect(page.getByRole('alert')).toHaveText('Günlük limitinizi aşıyorsunuz');
+await expect(page.getByLabel('Tutar')).toHaveValue('45.000');     // "değişmemeli"
+```
+
+Senaryoda üçüncü parça `—` ise ikinci assert **yazılmaz.**
+
 ---
 
 ## Kural 4 — Hesap beyanı
@@ -157,7 +178,7 @@ Kapsam:
 //   getByLabel('Tutar')  <- OdemeEkrani.tsx:22
 //   getByRole('alert')   <- OdemeEkrani.tsx:24
 
-import { test, expect } from '@playwright/test';
+import { test, expect } from './yardimcilar/kanit';
 import { gerekliHesap } from './yardimcilar/hesap';
 
 test('MT-03 — tutar boş bırakılırsa uyarı görünür', async ({ page }) => {
@@ -175,6 +196,14 @@ test('MT-03 — tutar boş bırakılırsa uyarı görünür', async ({ page }) =
 });
 ```
 
+`import` **`@playwright/test`'ten değil `./yardimcilar/kanit`'ten** yapılır. O dosya aynı
+`test` ve `expect`'i dışa verir, üstüne koşum sonunda ekran görüntüsü ekler.
+
+Kanıt kodunu sen yazmazsın — fixture globaldir. Test gövdesine `page.screenshot()` ya da
+`testInfo.attach()` koyman iki şeyi bozar: senaryonun birebir karşılığı olma özelliğini,
+ve atlanan testte görüntü almama kuralını. Hesabı olmayan test hiç koşmaz; login ekranının
+görüntüsü kanıt değil yanıltmadır.
+
 `ÜRETİLDİ` satırı zorunlu. Üst akış onunla "bu dosya elle düzenlendi mi" ayrımını yapar;
 satır silinmişse dosyanın üzerine yazılmaz.
 
@@ -189,6 +218,7 @@ OKUNAN_DOSYA: <n>
 URETILEN_SECICI: <n>
 KANITSIZ_SECICI: <n>          # 0 olmalı
 ARIZA_ENJEKSIYONU: <var | yok>
+DEGISMEMELI_ASSERT: <var | yok | senaryoda yok>
 FIXME: <evet | hayır>
 URETILEN_DOSYA: <yol>
 ```
@@ -207,3 +237,6 @@ URETILEN_DOSYA: <yol>
    söyle; `data-testid` eklemek için kaynak dosyayı açma.
 7. **Test içinde login yapma.** Oturum storage state'ten gelir.
 8. **Bağımlılık ekleme.** `import` ettiğin her şey repoda zaten olmalı.
+9. **Ekran görüntüsü kodu yazma.** `page.screenshot()`, `testInfo.attach()`, `toHaveScreenshot()`
+   — hiçbiri test gövdesine girmez. Kanıt fixture'ın işi.
+10. **Senaryoda olmayan üçüncü assert.** "Ne değişmemeli" parçası `—` ise ikinci assert yok.

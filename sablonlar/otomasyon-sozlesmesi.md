@@ -301,3 +301,101 @@ hangi anahtarları doldurması gerektiği söylenir.
 Mevcut kural değişmiyor: `(*)` KALDI = **yakalanan** defect, `(*)` işaretsiz KALDI =
 **kaçan** defect. `Koşan` kolonu sadece kimin yakaladığını ayırır — otomatın kırdığı,
 analistin yakaladığı değildir.
+
+---
+
+## 9. Koşum kanıtı — ekran görüntüsü
+
+Analistler istedi: *"otomasyon çalıştığında senaryo başarılı veya başarısız olduğunda
+kanıt niteliğinde ekran görüntüsü koyabilmeli."*
+
+Gerekçe onların tarafında net: bugün elle koştuklarında ekran görüntüsünü kendileri
+alıyor ve Confluence'a yapıştırıyorlar. Otomat koştuğunda o kanıt yoksa `Sonuç` kolonunda
+tek kelime kalır ve kimse doğrulayamaz.
+
+### Nerede yakalanır
+
+```
+KALDI  ->  Playwright'ın kendi görüntüsü   (screenshot: 'only-on-failure')
+           kırılma ANINDA alınır — en iyi kanıt
+
+GEÇTİ  ->  afterEach kancası
+           senaryo bittikten sonra son ekran
+
+ATLANDI -> görüntü YOK
+           hesabı olmayan test hiç koşmadı; login ekranının görüntüsü kanıt sanılır
+```
+
+Bu ayrım maliyet değil doğruluk meselesi. Kırılma anındaki ekran ile teardown sonrası
+ekran farklı şeylerdir; kaldıysa ilki lazım.
+
+### Fixture
+
+`/dv-otomat` bu dosyayı üretir. Testler `@playwright/test` yerine buradan `import` eder.
+
+```javascript
+// testler/yardimcilar/kanit.js
+import { test as base } from '@playwright/test';
+
+export const test = base;
+export { expect } from '@playwright/test';
+
+base.afterEach(async ({ page }, testInfo) => {
+  // KALDI ve ATLANDI burada ele alınmaz:
+  //   KALDI   -> Playwright kırılma anında kendi görüntüsünü aldı
+  //   ATLANDI -> test hiç koşmadı, görüntü kanıt değil yanıltmadır
+  if (testInfo.status !== 'passed') return;
+
+  const mt = testInfo.title.split(' ')[0];        // "MT-03 — ..." -> "MT-03"
+  try {
+    await testInfo.attach(`${mt}__gecti.png`, {
+      body: await page.screenshot(),               // viewport — fullPage DEĞİL
+      contentType: 'image/png',
+    });
+  } catch {
+    // Kanıt alınamadı. Testi düşürme — kanıt yokluğu bulgu değildir.
+  }
+});
+```
+
+### Config
+
+```javascript
+use: {
+  screenshot: 'only-on-failure',
+  trace:      'retain-on-failure',
+  video:      'off',
+},
+reporter: [['html', { open: 'never' }]],
+```
+
+`video: 'off'` ve viewport görüntü bilinçli: 15 test x tam sayfa ekran = onlarca MB ve
+her koşumda tekrar üretilir. `trace` yalnız kırmızıda tutulur; asıl teşhis aracı odur.
+
+`open: 'never'` — rapor kendiliğinden tarayıcı açmaz.
+
+### Kural
+
+| Kural | Neden |
+|---|---|
+| Test gövdesine ekran görüntüsü kodu **yazılmaz** | Fixture global. Test gövdesi senaryonun birebir karşılığı kalmalı |
+| Kanıt dosyaları **commit'lenmez** | Bakiye, isim, müşteri numarası içerir |
+| Kanıt Confluence'a **otomatik gitmez** | Hangi görüntünün paylaşılacağı insan kararı |
+| Kanıt yokluğu **bulgu değildir** | `catch` sessiz. Testi kanıt yüzünden kırmızıya çevirme |
+
+`.gitignore`'a eklenecek satırlar `sablonlar/gitignore-eki` içinde.
+
+### Rapora bağlanması
+
+`OTOMASYON.md` koşum kanıtı tablosu taşır:
+
+```markdown
+| Test | Sonuç | Kanıt |
+|---|---|---|
+| MT-01 | GEÇTİ | MT-01__gecti.png |
+| MT-04 | KALDI | test-results/MT-04.../test-failed-1.png + trace.zip |
+| MT-09 | ATLANDI | — (hesap yok) |
+```
+
+Developer ilgili görüntüyü `ANALISTE-GIDECEK.md`'nin `Kanıt` kolonuna **elle** taşır.
+Otomatik yükleme yok — §9 başındaki gerekçe.

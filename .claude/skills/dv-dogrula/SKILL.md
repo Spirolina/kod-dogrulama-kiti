@@ -234,7 +234,7 @@ Onaylanan kapsamı `ic/kapsam.md` olarak yaz. Sonraki tüm agent'lar bunu alır.
 Üretilenler: `ic/gereksinimler.md`, `ic/rtm.md`, `ic/developer-kontrolleri.md`,
 `ic/analist-girdisi.md`.
 
-**`ANALISTE-GIDECEK.md` burada üretilmez.** Analist paketi en sonda, KAPI 5.7'de, kodu görmemiş ayrı bir
+**`ANALISTE-GIDECEK.md` burada üretilmez.** Analist paketi KAPI 5.6'da, kodu görmemiş ayrı bir
 bağlamda yazılır. Bu agent az önce her dosyayı okudu; ona "analist diliyle yaz" demek
 tutmuyor.
 
@@ -288,17 +288,23 @@ Ortam alt agent çağırmaya izin vermiyorsa zincir durmaz, ama şu kurallarla k
    işaretleri sıralı modda daha kritik: kaçırılan lens burada görünür.
 4. Çürütmeyi (KAPI 5) **ayrı bir geçişte** yap. Bulguyu üreten geçiş kendi bulgusunu
    çürütmeye çalışırsa ikisi de zayıflar.
-5. `ANALISTE-GIDECEK.md`'yı **en son ve ayrı bir geçişte** yaz. Ondan önce yazdığın her şeyi (kod, RTM,
-   bulgular, otomasyon yargısı) unutmuş gibi davran; girdin yalnız analiz dokümanı ve
-   `ic/analist-girdisi.md`.
+5. `ANALISTE-GIDECEK.md`'yı **kod okuyan tüm geçişlerden sonra, ayrı bir geçişte** yaz.
+   Ondan önce yazdığın her şeyi (kod, RTM, bulgular) unutmuş gibi davran; girdin yalnız
+   analiz dokümanı ve `ic/analist-girdisi.md`.
 
    **Dikkat:** agent modunda bu görev `dv-analist-paketi` agent'ında koşar ve o agent'ın
    `Grep`/`Glob` araçları yoktur — koruma mekaniktir. Sıralı modda alt agent yok, dolayısıyla
    araç kısıtı da yok; burada koruma yeniden sadece disiplin. Bu yüzden §3b mekanik `grep`
    kontrolü sıralı modda **tek gerçek koruma**. Mutlaka koş.
 
-6. `GOREV: OTOMAT` yargısını da ayrı bir geçişte yap ve `ANALISTE-GIDECEK.md`'dan **önce**
-   bitir. Yargı dosyasını yazdıktan sonra içeriğini unut.
+6. `GOREV: OTOMAT` yargısını **`ANALISTE-GIDECEK.md`'dan sonra**, ayrı bir geçişte yap.
+   Girdisi yazdığın paketin kendisi; `MT-xx` numaraları oradan gelir.
+
+   Sıralı modda buradaki risk ters yönde: paketi az önce sen yazdın, senaryoların
+   otomatikleşmesini istiyorsun ve yargıyı iyimser vermeye eğilimlisin. `BELİRSİZ`
+   ve `HAYIR-*` dallarını bilinçli olarak ara. `ESLESMEYEN_MT: 0` kontrolünü elle yap:
+   pakette kaç `MT` varsa yargıda o kadar satır olmalı.
+
 7. `SONUC.md`'ye `Bağımsızlık: ZAYIF — sıralı modda koşuldu` yaz.
 
 Sıralı mod bir **düşüş**, eşdeğer değil. Aynı bağlam hem 11 lensi hem çürütmeyi taşır;
@@ -330,31 +336,7 @@ Köprüden geçen bulgu yoksa bu kapıyı atla ve `SONUC.md`'ye `Köprüye giden
 
 ---
 
-## KAPI 5.6 — Otomasyon yargısı
-
-`dv-iz-denetci` agent'ını `GOREV: OTOMAT` ile çağır.
-
-**Bu kapı koşulsuz koşar.** KAPI 5.5 atlanmış olabilir (köprüye giden bulgu yoksa);
-bu kapı atlanmaz. Sağlıklı bir değişiklikte de senaryolar var ve yargı gerekiyor.
-Atlarsan hiçbir şey hata vermez — `ic/otomasyon-yargisi.md` sadece **yok** olur.
-
-Girdi: `ic/analist-girdisi.md`, kapsam, `ic/bulgular-curutulmus.md`.
-Çıktı: `ic/otomasyon-yargisi.md`.
-
-Sağlık kontrolü:
-
-| İşaret | Beklenen | Değilse |
-|---|---|---|
-| `YARGILANAN` | senaryo sayısına eşit | Senaryo atlanmış, yeniden çağır |
-| `OTOMATIKLESEBILIR` | — | `SONUC.md` §4'e yazılır |
-| `YARGILANAMAYAN` | mümkünse 0 | > 0 ise `SONUC.md` §4'te açıkça yazılır |
-| `GEREKLI_HESAP` | — | `SONUC.md` §4'e hesap listesi olarak yazılır |
-
-`YARGILANAMAYAN > 0` bir hata değil, dürüst bir cevap. Gizleme — o senaryolar elle kalır.
-
----
-
-## KAPI 5.7 — Analist test paketi
+## KAPI 5.6 — Analist test paketi
 
 `dv-analist-paketi` agent'ını çağır. (`dv-iz-denetci` **değil** — o agent kod okuyor.)
 
@@ -362,11 +344,14 @@ Sağlık kontrolü:
 `sablonlar/analist-test-paketi.md`. Kapsam dosyasını, RTM'i, bulguları,
 `ic/otomasyon-yargisi.md`'yi, `SONUC.md` §3'yi bu çağrının bağlamına sokma — özet olarak bile.
 
+İlk koşumda `ic/otomasyon-yargisi.md` zaten **yok** (KAPI 5.7'de üretilecek). İkinci
+koşumda önceki turun dosyası diskte durur — yasak o yüzden yazılı kalıyor.
+
 Agent'ın kendi `tools` satırında `Grep` ve `Glob` yok; kod araması yapması teknik olarak
 mümkün değil. Bu, düz yazı bir yasağın yerini alan yapısal güvence — `dv-analist-paketi.md`
 dosyasına kod okuyan bir görev eklenmez.
 
-Çıktı: `ANALISTE-GIDECEK.md`.
+Çıktı: `ANALISTE-GIDECEK.md`. **`MT-xx` numaraları burada doğar.**
 
 Sağlık kontrolü:
 
@@ -375,10 +360,53 @@ Sağlık kontrolü:
 | `OKUNAN_KOD_DOSYASI` | **0** | Görev geçersiz, yeniden çağır |
 | `BEKLENMEYEN_GIRDI` | **0** | Sözleşme dışı dosya verilmiş — çağrıyı düzelt, yeniden koş |
 | `TEKNIK_SIZINTI` | **0** | `ANALISTE-GIDECEK.md` yayına hazır değil, düzelttir |
+| `MUSTERI_NO_YAZILDI` | **0** | Gerçek müşteri numarası yazılmış — sil, yeniden çağır |
 | `KAPSANAN_GEREKSINIM` | `❌`/`❓` hariç hepsi | Eksikse kapsam beyanında yazılı mı, kontrol et |
+| `BIRLESTIRILEN` | — | `SONUC.md` §4'e ve kapsam beyanına yazılır |
+| `FONKSIYONEL_BOLUM` | ≥ 1 | 0 ise bölümleme yapılmamış, yeniden çağır |
+| `AKIS_VARYANTI` | — | Analizde varyant yoksa 1 normaldir |
+| `HESAP_KOSULU` | ≥ 1 | Koşum planı satır sayısı |
 
 `TEKNIK_SIZINTI > 0` iken `ANALISTE-GIDECEK.md`'yı devretme. Confluence sayfasını sandığından çok daha
 fazla kişi görür ve oradan geri alınamaz.
+
+`MUSTERI_NO_YAZILDI > 0` iken de devretme. Müşteri numarası kişisel veridir; kolon **boş**
+gider, analist doldurur.
+
+---
+
+## KAPI 5.7 — Otomasyon yargısı
+
+`dv-iz-denetci` agent'ını `GOREV: OTOMAT` ile çağır.
+
+**Bu kapı koşulsuz koşar.** KAPI 5.5 atlanmış olabilir (köprüye giden bulgu yoksa);
+bu kapı atlanmaz. Sağlıklı bir değişiklikte de senaryolar var ve yargı gerekiyor.
+Atlarsan hiçbir şey hata vermez — `ic/otomasyon-yargisi.md` sadece **yok** olur.
+
+Girdi: **`ANALISTE-GIDECEK.md`** (gerçek `MT-xx` senaryoları), `ic/analist-girdisi.md`,
+kapsam, `ic/bulgular-curutulmus.md`.
+Çıktı: `ic/otomasyon-yargisi.md`.
+
+### Neden analist paketinden sonra
+
+Yargı `MT-xx` üzerinden yazılıyor ve `MT-xx` numaralarını KAPI 5.6 atıyor. Bu kapı önce
+koşarsa yargı, henüz yazılmamış senaryolara numara verir — senaryo kümesini ikinci kez,
+tahmini numaralarla türetmek zorunda kalır. Tekrar eleme ve akış varyantı devreye
+girdiğinde iki türetme ayrışır ve faz B yanlış senaryoya test yazar.
+
+Sıra bu yüzden bağlayıcı. `ESLESMEYEN_MT` bunun nöbetçisi.
+
+Sağlık kontrolü:
+
+| İşaret | Beklenen | Değilse |
+|---|---|---|
+| `YARGILANAN` | `ANALISTE-GIDECEK.md`'deki senaryo sayısına eşit | Senaryo atlanmış, yeniden çağır |
+| `ESLESMEYEN_MT` | **0** | Pakette olup yargılanmayan `MT` var — sıra bozulmuş, yeniden çağır |
+| `OTOMATIKLESEBILIR` | — | `SONUC.md` §4'e yazılır |
+| `YARGILANAMAYAN` | mümkünse 0 | > 0 ise `SONUC.md` §4'te açıkça yazılır |
+| `GEREKLI_HESAP` | — | `SONUC.md` §4'e hesap listesi olarak yazılır |
+
+`YARGILANAMAYAN > 0` bir hata değil, dürüst bir cevap. Gizleme — o senaryolar elle kalır.
 
 ---
 
@@ -485,9 +513,10 @@ Sonuç imzaya kapatılamaz. Yeniden koş veya kapsamı daralt.
 
 ## Duvar saati
 
-Hedef: **T1 ≤ 18 dk · T2 ≤ 6 dk · T3 ≤ 2 dk**.
+Hedef: **T1 ≤ 20 dk · T2 ≤ 7 dk · T3 ≤ 2 dk**.
 
-(KAPI 5.6 eklendiğinde T1 16→18, T2 5→6 çıkarıldı. Dosya sayısı sinyali değişmedi —
+(KAPI 5.6 eklendiğinde T1 16→18, T2 5→6; tekrar eleme ve gruplama ile 18→20, 6→7.
+ Dosya sayısı sinyali değişmedi —
 OTOMAT zaten KAPI 3'te okunan dosyalara bakıyor.)
 
 Task tabanlı ortamda duvar saati anlamsızdır — kullanıcı ekranda beklemiyor. Orada
@@ -511,7 +540,7 @@ Aşılırsa çözüm "daha hızlı koş" değil. Kullanıcıya söyle:
 6. **Kademe düşürmeyi kendi başına yapma.** Yükseltme serbest, düşürme onaylı.
 7. **Ürün kodunu değiştirme.** Bulgu bulsan bile düzeltme, test yazma, format/lint
    düzeltmesi yapma. Yazma izni yalnız `dogrulama/<tarih>-<konu>/` altında.
-8. **Otomasyon testi üretme.** KAPI 5.6 yalnız *yargı* üretir. Test dosyası yazmak ayrı
+8. **Otomasyon testi üretme.** KAPI 5.7 yalnız *yargı* üretir. Test dosyası yazmak ayrı
    bir görevdir, ayrı bir task'ta ve ayrı bir branch'te koşar.
 9. **`dv-analist-paketi`'ne kod yolu verme.** Kapsam, RTM, bulgular, otomasyon yargısı —
    hiçbiri o çağrının bağlamına girmez.

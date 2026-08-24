@@ -1,6 +1,6 @@
 # Beklenen — AV-12
 
-Test ettiği: **`GOREV: OTOMAT`** (KAPI 5.6). Otomasyon yargısının karar dallarını sınar.
+Test ettiği: **`GOREV: OTOMAT`** (KAPI 5.7). Otomasyon yargısının karar dallarını sınar.
 
 Bu vakanın asıl konusu bulgular değil, **yargı.** Bulgular sadece zinciri çalıştırmak ve
 `(*)` üretmek için var. Yargı yanlışsa vaka kalır, bulgular doğru olsa bile.
@@ -12,8 +12,18 @@ serbest (`OTOMASYON-PLANI.md` §4, §4d).
 
 ## Beklenen yargı tablosu
 
-`ic/otomasyon-yargisi.md` şu dalların **hepsini** içermeli. Senaryo numaraları koşuma göre
-değişir; bağlı gereksinim üzerinden eşleştir.
+`ic/otomasyon-yargisi.md` şu dalların **hepsini** içermeli.
+
+Yargıdaki her `MT` numarası `ANALISTE-GIDECEK.md`'de **birebir bulunmalı.** Kapı sırası
+takas edildikten sonra (KAPI 5.6 analist, 5.7 otomasyon) numaralar artık tahmin değil:
+yargı, yazılmış paketi okuyor.
+
+Eski sürümde bu satırda *"senaryo numaraları koşuma göre değişir, bağlı gereksinim
+üzerinden eşleştir"* yazıyordu. O bir kaçamaktı — yargı, senaryolar doğmadan koşuyor ve
+numara uyduruyordu. Artık eşleştirme `MT` üzerinden yapılır.
+
+**Kalır:** yargıda pakette olmayan bir `MT` varsa, ya da pakette olup yargılanmayan bir
+`MT` kalırsa (`ESLESMEYEN_MT > 0`).
 
 | Bağlı gereksinim | Beklenen `Otomat` | Neden |
 |---|---|---|

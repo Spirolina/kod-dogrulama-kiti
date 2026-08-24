@@ -16,3 +16,8 @@ ortam-profili.local.json
 
 # Playwright oturum durumu — CANLI JETON taşır, elle düzenlenmez.
 auth/
+
+# Playwright koşum çıktıları — ekran görüntüsü, trace, HTML rapor.
+# İçlerinde bakiye, müşteri bilgisi ve ekran içeriği var; kimlik bilgisi kadar hassas.
+test-results/
+playwright-report/

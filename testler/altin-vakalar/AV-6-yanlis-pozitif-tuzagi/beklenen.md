@@ -27,23 +27,43 @@ dördüncü gerçek alarma bakmaz.
 
 ---
 
-## KAPI 5.6 temiz koşumda koştu mu  (v0.8.0 — KRİTİK)
+## KAPI 5.7 temiz koşumda koştu mu  (KRİTİK)
 
 Bu vakanın tanımı gereği köprüye hiçbir bulgu gitmiyor: bulgu çürütülüyor, güven < 7
 kalan bir şey yok. Dolayısıyla **KAPI 5.5 atlanıyor** ve `SONUC.md`'ye `Köprüye giden: 0`
 yazılıyor.
 
-KAPI 5.6 atlanmamalı.
+KAPI 5.7 (otomasyon yargısı) atlanmamalı.
 
 Kontrol:
 1. `ic/otomasyon-yargisi.md` **var mı** — koşulsuz üretilmesi gerekiyor
 2. Sağlık işaretlerinde `GOREV: OTOMAT` bloğu var mı
-3. `YARGILANAN` senaryo sayısına eşit mi
-4. `SONUC.md` §4'te "Otomatikleşebilirlik" alt bölümü dolu mu
+3. `YARGILANAN` = `PAKETTEKI_MT`, ve `ESLESMEYEN_MT: 0`
+4. Yargıdaki her `MT` numarası `ANALISTE-GIDECEK.md`'de **gerçekten var mı**
+5. `SONUC.md` §4'te "Otomatikleşebilirlik" alt bölümü dolu mu
 
 **Başarısız sayılır:** `ic/otomasyon-yargisi.md` yoksa.
 
-**Neden bu vaka:** KAPI 5.6, 5.5'e katlanırsa ya da koşullu yazılırsa, en sağlıklı
+**Başarısız sayılır:** yargıda pakette olmayan bir `MT` varsa. Sıra bozulmuş demektir —
+yargı, senaryolar yazılmadan koşmuş ve numara uydurmuş.
+
+**Neden bu vaka:** KAPI 5.7, 5.5'e katlanırsa ya da koşullu yazılırsa, en sağlıklı
 değişikliklerde sessizce hiç koşmaz. Hata vermez, uyarı vermez — dosya sadece yok olur.
 Test yok + hata yönetimi yok + kullanıcı görmüyor: tanım gereği kritik gap. Bu paketteki
 tek "temiz koşum" vakası burası, kontrolün doğal yeri burası.
+
+---
+
+## Paket biçimi temiz koşumda da tam mı
+
+Sağlıklı bir değişiklikte bulgu yok, `(*)` yok, köprü yok. Paketin yapısal parçaları yine
+de eksiksiz olmalı — "bulunacak bir şey yoktu" biçimi gevşetmez.
+
+1. `h3. Gereksinimler` tablosu **var mı**, metinler analizden birebir mi
+2. `h3. Koşum planı` **var mı**, `Müşteri no` kolonu **boş** mu
+3. Fonksiyonel bölümler analiz başlıklarıyla eşleşiyor mu
+4. Beklenen sonuçlar üç parçalı mı (`ne değişmemeli` yoksa `—`)
+5. Kapsam beyanında `Birleştirilen: <n>` satırı **var mı** — `0` olabilir, yokluğu olamaz
+
+**Başarısız sayılır:** biri bile eksikse. Bunlar bulguya bağlı değil; temiz koşumda
+atlanmaları en olası yerdir çünkü "yapacak iş yok" hissi verir.
