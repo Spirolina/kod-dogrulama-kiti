@@ -5,9 +5,11 @@ dosya eklersin → repo seçersin → önce plan çıkar → onaylarsın → ça
 
 Kullanım: bloğu kopyala, `<...>` alanlarını doldur, task'ın **not** kısmına yapıştır.
 
-Kapsam: **doğrulama + analist test paketi.** Kavrayış sınavı (`/dv-kavra`) bu ortamda
-koşmaz — interaktif soru-cevap ister. Onu Copilot, Windsurf ya da erişimin olan başka bir
-canlı araçta kendin koşarsın.
+Kapsam: **doğrulama + analist test paketi + otomasyon üretimi.** Kavrayış sınavı
+(`/dv-kavra`) bu ortamda koşmaz — interaktif soru-cevap ister. Onu Copilot, Windsurf ya da
+erişimin olan başka bir canlı araçta kendin koşarsın.
+
+İki task şablonu var: **Doğrulama** ve **Otomasyon.** Ayrı task'lar, ayrı branch'ler.
 
 ---
 
@@ -55,6 +57,82 @@ PLAN AŞAMASINDA bana şunları göster ve onay iste:
 Onaydan sonra zinciri sonuna kadar koş, dogrulama/ klasörünü commit'le ve branch'i
 push'la. Değişen tek klasör dogrulama/ olmalı.
 ```
+
+---
+
+## TASK — Otomasyon üretimi
+
+`/dv-dogrula` bittikten **sonra**, **ayrı bir task'ta**, **ayrı bir branch'te** koşulur.
+Doğrulamayla aynı task'ta koşturma: bulguyu bulan bağlam testi yazarsa, test bulgunun
+etrafından dolaşır.
+
+Aşağıdaki `ORTAM` ve `AUTH` bloklarını bir kez doldurursun. `/dv-otomat` bunları
+`ortam-profili.local.json`'a yazar; sonraki koşumlarda nota tekrar yazmana gerek kalmaz.
+Yine yazarsan **not kazanır** — profil güncellenir ve fark raporlanır.
+
+```
+Bu bir OTOMASYON ÜRETİMİ görevidir. Ürün kodu YAZMAYACAKSIN.
+
+Repo kökündeki .claude/skills/dv-otomat/SKILL.md dosyasını oku ve oradaki kapıları
+sırayla uygula.
+
+Doğrulama klasörü : dogrulama/<tarih>-<konu>/
+Konu              : <kisa-kebab-case>
+
+ORTAM
+  container app   komut: <npm run ...>   port: <...>
+  child app       komut: <npm run ...>   port: <...>
+  sağlık kontrolü : <ayakta olduğunu anlayan en ucuz kontrol>
+
+AUTH   (biçim A — token API'den; biçim B için SKILL.md'ye bak)
+  yöntem      : api
+  istek       : POST <login endpoint>
+                gövde { <müşteri no alanı>: $KULLANICI, <şifre alanı>: $PAROLA }
+  token yolu  : <yanıt gövdesinde token nerede, ör: data.accessToken>
+  kullanım    : <header Authorization: Bearer <TOKEN>
+                 | localStorage anahtar: <ad>
+                 | cookie: <ad>>
+  ek adım     : <OTP var | yok>
+  geçerlilik  : <token kaç dakika yaşıyor>
+
+HESAPLAR
+  <hesap-anahtari>  ->  $ENV:TEST_USER_1 / $ENV:TEST_PW_1
+  <hesap-anahtari>  ->  $ENV:TEST_USER_2 / $ENV:TEST_PW_2
+  (anahtarlar ic/otomasyon-yargisi.md'deki "Gerekli hesaplar" listesinden)
+
+YASAK:
+- Ürün kodunda tek satır değişiklik. Testi yeşile çevirmek için bile.
+- Yeni bağımlılık kurmak, önermek, package.json'a yazmak.
+- Görmediğin seçiciyi uydurmak. Bulamazsan <SECICI-BULUNAMADI> ile işaretle,
+  testi test.fixme yap.
+- Yargıyı değiştirmek. HAYIR-* ya da BELİRSİZ yazan senaryoya test yazma.
+- Senaryoyu değiştirmek. Adım ekleme, çıkarma, birleştirme.
+- Beklenen değeri koddan almak. Analizden gelir.
+- Veri mock'u kurmak. Arıza enjeksiyonu dışında route'a dokunma.
+- Testleri koşmaya çalışıp ortamı beklemek. Koşum benim adımım.
+
+PLAN AŞAMASINDA bana şunları göster ve onay iste:
+1. Playwright bulundu mu, test dizini neresi olacak
+2. ic/otomasyon-yargisi.md'den kaç EVET / EVET-ARIZA çıktı, hangileri
+3. Üretilecek ortam profili taslağı — hangi alanı neyi OKUYARAK doldurdun,
+   hangisini <DOLDUR> bıraktın
+4. Alt agent (dv-otomat-yazar) çağırabiliyor musun — çağıramıyorsan SIRALI MOD
+5. Üzerine yazılacak var olan test dosyası var mı
+
+Onaydan sonra testleri üret, OTOMASYON.md raporunu yaz, commit'le ve push'la.
+Değişen dosyalar yalnız: test dizini, auth/, ortam-profili.local.json, .env.example,
+.gitignore, dogrulama/.
+```
+
+**Neden hesap anahtarları nota yazılıyor?** `ic/otomasyon-yargisi.md` hangi hesabın
+gerektiğini söylüyor ama ortam değişkeni adını bilmiyor — o eşleştirme sende. Kimlik
+bilgisinin kendisi hiçbir yere yazılmaz; nota da yazılmaz, sadece `.env.local`'de durur.
+
+**`ek adım: OTP var` yazarsan** `/dv-otomat` durur ve sorar. Test hesapları için
+atlanamıyorsa otomasyon kurulamaz — bunu baştan bilmek, on beşinci testte keşfetmekten
+iyidir.
+
+---
 
 **Neden plan aşamasında bunlar?** Platformun zorunlu plan onayı, B modundaki kapsam
 onayının (KAPI 2) yerine geçer. Bu durak atlanırsa sistem yanlış kod üzerinde kusursuz

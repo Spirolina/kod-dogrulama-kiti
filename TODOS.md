@@ -8,9 +8,11 @@ istemediğini sil.
 > **Durum (2026-08-24):** Tasarlandı, ikiye bölündü — `OTOMASYON-PLANI.md`.
 > **Faz A UYGULANDI (v0.8.0):** `GOREV: OTOMAT`, KAPI 5.6, `dv-analist-paketi` agent
 > ayrımı, AV-12 altın vakası, `sablonlar/otomasyon-sozlesmesi.md`.
-> **Faz B** (üretici `/dv-otomat`) sırada. Koşum modeli kararlaştırıldı: Playwright,
-> gerçek ortam, veri mock'u yok, hata yolları arıza enjeksiyonuyla. Kalan tek iş
-> ortam profilini bankada doldurmak (portlar, auth, sağlık kontrolü).
+> **Faz B UYGULANDI (v0.9.0):** `/dv-otomat` skill + `dv-otomat-yazar` agent +
+> task notu şablonu. Playwright, gerçek ortam, veri mock'u yok, hata yolları arıza
+> enjeksiyonuyla. Kalan tek iş bankada: ortam ve auth bloklarını task notuna yazıp
+> ilk koşumu yapmak, sonra `.env.local`'i doldurup `npx playwright test` demek.
+> **Bu kalem kapandı.**
 
 **Ne:** Analist test paketindeki senaryoları elle koşmak yerine otomatik koşulabilir hale
 getirmek (E2E / entegrasyon seviyesi).

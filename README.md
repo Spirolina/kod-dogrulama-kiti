@@ -92,11 +92,13 @@ dogrulama/<tarih>-<konu>/
 .claude/agents/
   dv-iz-denetci.md        RTM, gereksinim ID çivileme, keşif, köprü, otomasyon yargısı
   dv-analist-paketi.md    analist test paketi — tools: Read, Write (kod arayamaz)
+  dv-otomat-yazar.md      senaryo → Playwright testi, seçici uydurmaz
   dv-celiskici.md         lens başına adversarial tarama
   dv-curutucu.md          bulgu çürütme (yanlış pozitif eleme)
   dv-kavrayis-kocu.md     rehberli tur, viva soruları, notlama
 .claude/skills/
   dv-dogrula/SKILL.md     G0→G2 orkestrasyonu
+  dv-otomat/SKILL.md      otomasyon üretimi (faz B) — ayrı task, ayrı branch
   dv-kavra/SKILL.md       G4 interaktif sınav
 sablonlar/
   lens-paketi.md          ★ KANONİK KAYNAK — 16 lens, kademe×dosya tipi matrisi, çıktı biçimi
@@ -141,9 +143,15 @@ Hepsi `ic/OKUBENI.md`'de birer satırla açıklanır.
 analist paketine `(*)` işaretli bir senaryo olarak girer ve elle kanıtlanır.
 
 **Otomasyon yargısı:** her manuel senaryo için "bu makineyle koşulabilir mi, koşulamazsa
-neden" kararı verilir (`ic/otomasyon-yargisi.md`). Otomasyon henüz üretilmiyor; yargının
-bugünkü değeri, hangi testin **yapısal olarak** elle kalmak zorunda olduğunu ve hangi test
-hesaplarının gerektiğini söylemesi. Tasarım: `OTOMASYON-PLANI.md`.
+neden" kararı verilir (`ic/otomasyon-yargisi.md`). Bu yargı, otomasyon hiç koşulmasa bile
+hangi testin **yapısal olarak** elle kalmak zorunda olduğunu ve hangi test hesaplarının
+gerektiğini söyler.
+
+**Otomasyon üretimi (`/dv-otomat`):** yargıdan Playwright testleri üretir — ayrı task,
+ayrı branch. Gerçek ortamda koşar, veri mock'u kurmaz, hata yollarını arıza
+enjeksiyonuyla üretir, görmediği seçiciyi uydurmaz. Testleri yazar, **koşmaz** — koşum
+developer'ın adımı. Tasarım: `OTOMASYON-PLANI.md`, sözleşme:
+`sablonlar/otomasyon-sozlesmesi.md`.
 
 ## Kurulum
 

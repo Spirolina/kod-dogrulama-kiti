@@ -6,7 +6,7 @@ senaryoları çalıştırılabilir teste dönüşebilir mi?
 Kısa cevap: **evet, ama o dosyadan değil.** Ve hepsi değil. Ve bu turda üretici
 yazılmıyor — bu turda otomasyonun dayanacağı **yargı katmanı** kuruluyor.
 
-Durum: **FAZ A UYGULANDI (v0.8.0)** · `/plan-eng-review` geçti · 6 karar · 4 bulgu · 1 kritik gap
+Durum: **FAZ A + FAZ B UYGULANDI (v0.9.0)** · `/plan-eng-review` geçti · 6 karar · 4 bulgu · 1 kritik gap
 Bloke: **kalktı** (2026-08-24) — MFE lokalde açılıyor · Playwright kullanılabilir ·
 mock yok, gerçek ortam · hesapları developer sağlar
 
@@ -290,7 +290,7 @@ Karar:
                         └── KAPI 5.7  ANALIST      (kod görmez)
 
   ┌────────────────────────────────────────────────────────┐
-  │  FAZ B — SONRAKİ TUR:  /dv-otomat                      │
+  │  FAZ B — UYGULANDI (v0.9.0):  /dv-otomat               │
   │  AYRI TASK, AYRI BRANCH                                │
   │  girdi: ic/otomasyon-yargisi.md + ic/rtm.md + kod      │
   │  çıktı: test dosyaları (repo'nun mevcut aracıyla)      │
@@ -639,11 +639,39 @@ Bu review'ın bulgularından türetildi. Her madde bir bulguya bağlı.
   - Verify: profil dosyası `.gitignore`'da, şablonda hiçbir kimlik bilgisi yok;
     enjeksiyon kuralı "başarılı yanıt uydurma" yasağını içeriyor
 
-- [ ] **T15 (P3, human: ~30dk / CC: —)** — bankada — container/child portları, auth yöntemi
+- [ ] **T15 (P1, human: ~30dk / CC: —)** — bankada — ORTAM ve AUTH bloklarını task notuna yaz
       ve en ucuz sağlık kontrolünü ortam profiline yaz
   - Surfaced by: §11 #5 ve #6 — üreticinin konfigürasyonu
   - Files: hedef repoda `ortam-profili.local.json`
   - Verify: `playwright.config.ts` iki `webServer` ile ikisini de kaldırabiliyor
+
+## 17. Faz B — uygulandı (v0.9.0)
+
+`/dv-otomat` skill + `dv-otomat-yazar` agent + task notu şablonu.
+
+Ortam ve auth bilgisi **task notundan** geliyor; `/dv-otomat` bunu
+`ortam-profili.local.json`'a yazıyor. Not tek koşumluk, profil kalıcı — ikinci koşumda
+yeniden yazmak gerekmiyor. Nota yine yazılırsa **not kazanıyor** ve fark raporlanıyor.
+
+Kapılar: 0 ortam/girdi · 1 araç tespiti (bloklayıcı) · 2 ortam profili (task modunda
+plan onayı) · 3 auth iskeleti · 4 üretim · 5 kendi kontrolü (bloklayıcı) · 6 rapor ·
+7 devir.
+
+**Üretici testleri koşmuyor.** Task ortamında container ve child app ayakta değil;
+beklemek boşuna. `OTOMASYON.md` durumu açıkça yazıyor: *"Test dosyaları henüz koşulmadı —
+doğrulanmadılar."* İlk koşumda kırmızı beklenir ve raporun §5'i o kırmızıyı ayırmak için
+bir triyaj tablosu veriyor — çoğu kod değil ortam.
+
+İki bloklayıcı öz denetim:
+
+| İşaret | Beklenen | Neden |
+|---|---|---|
+| `KANITSIZ_SECICI` | 0 | Uydurulmuş seçici, sebebi teşhis edilemeyen kırmızı demek |
+| `KURAL_IHLALI` | 0 | 200 içinde iş değeri uydurulmuş mu, global route handler var mı |
+
+Elle düzenlenmiş test korunuyor: üretilen her dosyanın başında
+`// ÜRETİLDİ — MT-xx · <tarih> · elle düzenlersen bu satırı sil` satırı var. Satır yoksa
+dosyaya dokunulmuyor, çakışma raporlanıyor.
 
 ---
 
@@ -670,6 +698,7 @@ belirtti. `§4d` eklendi: **veri mock'u ile arıza enjeksiyonu ayrıldı** — e
 bir isteği bozabilir, başarılı yanıt uyduramaz. Rubrikte `HAYIR-HATA` → `EVET-ARIZA`.
 Otomasyon kapsamı belirgin şekilde büyüdü.
 
-**VERDICT:** ENG CLEARED — faz A uygulanabilir, tasarımı bloke eden soru kalmadı.
+**VERDICT:** ENG CLEARED — faz A ve faz B uygulandı (v0.9.0). Kalan iş bankada:
+ORTAM ve AUTH bloklarını task notuna yazıp ilk `/dv-otomat` koşumunu yapmak.
 
 NO UNRESOLVED DECISIONS
