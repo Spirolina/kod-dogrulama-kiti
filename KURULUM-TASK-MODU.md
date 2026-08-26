@@ -23,11 +23,13 @@ Doğrulanacak reponun **köküne**:
   skills/
     dv-dogrula/SKILL.md
     dv-otomat/SKILL.md         # faz B — ayrı task, ayrı branch
+    dv-triyaj/SKILL.md         # faz C — her koşumdan sonra, ayrı task
     dv-kavra/SKILL.md          # task ortamında koşmaz, interaktif araç için
   agents/
     dv-iz-denetci.md
     dv-analist-paketi.md        # tools: Read, Write — kod arayamaz, bu kasıtlı
     dv-otomat-yazar.md
+    dv-triyajci.md
     dv-celiskici.md
     dv-curutucu.md
     dv-kavrayis-kocu.md

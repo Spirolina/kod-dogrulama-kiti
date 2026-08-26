@@ -205,8 +205,15 @@ KIRMIZI
    │
    ├─ ortam sağlık kontrolü geçti mi?  ─── HAYIR ──> ORTAM. Bulgu değil.
    ├─ gerekli hesap profilde var mı?   ─── HAYIR ──> ATLANDI. Bulgu değil.
-   └─ ikisi de tamam                   ────────────> BULGU. Rapora girer.
+   └─ ikisi de tamam                   ────────────> YARGIYA GİDER.
 ```
+
+Üçüncü dal doğrudan "bulgu" değildir — orada dört ihtimal vardır (kod, test, gereksinim,
+sessiz ortam kayması) ve ayrımı `/dv-triyaj` yapar. Bu ağaç üst iki dalın filtresidir;
+alt dalın yargısı ayrı bir task'ın işi.
+
+Retry ile geçen test de o task'a gider: Playwright onu özet satırında başarılı sayar,
+ama bir denemesi düşmüştür. `flaky` bir durumdur, yeşil değil.
 
 ---
 

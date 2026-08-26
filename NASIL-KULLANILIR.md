@@ -40,7 +40,17 @@ Analist sonuçları gelir → SONUC.md §4
     │
     ▼
 SONUC.md kapanır → imza → merge
+    │
+    ▼
+[faz B — bir kez]  /dv-otomat  → testler yazılır (ayrı task + branch)
+    │              sen koşarsın: npx playwright test
+    ▼
+[faz C — her koşumda]  /dv-triyaj  → kırmızının sebebi ayrılır (ayrı task)
 ```
+
+Yukarısı faz A — **her değişiklikte** koşar. Faz B senaryo kümesi başına bir kez, faz C
+her test koşumundan sonra. Dördünün sırası, hangisinin hangi oturumda koşacağı ve
+"şu durumdaysam ne koşarım" tablosu: **`CALISTIRMA.md`**.
 
 ## Sıra neden bu — sınav bulgulardan önce
 
@@ -349,6 +359,11 @@ Sonucun anlamı kolay karıştırılıyor, tablo şu:
 | `(*)` işaretli test **KALDI** | Doğrulamanın şüphesi doğrulandı, köprü çalıştı | **Başarı hanesi** — *yakalanan* defect |
 | `(*)` işaretsiz test **KALDI** | Hiçbir mercek bunu öngörmedi | `dogrulama/kacan-defectler.md` — *kaçan* defect |
 | Test **GEÇTİ** | — | Kayıt Confluence'ta kalır |
+
+Otomasyon koşmaya başladığında bu tablo yetmez: kırmızı bir test **dört** farklı şey
+olabilir (kod bozuldu / test bozuldu / gereksinim değişti / ortam), ve retry ile geçen
+bir test suite özetinde yeşil görünür. Ayrımı `/dv-triyaj` yapar — ayrı task, ürün koduna
+ve test dosyasına dokunmadan. Varsayılan yargı **kod bozuldu**; değiştirmek kanıt ister.
 
 İkinci satır sistemin öğrendiği tek yer. Soru: **hangi mercek kaçırdı?** Cevap ya mevcut
 bir merceğe yeni kontrol maddesi olur, ya yeni bir mercek — ve beraberinde bir altın vaka

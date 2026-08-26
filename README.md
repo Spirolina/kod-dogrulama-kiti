@@ -17,7 +17,8 @@ Lens paketi buna göre yazıldı: JS float aritmetiği, React render/durum kural
 
 | | |
 |---|---|
-| **Günlük kullanım** | **`NASIL-KULLANILIR.md`** — task notu, plan onayı, çıktıyı okuma |
+| **Hangi komut ne zaman** | **`CALISTIRMA.md`** — kodu bitirdin, sırasıyla ne koşacaksın |
+| Günlük kullanım | `NASIL-KULLANILIR.md` — task notu, plan onayı, çıktıyı okuma |
 | Kurulum (terminalsiz) | `KURULUM-TASK-MODU.md` |
 | Kurulum (terminal) | `KURULUM.md` |
 | Tasarım gerekçesi | `DOGRULAMA-WORKFLOW-PLAN.md` |
@@ -42,17 +43,24 @@ Sınav bulgulardan **önce**. Bulgular kodun kırılgan noktalarını gösterir;
 da aynı noktalara gelir. Önce okunursa sınav, kodu anlamayı değil raporu hatırlamayı
 ölçer.
 
-## İki komut
+## Dört komut
 
 ```
+faz A — her değişiklikte
 /dv-dogrula     analiz ↔ kod eşleşmesi (RTM) · lenslerle adversarial tarama ·
                 bulguları çürütme · analistlere Türkçe manuel test paketi · sonuç dosyası
-
 /dv-kavra       rehberli tur · koda bakmadan sözlü sınav · notlama · boşlukları gösterme
+
+faz B — senaryo kümesi başına bir kez
+/dv-otomat      otomasyon yargısından Playwright testleri · ayrı task, ayrı branch
+
+faz C — her koşumdan sonra
+/dv-triyaj      kırmızının sebebi: kod / test / gereksinim / ortam · ayrı task
 ```
 
-`/dv-dogrula` **kendi oturumunda / kendi task'ında** koşulur. Kodu yazan bağlam kendi
-kodunu doğrulayamaz; skill bunu kontrol eder.
+**Dördü de kendi oturumunda / kendi task'ında koşulur.** Kodu yazan bağlam kendi kodunu
+doğrulayamaz, bulguyu bulan bağlam kendi testini yazamaz, testi yazan kendi testini
+yargılayamaz. Sıra ve oturum sınırları: `CALISTIRMA.md`.
 
 ## İki ortam
 
@@ -60,6 +68,8 @@ kodunu doğrulayamaz; skill bunu kontrol eder.
 |---|---|---|
 | `/dv-dogrula` | koşar | koşar — kapsam onayı **plan aşamasında** alınır |
 | `/dv-kavra` | koşar | **koşmaz** — canlı soru-cevap ister |
+| `/dv-otomat` | koşar | koşar — ortam profili plan aşamasında onaylanır |
+| `/dv-triyaj` | koşar | koşar |
 | Çıktı | T2/T3 lokal kalabilir | her şey commit'lenir |
 | Kurulum | `KURULUM.md` | `KURULUM-TASK-MODU.md` |
 
@@ -93,12 +103,14 @@ dogrulama/<tarih>-<konu>/
   dv-iz-denetci.md        RTM, gereksinim ID çivileme, keşif, köprü, otomasyon yargısı
   dv-analist-paketi.md    analist test paketi — tools: Read, Write (kod arayamaz)
   dv-otomat-yazar.md      senaryo → Playwright testi, seçici uydurmaz
+  dv-triyajci.md          kırmızı testin sebebi: kod / test / gereksinim / ortam
   dv-celiskici.md         lens başına adversarial tarama
   dv-curutucu.md          bulgu çürütme (yanlış pozitif eleme)
   dv-kavrayis-kocu.md     rehberli tur, viva soruları, notlama
 .claude/skills/
   dv-dogrula/SKILL.md     G0→G2 orkestrasyonu
   dv-otomat/SKILL.md      otomasyon üretimi (faz B) — ayrı task, ayrı branch
+  dv-triyaj/SKILL.md      koşum triyajı (faz C) — kırmızının sebebini ayırır
   dv-kavra/SKILL.md       G4 interaktif sınav
 sablonlar/
   lens-paketi.md          ★ KANONİK KAYNAK — 16 lens, kademe×dosya tipi matrisi, çıktı biçimi
@@ -174,6 +186,15 @@ enjeksiyonuyla üretir, görmediği seçiciyi uydurmaz. Testleri yazar, **koşma
 developer'ın adımı. Koşum kanıtı olarak ekran görüntüsü üretilir: geçen testte koşum
 sonunda, kalan testte kırılma anında, atlanan testte hiç. Tasarım: `OTOMASYON-PLANI.md`
 ve `ANALIST-GERIBILDIRIM-PLANI.md`, sözleşme: `sablonlar/otomasyon-sozlesmesi.md`.
+
+**Koşum triyajı (`/dv-triyaj`):** testler koştuktan sonra kırmızıların sebebini ayırır —
+kod mu bozuldu, test mi, gereksinim mi değişti, ortam mı. Ayrı task; ürün koduna da test
+dosyasına da dokunmaz, çünkü kırmızıyı susturmak (skip, seçici güncelleme, timeout
+artırma) triyaj değil kanıt imhasıdır. Varsayılan yargı **kod bozuldu**; değiştirmek
+koddan alıntı ister. Ayrımın belkemiği `dogrulama/kosum-gecmisi.jsonl` — testin son ne
+zaman yeşil olduğunu tutan tek yer; onsuz regresyon ile hiç çalışmamış test ayrılamaz.
+Retry ile geçen ve arıza enjeksiyonlu yeşil testler de yargıya girer: ikisi de yeşil
+raporlanır, ikisi de yeşil değildir.
 
 ## Kurulum
 

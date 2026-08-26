@@ -36,6 +36,7 @@ cp /tmp/dv/.claude/agents/dv-*.md        .claude/agents/
 cp -r /tmp/dv/.claude/skills/dv-dogrula  .claude/skills/
 cp -r /tmp/dv/.claude/skills/dv-kavra    .claude/skills/
 cp -r /tmp/dv/.claude/skills/dv-otomat   .claude/skills/
+cp -r /tmp/dv/.claude/skills/dv-triyaj   .claude/skills/
 cp -r /tmp/dv/sablonlar                  .
 cp -r /tmp/dv/testler                    .
 mkdir -p dogrulama && cp /tmp/dv/dogrulama/kacan-defectler.md dogrulama/
